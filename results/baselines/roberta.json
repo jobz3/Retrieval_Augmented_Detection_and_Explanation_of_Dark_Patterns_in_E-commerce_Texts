@@ -1,0 +1,168 @@
+{
+  "model": "roberta-large",
+  "best_val_macro_f1": 0.8498910475724992,
+  "test_macro_f1": 0.7112305540840951,
+  "classification_report": {
+    "Forced Action": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 0.0
+    },
+    "Misdirection": {
+      "precision": 0.8928571428571429,
+      "recall": 0.9259259259259259,
+      "f1-score": 0.9090909090909091,
+      "support": 27.0
+    },
+    "Not Dark Pattern": {
+      "precision": 0.9879518072289156,
+      "recall": 0.9647058823529412,
+      "f1-score": 0.9761904761904762,
+      "support": 170.0
+    },
+    "Obstruction": {
+      "precision": 0.75,
+      "recall": 1.0,
+      "f1-score": 0.8571428571428571,
+      "support": 3.0
+    },
+    "Scarcity": {
+      "precision": 0.9714285714285714,
+      "recall": 1.0,
+      "f1-score": 0.9855072463768116,
+      "support": 68.0
+    },
+    "Sneaking": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 2.0
+    },
+    "Social Proof": {
+      "precision": 0.9795918367346939,
+      "recall": 1.0,
+      "f1-score": 0.9896907216494846,
+      "support": 48.0
+    },
+    "Urgency": {
+      "precision": 0.9722222222222222,
+      "recall": 0.9722222222222222,
+      "f1-score": 0.9722222222222222,
+      "support": 36.0
+    },
+    "accuracy": 0.9689265536723164,
+    "macro avg": {
+      "precision": 0.6942564475589432,
+      "recall": 0.7328567538126363,
+      "f1-score": 0.7112305540840951,
+      "support": 354.0
+    },
+    "weighted avg": {
+      "precision": 0.9671935059504708,
+      "recall": 0.9689265536723164,
+      "f1-score": 0.9677652866159957,
+      "support": 354.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      25,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      1,
+      3,
+      164,
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      3,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      68,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      48,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      35
+    ]
+  ],
+  "label_names": [
+    "Forced Action",
+    "Misdirection",
+    "Not Dark Pattern",
+    "Obstruction",
+    "Scarcity",
+    "Sneaking",
+    "Social Proof",
+    "Urgency"
+  ],
+  "config": {
+    "model_name": "roberta-large",
+    "max_length": 128,
+    "batch_size": 8,
+    "learning_rate": 1e-05,
+    "num_epochs": 5,
+    "warmup_ratio": 0.1
+  }
+}

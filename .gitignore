@@ -1,0 +1,28 @@
+# Environment
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Data (large files — commit only scripts, not raw data)
+data/raw/
+data/processed/
+data/german/
+
+# Model checkpoints and index files
+outputs/
+results/predictions/
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store

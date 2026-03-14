@@ -1,0 +1,75 @@
+project:
+  name: "Dark Pattern RAG Explainer"
+  seed: 42
+
+paths:
+  raw_data: "data/raw/dataset.tsv"
+  processed_data: "data/processed"
+  german_data: "data/german"
+  outputs: "outputs"
+  indices: "outputs/indices"
+  models: "outputs/models"
+  results: "results"
+
+data:
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+  # 7 dark pattern categories + "Not Dark Pattern"
+  categories:
+    - "Scarcity"
+    - "Urgency"
+    - "Social Proof"
+    - "Misdirection"
+    - "Obstruction"
+    - "Forced Action"
+    - "Sneaking"
+    - "Not Dark Pattern"
+
+baselines:
+  bert:
+    model_name: "bert-base-uncased"
+    max_length: 128
+    batch_size: 16
+    learning_rate: 2.0e-5
+    num_epochs: 5
+    warmup_ratio: 0.1
+  roberta:
+    model_name: "roberta-large"
+    max_length: 128
+    batch_size: 8
+    learning_rate: 1.0e-5
+    num_epochs: 5
+    warmup_ratio: 0.1
+
+retrieval:
+  k: 5
+  # Encoder options: "bert", "roberta", "sbert"
+  # "sbert" uses sentence-transformers/all-mpnet-base-v2 (fast off-the-shelf)
+  encoder: "sbert"
+  sbert_model: "sentence-transformers/all-mpnet-base-v2"
+  bert_model: "bert-base-uncased"
+  roberta_model: "roberta-large"
+  # Strategies: "knn", "prototype", "diversity"
+  strategy: "knn"
+  diversity_lambda: 0.5   # MMR lambda for diversity-balanced retrieval
+
+ollama:
+  base_url: "http://localhost:11434"
+  models:
+    - "qwen3:8b"
+    - "mistral-nemo:12b"
+  default_model: "qwen3:8b"
+  temperature: 0.0        # greedy decode for reproducibility
+  max_tokens: 512
+  format: "json"
+
+evaluation:
+  rubric_dimensions:
+    - "label_correctness"
+    - "mechanism_correctness"
+    - "span_faithfulness"
+    - "specificity"
+    - "non_hallucination"
+    - "rewrite_usefulness"
+  human_eval_sample_size: 50
