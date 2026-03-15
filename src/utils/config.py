@@ -137,12 +137,17 @@ class PathsConfig:
     upstream_dataset_repo: Path
     raw_data: Path
     processed_data: Path
+    locked_processed_data: Path
     german_data: Path
     outputs: Path
     indices: Path
     models: Path
+    weighted_models: Path
     results: Path
     baseline_results: Path
+    weighted_baseline_results: Path
+    analysis: Path
+    phase1b_analysis: Path
 
 
 @dataclass(frozen=True)
@@ -208,6 +213,12 @@ class EvaluationConfig:
 
 
 @dataclass(frozen=True)
+class Phase1BConfig:
+    weighted_variant: str
+    minority_train_threshold: int
+
+
+@dataclass(frozen=True)
 class AppConfig:
     project: ProjectConfig
     paths: PathsConfig
@@ -216,6 +227,7 @@ class AppConfig:
     retrieval: RetrievalConfig
     ollama: OllamaConfig
     evaluation: EvaluationConfig
+    phase1b: Phase1BConfig
 
 
 def _build_baseline_model(data: dict[str, Any]) -> BaselineModelConfig:
@@ -267,12 +279,17 @@ def load_config(config_path: Path = CONFIG_PATH) -> AppConfig:
         upstream_dataset_repo=_resolve_path(str(path_data["upstream_dataset_repo"])),
         raw_data=_resolve_path(str(path_data["raw_data"])),
         processed_data=_resolve_path(str(path_data["processed_data"])),
+        locked_processed_data=_resolve_path(str(path_data["locked_processed_data"])),
         german_data=_resolve_path(str(path_data["german_data"])),
         outputs=_resolve_path(str(path_data["outputs"])),
         indices=_resolve_path(str(path_data["indices"])),
         models=_resolve_path(str(path_data["models"])),
+        weighted_models=_resolve_path(str(path_data["weighted_models"])),
         results=_resolve_path(str(path_data["results"])),
         baseline_results=_resolve_path(str(path_data["baseline_results"])),
+        weighted_baseline_results=_resolve_path(str(path_data["weighted_baseline_results"])),
+        analysis=_resolve_path(str(path_data["analysis"])),
+        phase1b_analysis=_resolve_path(str(path_data["phase1b_analysis"])),
     )
 
     data_cfg = DataConfig(
@@ -317,6 +334,12 @@ def load_config(config_path: Path = CONFIG_PATH) -> AppConfig:
         human_eval_sample_size=int(evaluation_data["human_eval_sample_size"]),
     )
 
+    phase1b_data = data["phase1b"]
+    phase1b = Phase1BConfig(
+        weighted_variant=str(phase1b_data["weighted_variant"]),
+        minority_train_threshold=int(phase1b_data["minority_train_threshold"]),
+    )
+
     return AppConfig(
         project=project,
         paths=paths,
@@ -325,6 +348,7 @@ def load_config(config_path: Path = CONFIG_PATH) -> AppConfig:
         retrieval=retrieval,
         ollama=ollama,
         evaluation=evaluation,
+        phase1b=phase1b,
     )
 
 

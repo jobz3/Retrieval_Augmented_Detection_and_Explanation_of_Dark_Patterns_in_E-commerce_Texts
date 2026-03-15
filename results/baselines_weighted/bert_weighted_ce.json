@@ -1,0 +1,195 @@
+{
+  "model": "bert-base-uncased",
+  "model_key": "bert",
+  "variant": "weighted_ce",
+  "checkpoint_name": "bert_weighted_ce",
+  "split_root": "data\\processed\\ec_darkpattern_phase1_locked",
+  "best_val_macro_f1": 0.6966798834280107,
+  "best_epoch": 5,
+  "test_macro_f1": 0.6897993918538161,
+  "test_accuracy": 0.9519774011299436,
+  "classification_report": {
+    "Scarcity": {
+      "precision": 0.9841269841269841,
+      "recall": 0.9841269841269841,
+      "f1-score": 0.9841269841269841,
+      "support": 63.0
+    },
+    "Urgency": {
+      "precision": 0.96875,
+      "recall": 1.0,
+      "f1-score": 0.9841269841269841,
+      "support": 31.0
+    },
+    "Social Proof": {
+      "precision": 1.0,
+      "recall": 0.9787234042553191,
+      "f1-score": 0.989247311827957,
+      "support": 47.0
+    },
+    "Misdirection": {
+      "precision": 0.8461538461538461,
+      "recall": 0.7586206896551724,
+      "f1-score": 0.8,
+      "support": 29.0
+    },
+    "Obstruction": {
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "f1-score": 0.8,
+      "support": 4.0
+    },
+    "Forced Action": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 1.0
+    },
+    "Sneaking": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 2.0
+    },
+    "Not Dark Pattern": {
+      "precision": 0.9502762430939227,
+      "recall": 0.9717514124293786,
+      "f1-score": 0.9608938547486033,
+      "support": 177.0
+    },
+    "accuracy": 0.9519774011299436,
+    "macro avg": {
+      "precision": 0.6769967175051774,
+      "recall": 0.7116528113083568,
+      "f1-score": 0.6897993918538161,
+      "support": 354.0
+    },
+    "weighted avg": {
+      "precision": 0.9447324102620126,
+      "recall": 0.9519774011299436,
+      "f1-score": 0.9476857978936533,
+      "support": 354.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      62,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      31,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      46,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      22,
+      0,
+      0,
+      0,
+      7
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      4,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      1,
+      0,
+      0,
+      3,
+      1,
+      0,
+      0,
+      172
+    ]
+  ],
+  "label_names": [
+    "Scarcity",
+    "Urgency",
+    "Social Proof",
+    "Misdirection",
+    "Obstruction",
+    "Forced Action",
+    "Sneaking",
+    "Not Dark Pattern"
+  ],
+  "class_weight_formula": "N_train / (K * n_c)",
+  "train_class_counts": {
+    "Scarcity": 292,
+    "Urgency": 147,
+    "Social Proof": 218,
+    "Misdirection": 137,
+    "Obstruction": 19,
+    "Forced Action": 2,
+    "Sneaking": 8,
+    "Not Dark Pattern": 824
+  },
+  "class_weights": {
+    "Scarcity": 0.7050513698630136,
+    "Urgency": 1.4005102040816326,
+    "Social Proof": 0.9443807339449541,
+    "Misdirection": 1.5027372262773722,
+    "Obstruction": 10.835526315789474,
+    "Forced Action": 102.9375,
+    "Sneaking": 25.734375,
+    "Not Dark Pattern": 0.2498483009708738
+  },
+  "config": {
+    "model_name": "bert-base-uncased",
+    "max_length": 128,
+    "batch_size": 16,
+    "learning_rate": 2e-05,
+    "num_epochs": 5,
+    "warmup_ratio": 0.1
+  }
+}

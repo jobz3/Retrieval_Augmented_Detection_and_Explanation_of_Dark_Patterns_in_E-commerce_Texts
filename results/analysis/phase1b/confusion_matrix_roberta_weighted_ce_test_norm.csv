@@ -1,0 +1,9 @@
+,Scarcity,Urgency,Social Proof,Misdirection,Obstruction,Forced Action,Sneaking,Not Dark Pattern
+Scarcity,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Urgency,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0
+Social Proof,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0
+Misdirection,0.0,0.0,0.034482758620689655,0.8620689655172413,0.0,0.0,0.0,0.10344827586206896
+Obstruction,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0
+Forced Action,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0
+Sneaking,0.0,0.0,0.0,0.5,0.0,0.0,0.0,0.5
+Not Dark Pattern,0.005649717514124294,0.0,0.0,0.01694915254237288,0.0,0.0,0.0,0.9774011299435028

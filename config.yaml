@@ -6,12 +6,17 @@ paths:
   upstream_dataset_repo: "data/dataset_repo"
   raw_data: "data/raw/ec_darkpattern/dataset.tsv"
   processed_data: "data/processed/ec_darkpattern"
+  locked_processed_data: "data/processed/ec_darkpattern_phase1_locked"
   german_data: "data/german"
   outputs: "outputs"
   indices: "outputs/indices"
   models: "outputs/models"
+  weighted_models: "outputs/models_weighted"
   results: "results"
   baseline_results: "results/baselines"
+  weighted_baseline_results: "results/baselines_weighted"
+  analysis: "results/analysis"
+  phase1b_analysis: "results/analysis/phase1b"
 
 data:
   train_ratio: 0.70
@@ -78,3 +83,7 @@ evaluation:
     - "non_hallucination"
     - "rewrite_usefulness"
   human_eval_sample_size: 50
+
+phase1b:
+  weighted_variant: "weighted_ce"
+  minority_train_threshold: 50
