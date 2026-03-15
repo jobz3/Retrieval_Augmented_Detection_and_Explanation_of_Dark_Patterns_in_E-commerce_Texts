@@ -8,9 +8,6 @@ Usage:
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
 import typer
 from torch.utils.data import DataLoader
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -19,9 +16,9 @@ import torch
 
 from src.data.dataset import DarkPatternDataset, load_label_map
 from src.baselines.train_classifier import evaluate as _evaluate
+from src.utils.config import load_config
 
-ROOT = Path(__file__).resolve().parents[2]
-MODEL_DIR = ROOT / "outputs" / "models"
+MODEL_DIR = load_config().paths.models
 
 app = typer.Typer()
 

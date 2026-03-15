@@ -2,9 +2,9 @@
 Build and persist a FAISS flat index over the training split.
 
 Usage:
-    python -m src.retrieval.index --encoder sbert
     python -m src.retrieval.index --encoder bert
     python -m src.retrieval.index --encoder roberta
+    python -m src.retrieval.index --encoder sbert   # optional fallback
 
 Outputs (one set per encoder):
     outputs/indices/{encoder}_embeddings.npy   — raw embedding matrix
@@ -15,7 +15,6 @@ Outputs (one set per encoder):
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
 import faiss
 import numpy as np
@@ -23,10 +22,11 @@ import pandas as pd
 import typer
 
 from src.retrieval.embeddings import encode_texts
+from src.utils.config import load_config
 
-ROOT = Path(__file__).resolve().parents[2]
-PROCESSED_DIR = ROOT / "data" / "processed"
-INDEX_DIR = ROOT / "outputs" / "indices"
+CONFIG = load_config()
+PROCESSED_DIR = CONFIG.paths.processed_data
+INDEX_DIR = CONFIG.paths.indices
 
 app = typer.Typer()
 
@@ -47,18 +47,18 @@ def save_index(
     embeddings: np.ndarray,
     metadata: list[dict],
     encoder: str,
-    out_dir: Path = INDEX_DIR,
+    out_dir=INDEX_DIR,
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     faiss.write_index(index, str(out_dir / f"{encoder}_index.faiss"))
     np.save(out_dir / f"{encoder}_embeddings.npy", embeddings)
-    with open(out_dir / f"{encoder}_metadata.json", "w") as f:
-        json.dump(metadata, f, ensure_ascii=False)
-    print(f"Saved FAISS index ({encoder}) → {out_dir}/")
+    with open(out_dir / f"{encoder}_metadata.json", "w", encoding="utf-8") as f:
+        json.dump(metadata, f, ensure_ascii=False, indent=2)
+    print(f"Saved FAISS index ({encoder}) to {out_dir}")
 
 
 def load_index(
-    encoder: str, out_dir: Path = INDEX_DIR
+    encoder: str, out_dir=INDEX_DIR
 ) -> tuple[faiss.IndexFlatIP, np.ndarray, list[dict]]:
     """Load a previously built index for a given encoder."""
     index = faiss.read_index(str(out_dir / f"{encoder}_index.faiss"))
@@ -70,7 +70,10 @@ def load_index(
 
 @app.command()
 def main(
-    encoder: str = typer.Option("sbert", help="Encoder: sbert | bert | roberta"),
+    encoder: str = typer.Option(
+        CONFIG.retrieval.encoder,
+        help="Encoder: bert | roberta | sbert (Phase 1 official encoders: bert, roberta)",
+    ),
     split: str = typer.Option("train", help="Which split to index (usually 'train')"),
     batch_size: int = typer.Option(64, help="Encoding batch size"),
 ) -> None:
@@ -84,7 +87,14 @@ def main(
     texts = df["text"].tolist()
 
     print(f"Encoding {len(texts)} texts with encoder='{encoder}' ...")
-    embeddings = encode_texts(texts, encoder=encoder, batch_size=batch_size)
+    embeddings = encode_texts(
+        texts,
+        encoder=encoder,
+        sbert_model=CONFIG.retrieval.sbert_model,
+        bert_model=CONFIG.retrieval.bert_model,
+        roberta_model=CONFIG.retrieval.roberta_model,
+        batch_size=batch_size,
+    )
     print(f"Embeddings shape: {embeddings.shape}")
 
     # Build metadata list (one dict per training example)

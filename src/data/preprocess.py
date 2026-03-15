@@ -1,232 +1,406 @@
 """
-Phase 1 — Data Preprocessing
------------------------------
-Loads the EC-DarkPattern dataset (dataset.tsv), cleans it, prints EDA statistics,
-and writes stratified train / val / test splits to data/processed/.
+Phase 1 data preprocessing for EC-DarkPattern.
 
 Usage:
     python -m src.data.preprocess
 
 Outputs:
-    data/processed/train.csv
-    data/processed/val.csv
-    data/processed/test.csv
-    data/processed/label_map.json   # category -> int id
+    data/processed/ec_darkpattern/train.csv
+    data/processed/ec_darkpattern/val.csv
+    data/processed/ec_darkpattern/test.csv
+    data/processed/ec_darkpattern/label_map.json
+    data/processed/ec_darkpattern/raw_audit.json
+    data/processed/ec_darkpattern/split_manifest.json
 """
 
+from __future__ import annotations
+
+import hashlib
 import json
-import os
+from collections import Counter
 from pathlib import Path
 
 import pandas as pd
-from sklearn.model_selection import train_test_split
 
-# ---------------------------------------------------------------------------
-# Paths
-# ---------------------------------------------------------------------------
-ROOT = Path(__file__).resolve().parents[2]
-RAW_TSV = ROOT / "data" / "raw" / "dataset.tsv"
-PROCESSED_DIR = ROOT / "data" / "processed"
+from src.utils.config import load_config, raw_audit_path, split_manifest_path
 
-# ---------------------------------------------------------------------------
-# Constants
-# ---------------------------------------------------------------------------
-# The 7 dark pattern categories from Yada et al. (2022)
-DARK_PATTERN_CATEGORIES = [
-    "Scarcity",
-    "Urgency",
-    "Social Proof",
-    "Misdirection",
-    "Obstruction",
-    "Forced Action",
-    "Sneaking",
-]
+
 NOT_DARK_PATTERN_LABEL = "Not Dark Pattern"
 
-TRAIN_RATIO = 0.70
-VAL_RATIO = 0.15
-TEST_RATIO = 0.15
-SEED = 42
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as file_obj:
+        for chunk in iter(lambda: file_obj.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
-# ---------------------------------------------------------------------------
-# Loading
-# ---------------------------------------------------------------------------
-
-def load_raw(path: Path = RAW_TSV) -> pd.DataFrame:
-    """Load the raw TSV into a DataFrame."""
+def load_raw(path: Path) -> pd.DataFrame:
+    """Load the canonical raw TSV into a DataFrame."""
     if not path.exists():
         raise FileNotFoundError(
-            f"Dataset not found at {path}.\n"
-            "Clone the dataset with:\n"
-            "  git clone https://github.com/yamanalab/ec-darkpattern.git\n"
-            "then copy dataset/dataset.tsv → data/raw/dataset.tsv"
+            f"Canonical raw dataset not found at {path}.\n"
+            "Run `python -m src.data.bootstrap_raw` first."
         )
-    df = pd.read_csv(path, sep="\t")
-    return df
+    return pd.read_csv(path, sep="\t")
 
 
-# ---------------------------------------------------------------------------
-# Cleaning
-# ---------------------------------------------------------------------------
-
-def clean(df: pd.DataFrame) -> pd.DataFrame:
+def clean(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, int]]:
     """
-    Standardise column names, drop nulls and duplicates, normalise category labels.
+    Standardise column names, drop nulls and duplicates, and normalise labels.
 
-    The raw TSV has columns: page_id, text, label, Pattern Category
-    We rename to: page_id, text, binary_label, category
+    Returns:
+        cleaned DataFrame, plus simple removal statistics for the audit artifact.
     """
-    # Flexible column rename — handle any casing or spacing variations
-    df.columns = [c.strip().lower().replace(" ", "_") for c in df.columns]
+    working_df = df.copy()
+    working_df.columns = [column.strip().lower().replace(" ", "_") for column in working_df.columns]
 
-    # Rename to canonical names
     rename_map = {}
-    for col in df.columns:
-        if "pattern" in col and "category" in col:
-            rename_map[col] = "category"
-        elif col in ("label", "labels"):
-            rename_map[col] = "binary_label"
-    df = df.rename(columns=rename_map)
+    for column in working_df.columns:
+        if "pattern" in column and "category" in column:
+            rename_map[column] = "category"
+        elif column in {"label", "labels"}:
+            rename_map[column] = "binary_label"
+    working_df = working_df.rename(columns=rename_map)
 
-    # Drop rows with missing text or category
-    before = len(df)
-    df = df.dropna(subset=["text", "category"])
-    df = df[df["text"].str.strip() != ""]
+    required_columns = {"text", "category"}
+    missing_columns = required_columns.difference(working_df.columns)
+    if missing_columns:
+        raise ValueError(f"Raw dataset is missing required columns: {sorted(missing_columns)}")
 
-    # Drop exact duplicates on (text, category)
-    df = df.drop_duplicates(subset=["text", "category"])
-    after = len(df)
-    print(f"Dropped {before - after} rows (null / empty / duplicate). Remaining: {after}")
+    removal_stats = {
+        "input_rows": int(len(working_df)),
+        "dropped_missing_text_or_category": 0,
+        "dropped_empty_text": 0,
+        "dropped_duplicate_text_category": 0,
+    }
 
-    # Normalise category: strip whitespace, title-case
-    df["category"] = df["category"].str.strip()
+    before = len(working_df)
+    working_df = working_df.dropna(subset=["text", "category"]).copy()
+    removal_stats["dropped_missing_text_or_category"] = before - len(working_df)
 
-    # Rows with binary_label == 0 are "Not Dark Pattern"
-    # Ensure category reflects this
-    if "binary_label" in df.columns:
-        df.loc[df["binary_label"] == 0, "category"] = NOT_DARK_PATTERN_LABEL
+    working_df["text"] = working_df["text"].astype(str)
+    before = len(working_df)
+    working_df = working_df[working_df["text"].str.strip() != ""].copy()
+    removal_stats["dropped_empty_text"] = before - len(working_df)
 
-    return df.reset_index(drop=True)
+    working_df["category"] = working_df["category"].astype(str).str.strip()
 
+    if "binary_label" in working_df.columns:
+        binary_values = pd.to_numeric(working_df["binary_label"], errors="coerce")
+        working_df.loc[binary_values == 0, "category"] = NOT_DARK_PATTERN_LABEL
 
-# ---------------------------------------------------------------------------
-# Label encoding
-# ---------------------------------------------------------------------------
+    before = len(working_df)
+    working_df = working_df.drop_duplicates(subset=["text", "category"]).reset_index(drop=True)
+    removal_stats["dropped_duplicate_text_category"] = before - len(working_df)
 
-def build_label_map(df: pd.DataFrame) -> dict[str, int]:
-    """Return {category_string: int_id}, sorted for reproducibility."""
-    categories = sorted(df["category"].unique().tolist())
-    return {cat: idx for idx, cat in enumerate(categories)}
-
-
-# ---------------------------------------------------------------------------
-# EDA
-# ---------------------------------------------------------------------------
-
-def print_eda(df: pd.DataFrame) -> None:
-    print("\n=== EDA ===")
-    print(f"Total samples: {len(df)}")
-    print(f"\nCategory distribution:")
-    counts = df["category"].value_counts()
-    for cat, n in counts.items():
-        pct = 100 * n / len(df)
-        print(f"  {cat:<22} {n:>5}  ({pct:.1f}%)")
-
-    print(f"\nText length (chars) — mean: {df['text'].str.len().mean():.0f}, "
-          f"median: {df['text'].str.len().median():.0f}, "
-          f"max: {df['text'].str.len().max()}")
-    print(f"Text length (tokens ≈ words) — mean: {df['text'].str.split().str.len().mean():.1f}")
-
-    if "binary_label" in df.columns:
-        dark = (df["binary_label"] == 1).sum()
-        not_dark = (df["binary_label"] == 0).sum()
-        print(f"\nBinary: dark pattern={dark}, not dark pattern={not_dark}")
+    return working_df, removal_stats
 
 
-# ---------------------------------------------------------------------------
-# Splitting
-# ---------------------------------------------------------------------------
+def build_label_map(df: pd.DataFrame, configured_categories: list[str]) -> dict[str, int]:
+    """Return a reproducible category -> id mapping using the config-defined order."""
+    observed_categories = set(df["category"].unique().tolist())
+    configured_category_set = set(configured_categories)
+    unknown_categories = sorted(observed_categories.difference(configured_category_set))
+    if unknown_categories:
+        raise ValueError(f"Observed categories not present in config.yaml: {unknown_categories}")
 
-def stratified_split(
+    ordered_categories = [category for category in configured_categories if category in observed_categories]
+    return {category: index for index, category in enumerate(ordered_categories)}
+
+
+def text_length_stats(texts: pd.Series) -> dict[str, float | int]:
+    char_lengths = texts.str.len()
+    token_lengths = texts.str.split().str.len()
+    return {
+        "char_min": int(char_lengths.min()),
+        "char_mean": round(float(char_lengths.mean()), 2),
+        "char_median": float(char_lengths.median()),
+        "char_max": int(char_lengths.max()),
+        "token_min": int(token_lengths.min()),
+        "token_mean": round(float(token_lengths.mean()), 2),
+        "token_median": float(token_lengths.median()),
+        "token_max": int(token_lengths.max()),
+    }
+
+
+def build_raw_audit(
+    raw_df: pd.DataFrame,
+    cleaned_df: pd.DataFrame,
+    raw_path: Path,
+    removal_stats: dict[str, int],
+) -> dict:
+    raw_label_column = None
+    for candidate in ["Pattern Category", "pattern_category", "category"]:
+        if candidate in raw_df.columns:
+            raw_label_column = candidate
+            break
+
+    raw_labels = raw_df[raw_label_column].astype(str).str.strip() if raw_label_column else pd.Series(dtype=str)
+    cleaned_labels = cleaned_df["category"].astype(str)
+
+    return {
+        "source_raw_path": str(raw_path),
+        "raw_file_sha256": file_sha256(raw_path),
+        "raw_input": {
+            "total_row_count": int(len(raw_df)),
+            "per_class_counts": dict(Counter(raw_labels.tolist())),
+            "unique_labels": sorted(raw_labels.unique().tolist()),
+            "text_length_stats": text_length_stats(raw_df["text"].astype(str)),
+        },
+        "cleaned_dataset": {
+            "total_row_count": int(len(cleaned_df)),
+            "per_class_counts": dict(Counter(cleaned_labels.tolist())),
+            "unique_labels": sorted(cleaned_labels.unique().tolist()),
+            "text_length_stats": text_length_stats(cleaned_df["text"].astype(str)),
+        },
+        "normalization": removal_stats,
+    }
+
+
+def save_json(payload: dict, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as file_obj:
+        json.dump(payload, file_obj, indent=2, ensure_ascii=False)
+
+
+def allocate_split_counts(total_count: int, ratios: tuple[float, float, float]) -> tuple[int, int, int]:
+    """
+    Deterministically allocate per-class counts across train/val/test.
+
+    Train must always contain the class when the class exists.
+    Val/test must each contain the class when that is mathematically feasible.
+    """
+    if total_count <= 0:
+        return 0, 0, 0
+
+    positive_split_indices = [index for index, ratio in enumerate(ratios) if ratio > 0]
+    minimums = [0, 0, 0]
+
+    if 0 in positive_split_indices:
+        minimums[0] = 1
+
+    if total_count >= len(positive_split_indices):
+        minimums = [1 if ratio > 0 else 0 for ratio in ratios]
+
+    if sum(minimums) > total_count:
+        minimums = [1 if index == 0 else 0 for index in range(len(ratios))]
+
+    targets = [total_count * ratio for ratio in ratios]
+    counts = minimums[:]
+    remaining = total_count - sum(counts)
+
+    for _ in range(remaining):
+        best_index = max(
+            range(len(ratios)),
+            key=lambda index: (
+                targets[index] - counts[index] if ratios[index] > 0 else float("-inf"),
+                ratios[index],
+                -index,
+            ),
+        )
+        counts[best_index] += 1
+
+    return counts[0], counts[1], counts[2]
+
+
+def deterministic_split(
     df: pd.DataFrame,
-    train_ratio: float = TRAIN_RATIO,
-    val_ratio: float = VAL_RATIO,
-    seed: int = SEED,
+    train_ratio: float,
+    val_ratio: float,
+    test_ratio: float,
+    seed: int,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
-    Stratified split by category.
-    Returns (train_df, val_df, test_df).
+    Split each category independently using deterministic shuffling plus
+    per-class allocation that preserves rare classes where feasible.
     """
-    # First split off test
-    test_size = 1.0 - train_ratio
-    train_df, temp_df = train_test_split(
-        df, test_size=test_size, random_state=seed, stratify=df["category"]
-    )
+    split_frames: dict[str, list[pd.DataFrame]] = {"train": [], "val": [], "test": []}
+    ratios = (train_ratio, val_ratio, test_ratio)
 
-    # Split temp into val and test (equal halves when val_ratio == test_ratio)
-    val_fraction_of_temp = val_ratio / test_size
+    ordered_categories = sorted(df["category"].unique().tolist())
+    for category_index, category in enumerate(ordered_categories):
+        category_df = df[df["category"] == category].sample(
+            frac=1.0,
+            random_state=seed + category_index,
+        )
+        train_count, val_count, test_count = allocate_split_counts(len(category_df), ratios)
 
-    # Some rare categories may have only 1 sample in temp; stratify only when safe
-    min_class_count = temp_df["category"].value_counts().min()
-    if min_class_count < 2:
-        rare = temp_df["category"].value_counts()[temp_df["category"].value_counts() < 2].index.tolist()
-        print(f"Warning: {rare} have <2 samples in temp split — using non-stratified val/test split.")
-        stratify_arg = None
-    else:
-        stratify_arg = temp_df["category"]
+        split_frames["train"].append(category_df.iloc[:train_count].copy())
+        split_frames["val"].append(category_df.iloc[train_count : train_count + val_count].copy())
+        split_frames["test"].append(
+            category_df.iloc[train_count + val_count : train_count + val_count + test_count].copy()
+        )
 
-    val_df, test_df = train_test_split(
-        temp_df,
-        test_size=1.0 - val_fraction_of_temp,
-        random_state=seed,
-        stratify=stratify_arg,
-    )
-
-    print(f"\nSplit sizes — train: {len(train_df)}, val: {len(val_df)}, test: {len(test_df)}")
+    train_df = pd.concat(split_frames["train"], ignore_index=True).sample(frac=1.0, random_state=seed)
+    val_df = pd.concat(split_frames["val"], ignore_index=True).sample(frac=1.0, random_state=seed + 1)
+    test_df = pd.concat(split_frames["test"], ignore_index=True).sample(frac=1.0, random_state=seed + 2)
     return train_df.reset_index(drop=True), val_df.reset_index(drop=True), test_df.reset_index(drop=True)
 
 
-# ---------------------------------------------------------------------------
-# Save
-# ---------------------------------------------------------------------------
+def category_counts(df: pd.DataFrame, category_order: list[str]) -> dict[str, int]:
+    counts = Counter(df["category"].tolist())
+    return {category: int(counts.get(category, 0)) for category in category_order}
+
+
+def validate_splits(
+    cleaned_df: pd.DataFrame,
+    train_df: pd.DataFrame,
+    val_df: pd.DataFrame,
+    test_df: pd.DataFrame,
+    ratios: tuple[float, float, float],
+) -> None:
+    raw_counts = Counter(cleaned_df["category"].tolist())
+    split_counts = {
+        "train": Counter(train_df["category"].tolist()),
+        "val": Counter(val_df["category"].tolist()),
+        "test": Counter(test_df["category"].tolist()),
+    }
+
+    positive_split_count = sum(1 for ratio in ratios if ratio > 0)
+    errors: list[str] = []
+
+    total_rows = len(train_df) + len(val_df) + len(test_df)
+    if total_rows != len(cleaned_df):
+        errors.append(
+            f"Row-count mismatch: cleaned={len(cleaned_df)}, train+val+test={total_rows}"
+        )
+
+    for category, raw_count in sorted(raw_counts.items()):
+        train_count = split_counts["train"].get(category, 0)
+        val_count = split_counts["val"].get(category, 0)
+        test_count = split_counts["test"].get(category, 0)
+        split_total = train_count + val_count + test_count
+
+        if split_total != raw_count:
+            errors.append(
+                f"{category}: split totals do not match raw count "
+                f"(raw={raw_count}, train={train_count}, val={val_count}, test={test_count})"
+            )
+
+        if train_count == 0:
+            errors.append(
+                f"{category}: class is missing from train even though it exists in raw data "
+                f"(raw={raw_count}, train={train_count}, val={val_count}, test={test_count})"
+            )
+
+        full_split_coverage_feasible = raw_count >= positive_split_count
+        if ratios[1] > 0 and full_split_coverage_feasible and val_count == 0:
+            errors.append(
+                f"{category}: class is missing from val despite being feasible to cover all splits "
+                f"(raw={raw_count}, requires>={positive_split_count}, train={train_count}, "
+                f"val={val_count}, test={test_count})"
+            )
+        if ratios[2] > 0 and full_split_coverage_feasible and test_count == 0:
+            errors.append(
+                f"{category}: class is missing from test despite being feasible to cover all splits "
+                f"(raw={raw_count}, requires>={positive_split_count}, train={train_count}, "
+                f"val={val_count}, test={test_count})"
+            )
+
+    if errors:
+        raise ValueError("Split validation failed:\n" + "\n".join(f"- {error}" for error in errors))
+
+
+def build_split_manifest(
+    cleaned_df: pd.DataFrame,
+    train_df: pd.DataFrame,
+    val_df: pd.DataFrame,
+    test_df: pd.DataFrame,
+    raw_path: Path,
+    seed: int,
+    ratios: tuple[float, float, float],
+) -> dict:
+    ordered_categories = sorted(cleaned_df["category"].unique().tolist())
+    return {
+        "source_raw_path": str(raw_path),
+        "raw_file_sha256": file_sha256(raw_path),
+        "seed": seed,
+        "ratios": {
+            "train": ratios[0],
+            "val": ratios[1],
+            "test": ratios[2],
+        },
+        "total_row_count": int(len(cleaned_df)),
+        "per_split_row_counts": {
+            "train": int(len(train_df)),
+            "val": int(len(val_df)),
+            "test": int(len(test_df)),
+        },
+        "per_class_counts": {
+            "raw": category_counts(cleaned_df, ordered_categories),
+            "train": category_counts(train_df, ordered_categories),
+            "val": category_counts(val_df, ordered_categories),
+            "test": category_counts(test_df, ordered_categories),
+        },
+    }
+
 
 def save_splits(
     train_df: pd.DataFrame,
     val_df: pd.DataFrame,
     test_df: pd.DataFrame,
     label_map: dict[str, int],
-    out_dir: Path = PROCESSED_DIR,
+    output_dir: Path,
 ) -> None:
-    out_dir.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Add integer label column
     for split_df in (train_df, val_df, test_df):
         split_df["label_id"] = split_df["category"].map(label_map)
 
-    train_df.to_csv(out_dir / "train.csv", index=False)
-    val_df.to_csv(out_dir / "val.csv", index=False)
-    test_df.to_csv(out_dir / "test.csv", index=False)
+    train_df.to_csv(output_dir / "train.csv", index=False)
+    val_df.to_csv(output_dir / "val.csv", index=False)
+    test_df.to_csv(output_dir / "test.csv", index=False)
 
-    with open(out_dir / "label_map.json", "w") as f:
-        json.dump(label_map, f, indent=2)
+    with (output_dir / "label_map.json").open("w", encoding="utf-8") as file_obj:
+        json.dump(label_map, file_obj, indent=2, ensure_ascii=False)
 
-    print(f"\nSaved splits and label_map to {out_dir}/")
-
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 def main() -> None:
-    print(f"Loading raw dataset from {RAW_TSV} ...")
-    df = load_raw()
-    df = clean(df)
-    print_eda(df)
-    label_map = build_label_map(df)
-    print(f"\nLabel map: {label_map}")
-    train_df, val_df, test_df = stratified_split(df)
-    save_splits(train_df, val_df, test_df, label_map)
+    config = load_config()
+    raw_path = config.paths.raw_data
+    processed_dir = config.paths.processed_data
+    ratios = (
+        config.data.train_ratio,
+        config.data.val_ratio,
+        config.data.test_ratio,
+    )
+
+    print(f"Loading canonical raw dataset from {raw_path}")
+    raw_df = load_raw(raw_path)
+    cleaned_df, removal_stats = clean(raw_df)
+
+    audit = build_raw_audit(raw_df, cleaned_df, raw_path, removal_stats)
+    save_json(audit, raw_audit_path(config))
+    print(f"Saved raw audit to {raw_audit_path(config)}")
+
+    label_map = build_label_map(cleaned_df, config.data.categories)
+    train_df, val_df, test_df = deterministic_split(
+        cleaned_df,
+        train_ratio=ratios[0],
+        val_ratio=ratios[1],
+        test_ratio=ratios[2],
+        seed=config.project.seed,
+    )
+
+    validate_splits(cleaned_df, train_df, val_df, test_df, ratios)
+    save_splits(train_df, val_df, test_df, label_map, processed_dir)
+
+    manifest = build_split_manifest(
+        cleaned_df,
+        train_df,
+        val_df,
+        test_df,
+        raw_path=raw_path,
+        seed=config.project.seed,
+        ratios=ratios,
+    )
+    save_json(manifest, split_manifest_path(config))
+
+    print(f"Saved processed splits to {processed_dir}")
+    print(f"Saved split manifest to {split_manifest_path(config)}")
+    print(f"Label map: {label_map}")
 
 
 if __name__ == "__main__":

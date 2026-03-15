@@ -3,19 +3,22 @@ project:
   seed: 42
 
 paths:
-  raw_data: "data/raw/dataset.tsv"
-  processed_data: "data/processed"
+  upstream_dataset_repo: "data/dataset_repo"
+  raw_data: "data/raw/ec_darkpattern/dataset.tsv"
+  processed_data: "data/processed/ec_darkpattern"
   german_data: "data/german"
   outputs: "outputs"
   indices: "outputs/indices"
   models: "outputs/models"
   results: "results"
+  baseline_results: "results/baselines"
 
 data:
   train_ratio: 0.70
   val_ratio: 0.15
   test_ratio: 0.15
-  # 7 dark pattern categories + "Not Dark Pattern"
+  raw_audit_filename: "raw_audit.json"
+  split_manifest_filename: "split_manifest.json"
   categories:
     - "Scarcity"
     - "Urgency"
@@ -44,15 +47,17 @@ baselines:
 
 retrieval:
   k: 5
-  # Encoder options: "bert", "roberta", "sbert"
-  # "sbert" uses sentence-transformers/all-mpnet-base-v2 (fast off-the-shelf)
-  encoder: "sbert"
+  encoder: "bert"
+  phase1_encoders:
+    - "bert"
+    - "roberta"
+  optional_encoders:
+    - "sbert"
   sbert_model: "sentence-transformers/all-mpnet-base-v2"
   bert_model: "bert-base-uncased"
   roberta_model: "roberta-large"
-  # Strategies: "knn", "prototype", "diversity"
   strategy: "knn"
-  diversity_lambda: 0.5   # MMR lambda for diversity-balanced retrieval
+  diversity_lambda: 0.5
 
 ollama:
   base_url: "http://localhost:11434"
@@ -60,7 +65,7 @@ ollama:
     - "qwen3:8b"
     - "mistral-nemo:12b"
   default_model: "qwen3:8b"
-  temperature: 0.0        # greedy decode for reproducibility
+  temperature: 0.0
   max_tokens: 512
   format: "json"
 

@@ -16,7 +16,6 @@ Outputs:
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 
 import numpy as np
@@ -36,34 +35,13 @@ from sklearn.metrics import (
 from tqdm import tqdm
 
 from src.data.dataset import DarkPatternDataset, load_label_map
+from src.utils.config import load_config
 
-ROOT = Path(__file__).resolve().parents[2]
-MODEL_DIR = ROOT / "outputs" / "models"
-RESULTS_DIR = ROOT / "results" / "baselines"
+CONFIG = load_config()
+MODEL_DIR = CONFIG.paths.models
+RESULTS_DIR = CONFIG.paths.baseline_results
 
 app = typer.Typer()
-
-# ---------------------------------------------------------------------------
-# Model config registry
-# ---------------------------------------------------------------------------
-MODEL_CONFIGS = {
-    "bert": {
-        "model_name": "bert-base-uncased",
-        "max_length": 128,
-        "batch_size": 16,
-        "learning_rate": 2e-5,
-        "num_epochs": 5,
-        "warmup_ratio": 0.1,
-    },
-    "roberta": {
-        "model_name": "roberta-large",
-        "max_length": 128,
-        "batch_size": 8,
-        "learning_rate": 1e-5,
-        "num_epochs": 5,
-        "warmup_ratio": 0.1,
-    },
-}
 
 
 # ---------------------------------------------------------------------------
@@ -129,14 +107,12 @@ def evaluate(
 @app.command()
 def main(
     model: str = typer.Option("bert", help="Model key: bert | roberta"),
-    seed: int = typer.Option(42, help="Random seed"),
+    seed: int = typer.Option(CONFIG.project.seed, help="Random seed"),
 ) -> None:
     torch.manual_seed(seed)
     np.random.seed(seed)
 
-    cfg = MODEL_CONFIGS.get(model)
-    if cfg is None:
-        raise ValueError(f"Unknown model '{model}'. Choose: bert, roberta")
+    cfg = CONFIG.baselines.by_name(model)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
@@ -146,30 +122,30 @@ def main(
     id2label = {v: k for k, v in label_map.items()}
     label_names = [id2label[i] for i in range(num_labels)]
 
-    print(f"\nLoading tokenizer: {cfg['model_name']}")
-    tokenizer = AutoTokenizer.from_pretrained(cfg["model_name"])
+    print(f"\nLoading tokenizer: {cfg.model_name}")
+    tokenizer = AutoTokenizer.from_pretrained(cfg.model_name)
 
-    train_dataset = DarkPatternDataset("train", tokenizer, cfg["max_length"])
-    val_dataset = DarkPatternDataset("val", tokenizer, cfg["max_length"])
-    test_dataset = DarkPatternDataset("test", tokenizer, cfg["max_length"])
+    train_dataset = DarkPatternDataset("train", tokenizer, cfg.max_length)
+    val_dataset = DarkPatternDataset("val", tokenizer, cfg.max_length)
+    test_dataset = DarkPatternDataset("test", tokenizer, cfg.max_length)
 
-    train_loader = DataLoader(train_dataset, batch_size=cfg["batch_size"], shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=cfg["batch_size"] * 2)
-    test_loader = DataLoader(test_dataset, batch_size=cfg["batch_size"] * 2)
+    train_loader = DataLoader(train_dataset, batch_size=cfg.batch_size, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=cfg.batch_size * 2)
+    test_loader = DataLoader(test_dataset, batch_size=cfg.batch_size * 2)
 
-    print(f"Loading model: {cfg['model_name']} (num_labels={num_labels})")
+    print(f"Loading model: {cfg.model_name} (num_labels={num_labels})")
     model_obj = AutoModelForSequenceClassification.from_pretrained(
-        cfg["model_name"],
+        cfg.model_name,
         num_labels=num_labels,
         id2label=id2label,
         label2id=label_map,
     ).to(device)
 
     optimizer = torch.optim.AdamW(
-        model_obj.parameters(), lr=cfg["learning_rate"], weight_decay=0.01
+        model_obj.parameters(), lr=cfg.learning_rate, weight_decay=0.01
     )
-    total_steps = len(train_loader) * cfg["num_epochs"]
-    warmup_steps = int(total_steps * cfg["warmup_ratio"])
+    total_steps = len(train_loader) * cfg.num_epochs
+    warmup_steps = int(total_steps * cfg.warmup_ratio)
     scheduler = get_linear_schedule_with_warmup(optimizer, warmup_steps, total_steps)
 
     # Training
@@ -177,10 +153,10 @@ def main(
     best_epoch = 0
     save_path = MODEL_DIR / model
 
-    for epoch in range(1, cfg["num_epochs"] + 1):
+    for epoch in range(1, cfg.num_epochs + 1):
         train_loss = train_epoch(model_obj, train_loader, optimizer, scheduler, device)
         val_f1, _, _ = evaluate(model_obj, val_loader, device)
-        print(f"Epoch {epoch}/{cfg['num_epochs']} — loss: {train_loss:.4f}, val macro F1: {val_f1:.4f}")
+        print(f"Epoch {epoch}/{cfg.num_epochs} - loss: {train_loss:.4f}, val macro F1: {val_f1:.4f}")
 
         if val_f1 > best_val_f1:
             best_val_f1 = val_f1
@@ -188,7 +164,7 @@ def main(
             save_path.mkdir(parents=True, exist_ok=True)
             model_obj.save_pretrained(save_path)
             tokenizer.save_pretrained(save_path)
-            print(f"  → New best! Saved to {save_path}")
+            print(f"  New best checkpoint saved to {save_path}")
 
     # Final test evaluation using best checkpoint
     print(f"\nBest epoch: {best_epoch} (val macro F1 = {best_val_f1:.4f})")
@@ -213,13 +189,20 @@ def main(
     # Save results
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     results = {
-        "model": cfg["model_name"],
+        "model": cfg.model_name,
         "best_val_macro_f1": best_val_f1,
         "test_macro_f1": test_f1,
         "classification_report": report,
         "confusion_matrix": cm,
         "label_names": label_names,
-        "config": cfg,
+        "config": {
+            "model_name": cfg.model_name,
+            "max_length": cfg.max_length,
+            "batch_size": cfg.batch_size,
+            "learning_rate": cfg.learning_rate,
+            "num_epochs": cfg.num_epochs,
+            "warmup_ratio": cfg.warmup_ratio,
+        },
     }
     results_path = RESULTS_DIR / f"{model}.json"
     with open(results_path, "w") as f:

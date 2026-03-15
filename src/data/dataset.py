@@ -11,8 +11,10 @@ import torch
 from torch.utils.data import Dataset
 from transformers import PreTrainedTokenizerBase
 
+from src.utils.config import load_config
 
-PROCESSED_DIR = Path(__file__).resolve().parents[2] / "data" / "processed"
+
+PROCESSED_DIR = load_config().paths.processed_data
 
 
 def load_label_map(processed_dir: Path = PROCESSED_DIR) -> dict[str, int]:
@@ -37,6 +39,7 @@ class DarkPatternDataset(Dataset):
         max_length: int = 128,
         processed_dir: Path = PROCESSED_DIR,
     ):
+        self.processed_dir = processed_dir
         csv_path = processed_dir / f"{split}.csv"
         if not csv_path.exists():
             raise FileNotFoundError(
@@ -66,7 +69,7 @@ class DarkPatternDataset(Dataset):
 
     @property
     def num_labels(self) -> int:
-        label_map = load_label_map(PROCESSED_DIR)
+        label_map = load_label_map(self.processed_dir)
         return len(label_map)
 
     @property
