@@ -70,9 +70,9 @@ retrieval:
 ollama:
   base_url: "http://localhost:11434"
   models:
-    - "qwen3:8b"
+    - "qwen3:latest"
     - "mistral-nemo:12b"
-  default_model: "qwen3:8b"
+  default_model: "qwen3:latest"
   temperature: 0.0
   max_tokens: 512
   format: "json"

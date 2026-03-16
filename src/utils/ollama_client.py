@@ -13,7 +13,7 @@ import ollama
 
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-DEFAULT_MODEL = "qwen3:8b"
+DEFAULT_MODEL = "qwen3:latest"
 
 # Models that support extended thinking mode (Qwen3 family).
 # We disable thinking for structured JSON output — it pollutes the response.

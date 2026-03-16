@@ -1,0 +1,44 @@
+[
+  {
+    "page_id": "833",
+    "gold_label": "Not Dark Pattern",
+    "prediction": {
+      "label": "Not Dark Pattern",
+      "confidence": 1.0,
+      "psychological_mechanism": "None",
+      "evidence_span": "Holland Cooper",
+      "harm_dimension": "None",
+      "rationale": "The text contains no manipulative language or dark pattern tactics.",
+      "rewrite": "Holland Cooper"
+    },
+    "evidence_span_valid": true
+  },
+  {
+    "page_id": "1609",
+    "gold_label": "Not Dark Pattern",
+    "prediction": {
+      "label": "Not Dark Pattern",
+      "confidence": 1.0,
+      "psychological_mechanism": "None",
+      "evidence_span": "MoTrail",
+      "harm_dimension": "None",
+      "rationale": "The input text contains no manipulative language or dark pattern tactics.",
+      "rewrite": "MoTrail"
+    },
+    "evidence_span_valid": true
+  },
+  {
+    "page_id": "1488",
+    "gold_label": "Not Dark Pattern",
+    "prediction": {
+      "label": "Not Dark Pattern",
+      "confidence": 0.95,
+      "psychological_mechanism": "None",
+      "evidence_span": "Events and Entertainment",
+      "harm_dimension": "No consumer harm detected",
+      "rationale": "The text is a generic category label with no manipulative language or dark pattern elements.",
+      "rewrite": "Events and Entertainment"
+    },
+    "evidence_span_valid": true
+  }
+]

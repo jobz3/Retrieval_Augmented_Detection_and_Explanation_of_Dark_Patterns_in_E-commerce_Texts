@@ -1,0 +1,20 @@
+{
+  "variant": "zero_shot",
+  "model": "qwen3:latest",
+  "input_file": "data\\processed\\ec_darkpattern_phase1_locked\\val.csv",
+  "processed_items": 5,
+  "json_valid_count": 5,
+  "json_invalid_count": 0,
+  "json_valid_rate": 1.0,
+  "schema_pass_count": 5,
+  "schema_fail_count": 0,
+  "schema_pass_rate": 1.0,
+  "label_in_known_set_pass_count": 5,
+  "label_in_known_set_fail_count": 0,
+  "label_in_known_set_pass_rate": 1.0,
+  "evidence_span_pass_count": 5,
+  "evidence_span_fail_count": 0,
+  "evidence_span_pass_rate": 1.0,
+  "predictions_path": "results\\predictions\\zero_shot\\zero_shot_val_limit5_qwen3_latest.jsonl",
+  "representative_outputs_path": "results\\analysis\\phase2_zero_shot_sanity\\zero_shot_val_limit5_qwen3_latest_representative_outputs.json"
+}
