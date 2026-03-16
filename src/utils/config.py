@@ -143,11 +143,14 @@ class PathsConfig:
     indices: Path
     models: Path
     weighted_models: Path
+    seed_robustness_models: Path
     results: Path
     baseline_results: Path
     weighted_baseline_results: Path
+    seed_robustness_results: Path
     analysis: Path
     phase1b_analysis: Path
+    phase1c_analysis: Path
 
 
 @dataclass(frozen=True)
@@ -219,6 +222,11 @@ class Phase1BConfig:
 
 
 @dataclass(frozen=True)
+class Phase1CConfig:
+    seeds: list[int]
+
+
+@dataclass(frozen=True)
 class AppConfig:
     project: ProjectConfig
     paths: PathsConfig
@@ -228,6 +236,7 @@ class AppConfig:
     ollama: OllamaConfig
     evaluation: EvaluationConfig
     phase1b: Phase1BConfig
+    phase1c: Phase1CConfig
 
 
 def _build_baseline_model(data: dict[str, Any]) -> BaselineModelConfig:
@@ -285,11 +294,14 @@ def load_config(config_path: Path = CONFIG_PATH) -> AppConfig:
         indices=_resolve_path(str(path_data["indices"])),
         models=_resolve_path(str(path_data["models"])),
         weighted_models=_resolve_path(str(path_data["weighted_models"])),
+        seed_robustness_models=_resolve_path(str(path_data["seed_robustness_models"])),
         results=_resolve_path(str(path_data["results"])),
         baseline_results=_resolve_path(str(path_data["baseline_results"])),
         weighted_baseline_results=_resolve_path(str(path_data["weighted_baseline_results"])),
+        seed_robustness_results=_resolve_path(str(path_data["seed_robustness_results"])),
         analysis=_resolve_path(str(path_data["analysis"])),
         phase1b_analysis=_resolve_path(str(path_data["phase1b_analysis"])),
+        phase1c_analysis=_resolve_path(str(path_data["phase1c_analysis"])),
     )
 
     data_cfg = DataConfig(
@@ -340,6 +352,11 @@ def load_config(config_path: Path = CONFIG_PATH) -> AppConfig:
         minority_train_threshold=int(phase1b_data["minority_train_threshold"]),
     )
 
+    phase1c_data = data["phase1c"]
+    phase1c = Phase1CConfig(
+        seeds=[int(item) for item in phase1c_data["seeds"]],
+    )
+
     return AppConfig(
         project=project,
         paths=paths,
@@ -349,6 +366,7 @@ def load_config(config_path: Path = CONFIG_PATH) -> AppConfig:
         ollama=ollama,
         evaluation=evaluation,
         phase1b=phase1b,
+        phase1c=phase1c,
     )
 
 

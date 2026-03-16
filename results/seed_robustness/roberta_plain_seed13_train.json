@@ -1,0 +1,171 @@
+{
+  "model": "roberta-large",
+  "model_key": "roberta",
+  "seed": 13,
+  "best_val_macro_f1": 0.7307194485621905,
+  "test_macro_f1": 0.8586179851250846,
+  "classification_report": {
+    "Scarcity": {
+      "precision": 1.0,
+      "recall": 0.9841269841269841,
+      "f1-score": 0.992,
+      "support": 63.0
+    },
+    "Urgency": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 31.0
+    },
+    "Social Proof": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 47.0
+    },
+    "Misdirection": {
+      "precision": 0.896551724137931,
+      "recall": 0.896551724137931,
+      "f1-score": 0.896551724137931,
+      "support": 29.0
+    },
+    "Obstruction": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 4.0
+    },
+    "Forced Action": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1.0
+    },
+    "Sneaking": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 2.0
+    },
+    "Not Dark Pattern": {
+      "precision": 0.9722222222222222,
+      "recall": 0.9887005649717514,
+      "f1-score": 0.9803921568627451,
+      "support": 177.0
+    },
+    "accuracy": 0.9774011299435028,
+    "macro avg": {
+      "precision": 0.8585967432950192,
+      "recall": 0.8586724091545833,
+      "f1-score": 0.8586179851250846,
+      "support": 354.0
+    },
+    "weighted avg": {
+      "precision": 0.9719868173258005,
+      "recall": 0.9774011299435028,
+      "f1-score": 0.9746480558325025,
+      "support": 354.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      62,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      31,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      47,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      26,
+      0,
+      0,
+      0,
+      3
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      4,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      175
+    ]
+  ],
+  "label_names": [
+    "Scarcity",
+    "Urgency",
+    "Social Proof",
+    "Misdirection",
+    "Obstruction",
+    "Forced Action",
+    "Sneaking",
+    "Not Dark Pattern"
+  ],
+  "split_root": "data\\processed\\ec_darkpattern_phase1_locked",
+  "config": {
+    "model_name": "roberta-large",
+    "max_length": 128,
+    "batch_size": 8,
+    "learning_rate": 1e-05,
+    "num_epochs": 5,
+    "warmup_ratio": 0.1
+  }
+}

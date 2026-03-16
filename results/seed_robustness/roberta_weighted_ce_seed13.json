@@ -1,0 +1,149 @@
+{
+  "model": "roberta",
+  "variant": "weighted_ce",
+  "seed": 13,
+  "checkpoint_name": "roberta_weighted_ce_seed13",
+  "split_root": "data\\processed\\ec_darkpattern_phase1_locked",
+  "train_class_counts": {
+    "Scarcity": 292,
+    "Urgency": 147,
+    "Social Proof": 218,
+    "Misdirection": 137,
+    "Obstruction": 19,
+    "Forced Action": 2,
+    "Sneaking": 8,
+    "Not Dark Pattern": 824
+  },
+  "minority_labels": [
+    "Obstruction",
+    "Forced Action",
+    "Sneaking"
+  ],
+  "val_report": {
+    "Scarcity": {
+      "precision": 1.0,
+      "recall": 0.9841269841269841,
+      "f1-score": 0.992,
+      "support": 63.0
+    },
+    "Urgency": {
+      "precision": 0.9696969696969697,
+      "recall": 1.0,
+      "f1-score": 0.9846153846153847,
+      "support": 32.0
+    },
+    "Social Proof": {
+      "precision": 0.9591836734693877,
+      "recall": 1.0,
+      "f1-score": 0.9791666666666666,
+      "support": 47.0
+    },
+    "Misdirection": {
+      "precision": 0.9032258064516129,
+      "recall": 0.9655172413793104,
+      "f1-score": 0.9333333333333333,
+      "support": 29.0
+    },
+    "Obstruction": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 4.0
+    },
+    "Forced Action": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 1.0
+    },
+    "Sneaking": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 2.0
+    },
+    "Not Dark Pattern": {
+      "precision": 0.9942857142857143,
+      "recall": 0.9830508474576272,
+      "f1-score": 0.9886363636363636,
+      "support": 177.0
+    },
+    "accuracy": 0.9774647887323944,
+    "macro avg": {
+      "precision": 0.7282990204879606,
+      "recall": 0.7415868841204902,
+      "f1-score": 0.7347189685314686,
+      "support": 355.0
+    },
+    "weighted avg": {
+      "precision": 0.9726593112648803,
+      "recall": 0.9774647887323944,
+      "f1-score": 0.9748727568206442,
+      "support": 355.0
+    }
+  },
+  "test_report": {
+    "Scarcity": {
+      "precision": 1.0,
+      "recall": 0.9841269841269841,
+      "f1-score": 0.992,
+      "support": 63.0
+    },
+    "Urgency": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 31.0
+    },
+    "Social Proof": {
+      "precision": 0.9791666666666666,
+      "recall": 1.0,
+      "f1-score": 0.9894736842105263,
+      "support": 47.0
+    },
+    "Misdirection": {
+      "precision": 0.9230769230769231,
+      "recall": 0.8275862068965517,
+      "f1-score": 0.8727272727272727,
+      "support": 29.0
+    },
+    "Obstruction": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 4.0
+    },
+    "Forced Action": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1.0
+    },
+    "Sneaking": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 2.0
+    },
+    "Not Dark Pattern": {
+      "precision": 0.967032967032967,
+      "recall": 0.9943502824858758,
+      "f1-score": 0.9805013927576601,
+      "support": 177.0
+    },
+    "accuracy": 0.9745762711864406,
+    "macro avg": {
+      "precision": 0.8586595695970696,
+      "recall": 0.8507579341886764,
+      "f1-score": 0.8543377937119323,
+      "support": 354.0
+    },
+    "weighted avg": {
+      "precision": 0.9687991504728792,
+      "recall": 0.9745762711864406,
+      "f1-score": 0.9713533914833092,
+      "support": 354.0
+    }
+  },
+  "test_minority_avg_f1": 0.6666666666666666
+}

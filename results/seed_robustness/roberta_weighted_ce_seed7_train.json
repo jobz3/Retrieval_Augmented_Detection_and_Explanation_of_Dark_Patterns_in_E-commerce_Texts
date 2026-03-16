@@ -1,0 +1,196 @@
+{
+  "model": "roberta-large",
+  "model_key": "roberta",
+  "variant": "weighted_ce",
+  "seed": 7,
+  "checkpoint_name": "roberta_weighted_ce",
+  "split_root": "data\\processed\\ec_darkpattern_phase1_locked",
+  "best_val_macro_f1": 0.7153590268897627,
+  "best_epoch": 4,
+  "test_macro_f1": 0.8496916801808443,
+  "test_accuracy": 0.9689265536723164,
+  "classification_report": {
+    "Scarcity": {
+      "precision": 1.0,
+      "recall": 0.9841269841269841,
+      "f1-score": 0.992,
+      "support": 63.0
+    },
+    "Urgency": {
+      "precision": 0.96875,
+      "recall": 1.0,
+      "f1-score": 0.9841269841269841,
+      "support": 31.0
+    },
+    "Social Proof": {
+      "precision": 0.9791666666666666,
+      "recall": 1.0,
+      "f1-score": 0.9894736842105263,
+      "support": 47.0
+    },
+    "Misdirection": {
+      "precision": 0.8888888888888888,
+      "recall": 0.8275862068965517,
+      "f1-score": 0.8571428571428571,
+      "support": 29.0
+    },
+    "Obstruction": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 4.0
+    },
+    "Forced Action": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1.0
+    },
+    "Sneaking": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 2.0
+    },
+    "Not Dark Pattern": {
+      "precision": 0.9666666666666667,
+      "recall": 0.9830508474576272,
+      "f1-score": 0.9747899159663865,
+      "support": 177.0
+    },
+    "accuracy": 0.9689265536723164,
+    "macro avg": {
+      "precision": 0.8504340277777778,
+      "recall": 0.8493455048101454,
+      "f1-score": 0.8496916801808443,
+      "support": 354.0
+    },
+    "weighted avg": {
+      "precision": 0.9630787037037037,
+      "recall": 0.9689265536723164,
+      "f1-score": 0.9658309538108037,
+      "support": 354.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      62,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      31,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      47,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      24,
+      0,
+      0,
+      0,
+      4
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      4,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      1,
+      0,
+      2,
+      0,
+      0,
+      0,
+      174
+    ]
+  ],
+  "label_names": [
+    "Scarcity",
+    "Urgency",
+    "Social Proof",
+    "Misdirection",
+    "Obstruction",
+    "Forced Action",
+    "Sneaking",
+    "Not Dark Pattern"
+  ],
+  "class_weight_formula": "N_train / (K * n_c)",
+  "train_class_counts": {
+    "Scarcity": 292,
+    "Urgency": 147,
+    "Social Proof": 218,
+    "Misdirection": 137,
+    "Obstruction": 19,
+    "Forced Action": 2,
+    "Sneaking": 8,
+    "Not Dark Pattern": 824
+  },
+  "class_weights": {
+    "Scarcity": 0.7050513698630136,
+    "Urgency": 1.4005102040816326,
+    "Social Proof": 0.9443807339449541,
+    "Misdirection": 1.5027372262773722,
+    "Obstruction": 10.835526315789474,
+    "Forced Action": 102.9375,
+    "Sneaking": 25.734375,
+    "Not Dark Pattern": 0.2498483009708738
+  },
+  "config": {
+    "model_name": "roberta-large",
+    "max_length": 128,
+    "batch_size": 8,
+    "learning_rate": 1e-05,
+    "num_epochs": 5,
+    "warmup_ratio": 0.1
+  }
+}

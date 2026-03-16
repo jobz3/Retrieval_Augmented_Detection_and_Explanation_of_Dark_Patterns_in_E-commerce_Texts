@@ -1,0 +1,26 @@
+## Phase 1 Status
+
+- Status: accepted and frozen
+- Locked split root: `data/processed/ec_darkpattern_phase1_locked/`
+- Locked split artifacts:
+  - `train.csv`
+  - `val.csv`
+  - `test.csv`
+  - `label_map.json`
+  - `raw_audit.json`
+  - `split_manifest.json`
+- Accepted plain baseline truth:
+  - BERT reference metrics: `results/baselines/bert.json`
+  - BERT checkpoint: `outputs/models/bert/`
+  - RoBERTa plain checkpoint truth: `outputs/models/roberta/`
+- Accepted retrieval artifacts:
+  - `outputs/indices/bert_*`
+  - `outputs/indices/roberta_*`
+- Stale artifact warning:
+  - `results/baselines/roberta.json` is not reliable Phase 1 truth because it reflects an older split with `Forced Action` test support `0`.
+- Rare-class caveats:
+  - `Forced Action`: total `4`, test support `1`
+  - `Sneaking`: total `12`, test support `2`
+- Frozen vs experimental:
+  - Frozen: locked split, plain BERT checkpoint/results, plain RoBERTa checkpoint, accepted retrieval indices
+  - Experimental work must not overwrite those artifacts

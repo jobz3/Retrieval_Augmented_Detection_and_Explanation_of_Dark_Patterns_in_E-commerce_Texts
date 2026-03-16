@@ -43,6 +43,12 @@ def to_repo_relative(path: Path) -> str:
     return str(path.relative_to(ROOT))
 
 
+def resolve_path_override(path: Path | None, default: Path) -> Path:
+    if path is None:
+        return default
+    return path if path.is_absolute() else ROOT / path
+
+
 def load_weight_spec(processed_dir: Path) -> tuple[list[str], dict[str, int], list[float]]:
     label_map = load_label_map(processed_dir)
     id2label = {idx: label for label, idx in label_map.items()}
@@ -98,6 +104,9 @@ def train_epoch_weighted(
 def main(
     model: str = typer.Option("bert", help="Model key: bert | roberta"),
     seed: int = typer.Option(CONFIG.project.seed, help="Random seed"),
+    processed_dir: Path | None = typer.Option(None, help="Override processed split directory"),
+    save_dir: Path | None = typer.Option(None, help="Override checkpoint save directory"),
+    results_path: Path | None = typer.Option(None, help="Override results JSON path"),
 ) -> None:
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -105,23 +114,26 @@ def main(
     cfg = CONFIG.baselines.by_name(model)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     variant_key = f"{model}_{VARIANT_NAME}"
-    save_path = WEIGHTED_MODEL_DIR / variant_key
-    results_path = WEIGHTED_RESULTS_DIR / f"{variant_key}.json"
+    processed_dir_path = resolve_path_override(processed_dir, LOCKED_SPLIT_DIR)
+    save_path = resolve_path_override(save_dir, WEIGHTED_MODEL_DIR / variant_key)
+    results_output_path = resolve_path_override(
+        results_path, WEIGHTED_RESULTS_DIR / f"{variant_key}.json"
+    )
 
-    label_map = load_label_map(LOCKED_SPLIT_DIR)
+    label_map = load_label_map(processed_dir_path)
     num_labels = len(label_map)
     id2label = {idx: label for label, idx in label_map.items()}
-    label_names, train_class_counts, class_weights = load_weight_spec(LOCKED_SPLIT_DIR)
+    label_names, train_class_counts, class_weights = load_weight_spec(processed_dir_path)
 
     tokenizer = AutoTokenizer.from_pretrained(cfg.model_name)
     train_dataset = DarkPatternDataset(
-        "train", tokenizer, cfg.max_length, processed_dir=LOCKED_SPLIT_DIR
+        "train", tokenizer, cfg.max_length, processed_dir=processed_dir_path
     )
     val_dataset = DarkPatternDataset(
-        "val", tokenizer, cfg.max_length, processed_dir=LOCKED_SPLIT_DIR
+        "val", tokenizer, cfg.max_length, processed_dir=processed_dir_path
     )
     test_dataset = DarkPatternDataset(
-        "test", tokenizer, cfg.max_length, processed_dir=LOCKED_SPLIT_DIR
+        "test", tokenizer, cfg.max_length, processed_dir=processed_dir_path
     )
 
     train_loader = DataLoader(train_dataset, batch_size=cfg.batch_size, shuffle=True)
@@ -150,7 +162,7 @@ def main(
 
     print(f"Using device: {device}")
     print(f"Training variant: {variant_key}")
-    print(f"Locked split: {to_repo_relative(LOCKED_SPLIT_DIR)}")
+    print(f"Locked split: {to_repo_relative(processed_dir_path)}")
     print(f"Class weights: {dict(zip(label_names, class_weights, strict=True))}")
 
     for epoch in range(1, cfg.num_epochs + 1):
@@ -189,8 +201,9 @@ def main(
         "model": cfg.model_name,
         "model_key": model,
         "variant": VARIANT_NAME,
+        "seed": seed,
         "checkpoint_name": variant_key,
-        "split_root": to_repo_relative(LOCKED_SPLIT_DIR),
+        "split_root": to_repo_relative(processed_dir_path),
         "best_val_macro_f1": best_val_f1,
         "best_epoch": best_epoch,
         "test_macro_f1": test_f1,
@@ -213,8 +226,8 @@ def main(
         },
     }
 
-    WEIGHTED_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    with results_path.open("w", encoding="utf-8") as handle:
+    results_output_path.parent.mkdir(parents=True, exist_ok=True)
+    with results_output_path.open("w", encoding="utf-8") as handle:
         json.dump(results, handle, indent=2)
 
     print(f"\nBest epoch: {best_epoch} (val macro F1 = {best_val_f1:.4f})")
@@ -226,7 +239,7 @@ def main(
         target_names=label_names,
         zero_division=0,
     ))
-    print(f"Results saved to {to_repo_relative(results_path)}")
+    print(f"Results saved to {to_repo_relative(results_output_path)}")
 
 
 if __name__ == "__main__":

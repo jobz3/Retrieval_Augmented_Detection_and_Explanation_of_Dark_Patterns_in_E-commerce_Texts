@@ -1,0 +1,49 @@
+model,variant,seed,checkpoint_name,split,class,precision,recall,f1,support
+roberta,plain,7,roberta_plain_seed7,val,Forced Action,0.0,0.0,0.0,1.0
+roberta,plain,7,roberta_plain_seed7,val,Misdirection,0.9333333333333333,0.9655172413793104,0.9491525423728814,29.0
+roberta,plain,7,roberta_plain_seed7,val,Not Dark Pattern,0.9887640449438202,0.9943502824858758,0.9915492957746479,177.0
+roberta,plain,7,roberta_plain_seed7,val,Obstruction,1.0,1.0,1.0,4.0
+roberta,plain,7,roberta_plain_seed7,val,Scarcity,0.9682539682539683,0.9682539682539683,0.9682539682539683,63.0
+roberta,plain,7,roberta_plain_seed7,val,Sneaking,0.0,0.0,0.0,2.0
+roberta,plain,7,roberta_plain_seed7,val,Social Proof,1.0,0.9787234042553191,0.989247311827957,47.0
+roberta,plain,7,roberta_plain_seed7,val,Urgency,0.9411764705882353,1.0,0.9696969696969697,32.0
+roberta,plain,13,roberta_plain_seed13,val,Forced Action,0.0,0.0,0.0,1.0
+roberta,plain,13,roberta_plain_seed13,val,Misdirection,0.8529411764705882,1.0,0.9206349206349206,29.0
+roberta,plain,13,roberta_plain_seed13,val,Not Dark Pattern,0.9942857142857143,0.9830508474576272,0.9886363636363636,177.0
+roberta,plain,13,roberta_plain_seed13,val,Obstruction,1.0,1.0,1.0,4.0
+roberta,plain,13,roberta_plain_seed13,val,Scarcity,0.9841269841269841,0.9841269841269841,0.9841269841269841,63.0
+roberta,plain,13,roberta_plain_seed13,val,Sneaking,0.0,0.0,0.0,2.0
+roberta,plain,13,roberta_plain_seed13,val,Social Proof,0.9782608695652174,0.9574468085106383,0.967741935483871,47.0
+roberta,plain,13,roberta_plain_seed13,val,Urgency,0.9696969696969697,1.0,0.9846153846153847,32.0
+roberta,plain,42,roberta_plain_seed42,val,Forced Action,0.0,0.0,0.0,1.0
+roberta,plain,42,roberta_plain_seed42,val,Misdirection,0.8787878787878788,1.0,0.9354838709677419,29.0
+roberta,plain,42,roberta_plain_seed42,val,Not Dark Pattern,0.9943502824858758,0.9943502824858758,0.9943502824858758,177.0
+roberta,plain,42,roberta_plain_seed42,val,Obstruction,1.0,1.0,1.0,4.0
+roberta,plain,42,roberta_plain_seed42,val,Scarcity,1.0,0.9682539682539683,0.9838709677419355,63.0
+roberta,plain,42,roberta_plain_seed42,val,Sneaking,0.0,0.0,0.0,2.0
+roberta,plain,42,roberta_plain_seed42,val,Social Proof,1.0,1.0,1.0,47.0
+roberta,plain,42,roberta_plain_seed42,val,Urgency,0.9696969696969697,1.0,0.9846153846153847,32.0
+roberta,weighted_ce,7,roberta_weighted_ce_seed7,val,Forced Action,0.0,0.0,0.0,1.0
+roberta,weighted_ce,7,roberta_weighted_ce_seed7,val,Misdirection,0.875,0.9655172413793104,0.9180327868852459,29.0
+roberta,weighted_ce,7,roberta_weighted_ce_seed7,val,Not Dark Pattern,0.9830508474576272,0.9830508474576272,0.9830508474576272,177.0
+roberta,weighted_ce,7,roberta_weighted_ce_seed7,val,Obstruction,0.8,1.0,0.8888888888888888,4.0
+roberta,weighted_ce,7,roberta_weighted_ce_seed7,val,Scarcity,0.96875,0.9841269841269841,0.9763779527559056,63.0
+roberta,weighted_ce,7,roberta_weighted_ce_seed7,val,Sneaking,0.0,0.0,0.0,2.0
+roberta,weighted_ce,7,roberta_weighted_ce_seed7,val,Social Proof,0.9777777777777777,0.9361702127659575,0.9565217391304348,47.0
+roberta,weighted_ce,7,roberta_weighted_ce_seed7,val,Urgency,1.0,1.0,1.0,32.0
+roberta,weighted_ce,13,roberta_weighted_ce_seed13,val,Forced Action,0.0,0.0,0.0,1.0
+roberta,weighted_ce,13,roberta_weighted_ce_seed13,val,Misdirection,0.9032258064516129,0.9655172413793104,0.9333333333333333,29.0
+roberta,weighted_ce,13,roberta_weighted_ce_seed13,val,Not Dark Pattern,0.9942857142857143,0.9830508474576272,0.9886363636363636,177.0
+roberta,weighted_ce,13,roberta_weighted_ce_seed13,val,Obstruction,1.0,1.0,1.0,4.0
+roberta,weighted_ce,13,roberta_weighted_ce_seed13,val,Scarcity,1.0,0.9841269841269841,0.992,63.0
+roberta,weighted_ce,13,roberta_weighted_ce_seed13,val,Sneaking,0.0,0.0,0.0,2.0
+roberta,weighted_ce,13,roberta_weighted_ce_seed13,val,Social Proof,0.9591836734693877,1.0,0.9791666666666666,47.0
+roberta,weighted_ce,13,roberta_weighted_ce_seed13,val,Urgency,0.9696969696969697,1.0,0.9846153846153847,32.0
+roberta,weighted_ce,42,roberta_weighted_ce_seed42,val,Forced Action,0.0,0.0,0.0,1.0
+roberta,weighted_ce,42,roberta_weighted_ce_seed42,val,Misdirection,0.9032258064516129,0.9655172413793104,0.9333333333333333,29.0
+roberta,weighted_ce,42,roberta_weighted_ce_seed42,val,Not Dark Pattern,0.9943502824858758,0.9943502824858758,0.9943502824858758,177.0
+roberta,weighted_ce,42,roberta_weighted_ce_seed42,val,Obstruction,1.0,1.0,1.0,4.0
+roberta,weighted_ce,42,roberta_weighted_ce_seed42,val,Scarcity,1.0,0.9682539682539683,0.9838709677419355,63.0
+roberta,weighted_ce,42,roberta_weighted_ce_seed42,val,Sneaking,0.0,0.0,0.0,2.0
+roberta,weighted_ce,42,roberta_weighted_ce_seed42,val,Social Proof,0.9791666666666666,1.0,0.9894736842105263,47.0
+roberta,weighted_ce,42,roberta_weighted_ce_seed42,val,Urgency,0.9411764705882353,1.0,0.9696969696969697,32.0

@@ -12,11 +12,14 @@ paths:
   indices: "outputs/indices"
   models: "outputs/models"
   weighted_models: "outputs/models_weighted"
+  seed_robustness_models: "outputs/models_seed_robustness"
   results: "results"
   baseline_results: "results/baselines"
   weighted_baseline_results: "results/baselines_weighted"
+  seed_robustness_results: "results/seed_robustness"
   analysis: "results/analysis"
   phase1b_analysis: "results/analysis/phase1b"
+  phase1c_analysis: "results/analysis/phase1c_seed_robustness"
 
 data:
   train_ratio: 0.70
@@ -87,3 +90,9 @@ evaluation:
 phase1b:
   weighted_variant: "weighted_ce"
   minority_train_threshold: 50
+
+phase1c:
+  seeds:
+    - 7
+    - 13
+    - 42

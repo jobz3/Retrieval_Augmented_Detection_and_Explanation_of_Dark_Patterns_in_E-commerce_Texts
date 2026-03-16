@@ -38,10 +38,17 @@ from src.data.dataset import DarkPatternDataset, load_label_map
 from src.utils.config import load_config
 
 CONFIG = load_config()
+ROOT = Path(__file__).resolve().parents[2]
 MODEL_DIR = CONFIG.paths.models
 RESULTS_DIR = CONFIG.paths.baseline_results
 
 app = typer.Typer()
+
+
+def resolve_path_override(path: Path | None, default: Path) -> Path:
+    if path is None:
+        return default
+    return path if path.is_absolute() else ROOT / path
 
 
 # ---------------------------------------------------------------------------
@@ -108,16 +115,22 @@ def evaluate(
 def main(
     model: str = typer.Option("bert", help="Model key: bert | roberta"),
     seed: int = typer.Option(CONFIG.project.seed, help="Random seed"),
+    processed_dir: Path | None = typer.Option(None, help="Override processed split directory"),
+    save_dir: Path | None = typer.Option(None, help="Override checkpoint save directory"),
+    results_path: Path | None = typer.Option(None, help="Override results JSON path"),
 ) -> None:
     torch.manual_seed(seed)
     np.random.seed(seed)
 
     cfg = CONFIG.baselines.by_name(model)
+    processed_dir_path = resolve_path_override(processed_dir, CONFIG.paths.processed_data)
+    save_path = resolve_path_override(save_dir, MODEL_DIR / model)
+    results_output_path = resolve_path_override(results_path, RESULTS_DIR / f"{model}.json")
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
 
-    label_map = load_label_map()
+    label_map = load_label_map(processed_dir_path)
     num_labels = len(label_map)
     id2label = {v: k for k, v in label_map.items()}
     label_names = [id2label[i] for i in range(num_labels)]
@@ -125,9 +138,9 @@ def main(
     print(f"\nLoading tokenizer: {cfg.model_name}")
     tokenizer = AutoTokenizer.from_pretrained(cfg.model_name)
 
-    train_dataset = DarkPatternDataset("train", tokenizer, cfg.max_length)
-    val_dataset = DarkPatternDataset("val", tokenizer, cfg.max_length)
-    test_dataset = DarkPatternDataset("test", tokenizer, cfg.max_length)
+    train_dataset = DarkPatternDataset("train", tokenizer, cfg.max_length, processed_dir_path)
+    val_dataset = DarkPatternDataset("val", tokenizer, cfg.max_length, processed_dir_path)
+    test_dataset = DarkPatternDataset("test", tokenizer, cfg.max_length, processed_dir_path)
 
     train_loader = DataLoader(train_dataset, batch_size=cfg.batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=cfg.batch_size * 2)
@@ -151,8 +164,6 @@ def main(
     # Training
     best_val_f1 = 0.0
     best_epoch = 0
-    save_path = MODEL_DIR / model
-
     for epoch in range(1, cfg.num_epochs + 1):
         train_loss = train_epoch(model_obj, train_loader, optimizer, scheduler, device)
         val_f1, _, _ = evaluate(model_obj, val_loader, device)
@@ -190,11 +201,14 @@ def main(
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     results = {
         "model": cfg.model_name,
+        "model_key": model,
+        "seed": seed,
         "best_val_macro_f1": best_val_f1,
         "test_macro_f1": test_f1,
         "classification_report": report,
         "confusion_matrix": cm,
         "label_names": label_names,
+        "split_root": str(processed_dir_path.relative_to(ROOT)),
         "config": {
             "model_name": cfg.model_name,
             "max_length": cfg.max_length,
@@ -204,10 +218,10 @@ def main(
             "warmup_ratio": cfg.warmup_ratio,
         },
     }
-    results_path = RESULTS_DIR / f"{model}.json"
-    with open(results_path, "w") as f:
+    results_output_path.parent.mkdir(parents=True, exist_ok=True)
+    with results_output_path.open("w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
-    print(f"Results saved to {results_path}")
+    print(f"Results saved to {results_output_path}")
 
 
 if __name__ == "__main__":
