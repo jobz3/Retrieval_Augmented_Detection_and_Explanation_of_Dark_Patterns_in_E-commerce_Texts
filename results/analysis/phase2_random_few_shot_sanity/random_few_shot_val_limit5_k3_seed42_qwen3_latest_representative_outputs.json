@@ -1,0 +1,95 @@
+[
+  {
+    "page_id": "833",
+    "gold_label": "Not Dark Pattern",
+    "prediction": {
+      "label": "Not Dark Pattern",
+      "confidence": 1.0,
+      "psychological_mechanism": "None",
+      "evidence_span": "Holland Cooper",
+      "harm_dimension": "None",
+      "rationale": "The text contains no manipulative language or dark pattern techniques.",
+      "rewrite": "Holland Cooper"
+    },
+    "evidence_span_valid": true,
+    "sampled_examples": [
+      {
+        "page_id": "1475",
+        "category": "Scarcity",
+        "text": "only 5 left in stock"
+      },
+      {
+        "page_id": "361",
+        "category": "Misdirection",
+        "text": "No thanks, I don’t like fun and games."
+      },
+      {
+        "page_id": "243",
+        "category": "Social Proof",
+        "text": "Purchased 100+ times in the last few days."
+      }
+    ]
+  },
+  {
+    "page_id": "1609",
+    "gold_label": "Not Dark Pattern",
+    "prediction": {
+      "label": "Uncertain",
+      "confidence": 0.3,
+      "psychological_mechanism": "None identified",
+      "evidence_span": "MoTrail",
+      "harm_dimension": "Unclear intent",
+      "rationale": "The text contains no manipulative language or behavioral cues associated with dark patterns.",
+      "rewrite": "MoTrail"
+    },
+    "evidence_span_valid": true,
+    "sampled_examples": [
+      {
+        "page_id": "125",
+        "category": "Social Proof",
+        "text": "80 Customers are considering this product right now."
+      },
+      {
+        "page_id": "812",
+        "category": "Urgency",
+        "text": "HURRY! ENDS IN: 11 HRS 20 MIN 13 SEC"
+      },
+      {
+        "page_id": "192",
+        "category": "Social Proof",
+        "text": "Someone in Chambersburg, Pennsylvania purchased"
+      }
+    ]
+  },
+  {
+    "page_id": "1488",
+    "gold_label": "Not Dark Pattern",
+    "prediction": {
+      "label": "Not Dark Pattern",
+      "confidence": 1.0,
+      "psychological_mechanism": "None",
+      "evidence_span": "Events and Entertainment",
+      "harm_dimension": "None",
+      "rationale": "The text is a neutral category label with no manipulative language or dark pattern techniques.",
+      "rewrite": "Events and Entertainment"
+    },
+    "evidence_span_valid": true,
+    "sampled_examples": [
+      {
+        "page_id": "803",
+        "category": "Not Dark Pattern",
+        "text": "Recovery Best Sellers"
+      },
+      {
+        "page_id": "269",
+        "category": "Social Proof",
+        "text": "Nancy in Pennsylvania purchased 24\" Italian Sterling Silver Milano Twist Adjustable Chain"
+      },
+      {
+        "page_id": "1477",
+        "category": "Not Dark Pattern",
+        "text": "If you are one of those constantly devoted to healthy eating, weight loss plans,.."
+      }
+    ]
+  }
+]

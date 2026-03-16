@@ -4,6 +4,8 @@ Shared prompt layer for structured dark-pattern explanation pipelines.
 
 from __future__ import annotations
 
+from typing import Iterable, Mapping
+
 from src.pipelines.schema import OUTPUT_SCHEMA_STR, PatternType
 
 
@@ -43,3 +45,31 @@ def build_user_prompt(input_text: str, examples_block: str | None = None) -> str
 
     blocks.append(f'Input text:\n"""\n{input_text}\n"""')
     return "\n\n".join(blocks)
+
+
+def build_label_only_examples_block(examples: Iterable[Mapping[str, str]]) -> str:
+    """
+    Format random few-shot references from the locked training split.
+
+    The locked split does not contain gold explanations, so we include only
+    text plus the gold label as an honest, auditable reference format.
+    """
+    rendered_examples: list[str] = [
+        "Reference examples from the locked training split (label-only, no retrieval):"
+    ]
+
+    for index, example in enumerate(examples, start=1):
+        rendered_examples.append(
+            "\n".join(
+                [
+                    f"Example {index}",
+                    "Input text:",
+                    '"""',
+                    example["text"],
+                    '"""',
+                    f"Gold label: {example['category']}",
+                ]
+            )
+        )
+
+    return "\n\n".join(rendered_examples)
