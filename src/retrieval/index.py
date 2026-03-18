@@ -63,7 +63,7 @@ def load_index(
     """Load a previously built index for a given encoder."""
     index = faiss.read_index(str(out_dir / f"{encoder}_index.faiss"))
     embeddings = np.load(out_dir / f"{encoder}_embeddings.npy")
-    with open(out_dir / f"{encoder}_metadata.json") as f:
+    with open(out_dir / f"{encoder}_metadata.json", encoding="utf-8") as f:
         metadata = json.load(f)
     return index, embeddings, metadata
 

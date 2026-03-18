@@ -1,0 +1,142 @@
+[
+  {
+    "page_id": "833",
+    "gold_label": "Not Dark Pattern",
+    "input_text": "Holland Cooper",
+    "encoder": "bert",
+    "strategy": "knn",
+    "top_k": 3,
+    "retrieved_examples": [
+      {
+        "text": " Irwin ",
+        "category": "Not Dark Pattern",
+        "page_id": 1630,
+        "score": 0.968316376209259
+      },
+      {
+        "text": "Discreet packaging",
+        "category": "Not Dark Pattern",
+        "page_id": 217,
+        "score": 0.9657403826713562
+      },
+      {
+        "text": "Barbour International",
+        "category": "Not Dark Pattern",
+        "page_id": 833,
+        "score": 0.9652003645896912
+      }
+    ]
+  },
+  {
+    "page_id": "1609",
+    "gold_label": "Not Dark Pattern",
+    "input_text": "MoTrail",
+    "encoder": "bert",
+    "strategy": "knn",
+    "top_k": 3,
+    "retrieved_examples": [
+      {
+        "text": " Glow Gear ",
+        "category": "Not Dark Pattern",
+        "page_id": 527,
+        "score": 0.9685044884681702
+      },
+      {
+        "text": "BreakThrough",
+        "category": "Not Dark Pattern",
+        "page_id": 1648,
+        "score": 0.9670006632804871
+      },
+      {
+        "text": "Decades Shop",
+        "category": "Not Dark Pattern",
+        "page_id": 1459,
+        "score": 0.9665648937225342
+      }
+    ]
+  },
+  {
+    "page_id": "1488",
+    "gold_label": "Not Dark Pattern",
+    "input_text": "Events and Entertainment",
+    "encoder": "bert",
+    "strategy": "knn",
+    "top_k": 3,
+    "retrieved_examples": [
+      {
+        "text": "NRA Annual Meetings & Exhibits",
+        "category": "Not Dark Pattern",
+        "page_id": 1488,
+        "score": 0.8942336440086365
+      },
+      {
+        "text": " Customer Support ",
+        "category": "Not Dark Pattern",
+        "page_id": 814,
+        "score": 0.8932175636291504
+      },
+      {
+        "text": "Sports ",
+        "category": "Not Dark Pattern",
+        "page_id": 811,
+        "score": 0.8917162418365479
+      }
+    ]
+  },
+  {
+    "page_id": "1031",
+    "gold_label": "Urgency",
+    "input_text": "HURRY! £32.99 UK DELIVERY ENDS SOON",
+    "encoder": "bert",
+    "strategy": "knn",
+    "top_k": 3,
+    "retrieved_examples": [
+      {
+        "text": "In Stock. Only 1 Left!",
+        "category": "Scarcity",
+        "page_id": 1592,
+        "score": 0.9048432111740112
+      },
+      {
+        "text": "Only 8 left in stock. Almost Gone!",
+        "category": "Scarcity",
+        "page_id": 1524,
+        "score": 0.8987548351287842
+      },
+      {
+        "text": "HURRY! ONLY 19 LEFT IN STOCK.",
+        "category": "Scarcity",
+        "page_id": 1095,
+        "score": 0.8984973430633545
+      }
+    ]
+  },
+  {
+    "page_id": "306",
+    "gold_label": "Not Dark Pattern",
+    "input_text": "COMBAT GEARHot",
+    "encoder": "bert",
+    "strategy": "knn",
+    "top_k": 3,
+    "retrieved_examples": [
+      {
+        "text": " Glow Gear ",
+        "category": "Not Dark Pattern",
+        "page_id": 527,
+        "score": 0.9289523363113403
+      },
+      {
+        "text": "Fashion Forward",
+        "category": "Not Dark Pattern",
+        "page_id": 242,
+        "score": 0.9260949492454529
+      },
+      {
+        "text": "Rare Book Conditions ",
+        "category": "Not Dark Pattern",
+        "page_id": 1667,
+        "score": 0.9225023984909058
+      }
+    ]
+  }
+]

@@ -73,3 +73,35 @@ def build_label_only_examples_block(examples: Iterable[Mapping[str, str]]) -> st
         )
 
     return "\n\n".join(rendered_examples)
+
+
+def build_retrieved_examples_block(examples: Iterable[Mapping[str, str | float | int]]) -> str:
+    """
+    Format retrieved training references for the RAG prompt.
+
+    Retrieved items are label-anchored training references only. They are not
+    gold explanation exemplars because the locked training split does not
+    contain explanation fields.
+    """
+    rendered_examples: list[str] = [
+        "Retrieved reference examples from the locked training split (label-only references):"
+    ]
+
+    for index, example in enumerate(examples, start=1):
+        score = example.get("score")
+        score_line = f"Retrieval score: {float(score):.4f}" if score is not None else "Retrieval score: n/a"
+        rendered_examples.append(
+            "\n".join(
+                [
+                    f"Retrieved Example {index}",
+                    score_line,
+                    "Input text:",
+                    '"""',
+                    str(example["text"]),
+                    '"""',
+                    f"Gold label: {example['category']}",
+                ]
+            )
+        )
+
+    return "\n\n".join(rendered_examples)

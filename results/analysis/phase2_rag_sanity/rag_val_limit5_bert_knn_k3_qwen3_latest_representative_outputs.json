@@ -1,0 +1,104 @@
+[
+  {
+    "page_id": "833",
+    "gold_label": "Not Dark Pattern",
+    "prediction": {
+      "label": "Not Dark Pattern",
+      "confidence": 1.0,
+      "psychological_mechanism": "None",
+      "evidence_span": "Holland Cooper",
+      "harm_dimension": "None",
+      "rationale": "The text contains no manipulative language or dark pattern techniques, merely stating a brand name.",
+      "rewrite": "Holland Cooper"
+    },
+    "evidence_span_valid": true,
+    "retrieved_examples": [
+      {
+        "text": " Irwin ",
+        "category": "Not Dark Pattern",
+        "page_id": 1630,
+        "score": 0.968316376209259
+      },
+      {
+        "text": "Discreet packaging",
+        "category": "Not Dark Pattern",
+        "page_id": 217,
+        "score": 0.9657403826713562
+      },
+      {
+        "text": "Barbour International",
+        "category": "Not Dark Pattern",
+        "page_id": 833,
+        "score": 0.9652003645896912
+      }
+    ]
+  },
+  {
+    "page_id": "1609",
+    "gold_label": "Not Dark Pattern",
+    "prediction": {
+      "label": "Not Dark Pattern",
+      "confidence": 0.98,
+      "psychological_mechanism": "None",
+      "evidence_span": "MoTrail",
+      "harm_dimension": "No consumer harm detected",
+      "rationale": "The text contains no manipulative language, persuasive tactics, or deceptive practices. It simply presents a brand name without any contextual cues that would constitute a dark pattern.",
+      "rewrite": "MoTrail"
+    },
+    "evidence_span_valid": true,
+    "retrieved_examples": [
+      {
+        "text": " Glow Gear ",
+        "category": "Not Dark Pattern",
+        "page_id": 527,
+        "score": 0.9685044884681702
+      },
+      {
+        "text": "BreakThrough",
+        "category": "Not Dark Pattern",
+        "page_id": 1648,
+        "score": 0.9670006632804871
+      },
+      {
+        "text": "Decades Shop",
+        "category": "Not Dark Pattern",
+        "page_id": 1459,
+        "score": 0.9665648937225342
+      }
+    ]
+  },
+  {
+    "page_id": "1488",
+    "gold_label": "Not Dark Pattern",
+    "prediction": {
+      "label": "Not Dark Pattern",
+      "confidence": 1.0,
+      "psychological_mechanism": "None",
+      "evidence_span": "Events and Entertainment",
+      "harm_dimension": "No consumer harm",
+      "rationale": "The text is a general category name without any manipulative language or persuasive tactics.",
+      "rewrite": "Events and Entertainment"
+    },
+    "evidence_span_valid": true,
+    "retrieved_examples": [
+      {
+        "text": "NRA Annual Meetings & Exhibits",
+        "category": "Not Dark Pattern",
+        "page_id": 1488,
+        "score": 0.8942336440086365
+      },
+      {
+        "text": " Customer Support ",
+        "category": "Not Dark Pattern",
+        "page_id": 814,
+        "score": 0.8932175636291504
+      },
+      {
+        "text": "Sports ",
+        "category": "Not Dark Pattern",
+        "page_id": 811,
+        "score": 0.8917162418365479
+      }
+    ]
+  }
+]
