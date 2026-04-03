@@ -37,6 +37,8 @@ class DarkPatternDataset(Dataset):
         max_length: int = 128,
         processed_dir: Path = PROCESSED_DIR,
     ):
+        # Allow callers to pass a full filename stem (e.g. "train_v2") or
+        # just the split name ("train").  Always appends ".csv".
         csv_path = processed_dir / f"{split}.csv"
         if not csv_path.exists():
             raise FileNotFoundError(

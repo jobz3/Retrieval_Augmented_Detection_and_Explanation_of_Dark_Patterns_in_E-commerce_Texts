@@ -130,6 +130,9 @@ def evaluate(
 def main(
     model: str = typer.Option("bert", help="Model key: bert | roberta"),
     seed: int = typer.Option(42, help="Random seed"),
+    train_file: str = typer.Option("train", help="Train split filename stem (e.g. 'train' or 'train_v2')"),
+    val_file: str = typer.Option("val", help="Val split filename stem (e.g. 'val' or 'val_v2')"),
+    test_file: str = typer.Option("test", help="Test split filename stem (e.g. 'test' or 'test_v2')"),
 ) -> None:
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -139,7 +142,7 @@ def main(
         raise ValueError(f"Unknown model '{model}'. Choose: bert, roberta")
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"Using device: {device}")
+    print(f"Using device: {device}  |  train={train_file}  val={val_file}  test={test_file}")
 
     label_map = load_label_map()
     num_labels = len(label_map)
@@ -149,9 +152,9 @@ def main(
     print(f"\nLoading tokenizer: {cfg['model_name']}")
     tokenizer = AutoTokenizer.from_pretrained(cfg["model_name"])
 
-    train_dataset = DarkPatternDataset("train", tokenizer, cfg["max_length"])
-    val_dataset = DarkPatternDataset("val", tokenizer, cfg["max_length"])
-    test_dataset = DarkPatternDataset("test", tokenizer, cfg["max_length"])
+    train_dataset = DarkPatternDataset(train_file, tokenizer, cfg["max_length"])
+    val_dataset = DarkPatternDataset(val_file, tokenizer, cfg["max_length"])
+    test_dataset = DarkPatternDataset(test_file, tokenizer, cfg["max_length"])
 
     train_loader = DataLoader(train_dataset, batch_size=cfg["batch_size"], shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=cfg["batch_size"] * 2)
@@ -175,7 +178,9 @@ def main(
     # Training
     best_val_f1 = 0.0
     best_epoch = 0
-    save_path = MODEL_DIR / model
+    is_default_splits = (train_file == "train" and val_file == "val" and test_file == "test")
+    run_suffix = "" if is_default_splits else f"_{train_file}"
+    save_path = MODEL_DIR / f"{model}{run_suffix}"
 
     for epoch in range(1, cfg["num_epochs"] + 1):
         train_loss = train_epoch(model_obj, train_loader, optimizer, scheduler, device)
@@ -221,7 +226,7 @@ def main(
         "label_names": label_names,
         "config": cfg,
     }
-    results_path = RESULTS_DIR / f"{model}.json"
+    results_path = RESULTS_DIR / f"{model}{run_suffix}.json"
     with open(results_path, "w") as f:
         json.dump(results, f, indent=2)
     print(f"Results saved to {results_path}")
