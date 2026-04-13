@@ -44,11 +44,13 @@ class Retriever:
         k: int = 5,
         diversity_lambda: float = 0.5,
         index_dir: Path = INDEX_DIR,
+        device: str = "cpu",
     ):
         self.encoder = encoder
         self.strategy = strategy
         self.k = k
         self.diversity_lambda = diversity_lambda
+        self.device = device  # "cpu" by default — avoids OOM when GPU is shared with Ollama
 
         print(f"Loading FAISS index [{encoder}] ...")
         self.index, self.embeddings, self.metadata = load_index(encoder, index_dir)
@@ -64,7 +66,7 @@ class Retriever:
         """
         Return k dicts: {"text": str, "category": str, "score": float}.
         """
-        query_emb = encode_texts([query], encoder=self.encoder, show_progress=False)  # (1, D)
+        query_emb = encode_texts([query], encoder=self.encoder, show_progress=False, device=self.device)  # (1, D)
 
         if self.strategy == "knn":
             return self._knn(query_emb)

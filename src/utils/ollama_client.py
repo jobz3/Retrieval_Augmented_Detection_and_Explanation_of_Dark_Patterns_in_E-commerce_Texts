@@ -31,6 +31,7 @@ def chat_json(
     temperature: float = 0.0,
     max_retries: int = 3,
     retry_delay: float = 1.0,
+    timeout: float = 120.0,
 ) -> dict:
     """
     Send a chat request to Ollama and return a parsed JSON dict.
@@ -58,19 +59,28 @@ def chat_json(
         messages.append({"role": "system", "content": system})
     messages.append({"role": "user", "content": prompt})
 
-    client = ollama.Client(host=OLLAMA_BASE_URL)
+    client = ollama.Client(host=OLLAMA_BASE_URL, timeout=timeout)
 
     options: dict = {"temperature": temperature}
     if _is_thinking_model(model):
         options["think"] = False
 
     for attempt in range(1, max_retries + 1):
-        response = client.chat(
-            model=model,
-            messages=messages,
-            format="json",
-            options=options,
-        )
+        try:
+            response = client.chat(
+                model=model,
+                messages=messages,
+                format="json",
+                options=options,
+            )
+        except Exception as exc:
+            # Covers ReadTimeout, ConnectError, and any other transport errors.
+            # Convert to ValueError so pipeline ParseError handlers catch it.
+            if attempt < max_retries:
+                time.sleep(retry_delay)
+                continue
+            raise ValueError(f"Ollama request failed after {max_retries} attempts: {exc}") from exc
+
         raw = response["message"]["content"]
         try:
             return json.loads(raw)
@@ -89,4 +99,9 @@ def chat_json(
 def list_models() -> list[str]:
     """Return available model tags from the local Ollama instance."""
     client = ollama.Client(host=OLLAMA_BASE_URL)
-    return [m["name"] for m in client.list()["models"]]
+    result = client.list()
+    # Ollama SDK ≥0.4 returns ListResponse with .models (list of Model objects)
+    if hasattr(result, "models"):
+        return [m.model for m in result.models]
+    # Older SDK returned a plain dict
+    return [m["name"] for m in result.get("models", [])]

@@ -1,0 +1,542 @@
+[
+  {
+    "name": "Zero-shot",
+    "n": 376,
+    "classification": {
+      "macro_f1": 0.5189,
+      "macro_precision": 0.7522,
+      "macro_recall": 0.504,
+      "per_class": {
+        "Forced Action": {
+          "f1": 0.6316,
+          "precision": 0.5,
+          "recall": 0.8571,
+          "support": 7.0
+        },
+        "Misdirection": {
+          "f1": 0.0645,
+          "precision": 1.0,
+          "recall": 0.0333,
+          "support": 30.0
+        },
+        "Not Dark Pattern": {
+          "f1": 0.8255,
+          "precision": 0.7085,
+          "recall": 0.9887,
+          "support": 177.0
+        },
+        "Obstruction": {
+          "f1": 0.375,
+          "precision": 0.75,
+          "recall": 0.25,
+          "support": 12.0
+        },
+        "Scarcity": {
+          "f1": 0.9688,
+          "precision": 0.9538,
+          "recall": 0.9841,
+          "support": 63.0
+        },
+        "Sneaking": {
+          "f1": 0.5455,
+          "precision": 1.0,
+          "recall": 0.375,
+          "support": 8.0
+        },
+        "Social Proof": {
+          "f1": 0.459,
+          "precision": 1.0,
+          "recall": 0.2979,
+          "support": 47.0
+        },
+        "Urgency": {
+          "f1": 0.8,
+          "precision": 0.8571,
+          "recall": 0.75,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          6,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          1,
+          25,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          175,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          8,
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          62,
+          0,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          3,
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          32,
+          0,
+          0,
+          0,
+          14,
+          1
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          3,
+          0,
+          0,
+          24
+        ]
+      ]
+    },
+    "grounding": {
+      "exact_rate": 0.9947,
+      "ci_rate": 0.9947,
+      "avg_span_len": 34.32,
+      "empty_spans": 3
+    },
+    "confidence": {
+      "mean_confidence": 0.9207,
+      "accuracy": 0.766,
+      "calibration_gap": 0.1548,
+      "confidence_buckets": {
+        "0.0-0.2": {
+          "count": 4,
+          "correct": 4
+        },
+        "0.2-0.4": {
+          "count": 1,
+          "correct": 0
+        },
+        "0.4-0.6": {
+          "count": 11,
+          "correct": 3
+        },
+        "0.6-0.8": {
+          "count": 9,
+          "correct": 7
+        },
+        "0.8-1.0": {
+          "count": 351,
+          "correct": 274
+        }
+      }
+    },
+    "output_quality": {
+      "rewrite_coverage": 0.4894,
+      "avg_rewrite_words": 8.23,
+      "avg_rationale_words": 18.21,
+      "avg_input_words": 8.45
+    }
+  },
+  {
+    "name": "Random few-shot k=5",
+    "n": 376,
+    "classification": {
+      "macro_f1": 0.559,
+      "macro_precision": 0.758,
+      "macro_recall": 0.5317,
+      "per_class": {
+        "Forced Action": {
+          "f1": 0.7059,
+          "precision": 0.6,
+          "recall": 0.8571,
+          "support": 7.0
+        },
+        "Misdirection": {
+          "f1": 0.0645,
+          "precision": 1.0,
+          "recall": 0.0333,
+          "support": 30.0
+        },
+        "Not Dark Pattern": {
+          "f1": 0.8325,
+          "precision": 0.722,
+          "recall": 0.9831,
+          "support": 177.0
+        },
+        "Obstruction": {
+          "f1": 0.375,
+          "precision": 0.75,
+          "recall": 0.25,
+          "support": 12.0
+        },
+        "Scarcity": {
+          "f1": 0.928,
+          "precision": 0.9355,
+          "recall": 0.9206,
+          "support": 63.0
+        },
+        "Sneaking": {
+          "f1": 0.6667,
+          "precision": 1.0,
+          "recall": 0.5,
+          "support": 8.0
+        },
+        "Social Proof": {
+          "f1": 0.7123,
+          "precision": 1.0,
+          "recall": 0.5532,
+          "support": 47.0
+        },
+        "Urgency": {
+          "f1": 0.7458,
+          "precision": 0.8148,
+          "recall": 0.6875,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          6,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          27,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          174,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          9,
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          58,
+          0,
+          0,
+          3
+        ],
+        [
+          1,
+          0,
+          3,
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          21,
+          0,
+          0,
+          0,
+          26,
+          0
+        ],
+        [
+          0,
+          0,
+          5,
+          0,
+          4,
+          0,
+          0,
+          22
+        ]
+      ]
+    },
+    "grounding": {
+      "exact_rate": 0.9894,
+      "ci_rate": 0.992,
+      "avg_span_len": 33.84,
+      "empty_spans": 1
+    },
+    "confidence": {
+      "mean_confidence": 0.9473,
+      "accuracy": 0.7819,
+      "calibration_gap": 0.1654,
+      "confidence_buckets": {
+        "0.0-0.2": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.2-0.4": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.4-0.6": {
+          "count": 3,
+          "correct": 0
+        },
+        "0.6-0.8": {
+          "count": 6,
+          "correct": 4
+        },
+        "0.8-1.0": {
+          "count": 367,
+          "correct": 290
+        }
+      }
+    },
+    "output_quality": {
+      "rewrite_coverage": 0.4282,
+      "avg_rewrite_words": 7.56,
+      "avg_rationale_words": 16.99,
+      "avg_input_words": 8.45
+    }
+  },
+  {
+    "name": "RAG sbert knn k=5",
+    "n": 376,
+    "classification": {
+      "macro_f1": 0.9455,
+      "macro_precision": 0.9881,
+      "macro_recall": 0.9185,
+      "per_class": {
+        "Forced Action": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 7.0
+        },
+        "Misdirection": {
+          "f1": 0.9677,
+          "precision": 0.9375,
+          "recall": 1.0,
+          "support": 30.0
+        },
+        "Not Dark Pattern": {
+          "f1": 0.9805,
+          "precision": 0.967,
+          "recall": 0.9944,
+          "support": 177.0
+        },
+        "Obstruction": {
+          "f1": 0.8571,
+          "precision": 1.0,
+          "recall": 0.75,
+          "support": 12.0
+        },
+        "Scarcity": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 63.0
+        },
+        "Sneaking": {
+          "f1": 0.7692,
+          "precision": 1.0,
+          "recall": 0.625,
+          "support": 8.0
+        },
+        "Social Proof": {
+          "f1": 0.9892,
+          "precision": 1.0,
+          "recall": 0.9787,
+          "support": 47.0
+        },
+        "Urgency": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          7,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          30,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          176,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          9,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          63,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          2,
+          0,
+          0,
+          5,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          46,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          32
+        ]
+      ]
+    },
+    "grounding": {
+      "exact_rate": 0.9973,
+      "ci_rate": 0.9973,
+      "avg_span_len": 35.38,
+      "empty_spans": 0
+    },
+    "confidence": {
+      "mean_confidence": 0.9778,
+      "accuracy": 0.9787,
+      "calibration_gap": 0.0009,
+      "confidence_buckets": {
+        "0.0-0.2": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.2-0.4": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.4-0.6": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.6-0.8": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.8-1.0": {
+          "count": 376,
+          "correct": 368
+        }
+      }
+    },
+    "output_quality": {
+      "rewrite_coverage": 0.492,
+      "avg_rewrite_words": 8.12,
+      "avg_rationale_words": 17.45,
+      "avg_input_words": 8.45
+    }
+  }
+]

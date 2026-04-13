@@ -16,9 +16,12 @@ import torch
 from tqdm import tqdm
 
 
-def get_sbert_encoder(model_name: str = "sentence-transformers/all-mpnet-base-v2"):
+def get_sbert_encoder(
+    model_name: str = "sentence-transformers/all-mpnet-base-v2",
+    device: str | None = None,
+):
     from sentence_transformers import SentenceTransformer
-    return SentenceTransformer(model_name)
+    return SentenceTransformer(model_name, device=device)
 
 
 def encode_with_sbert(
@@ -26,9 +29,10 @@ def encode_with_sbert(
     model_name: str = "sentence-transformers/all-mpnet-base-v2",
     batch_size: int = 64,
     show_progress: bool = True,
+    device: str | None = None,
 ) -> np.ndarray:
     """Return (N, D) float32 numpy array of L2-normalised embeddings."""
-    model = get_sbert_encoder(model_name)
+    model = get_sbert_encoder(model_name, device=device)
     embeddings = model.encode(
         texts,
         batch_size=batch_size,
@@ -93,18 +97,22 @@ def encode_texts(
     roberta_model: str = "roberta-large",
     batch_size: int = 64,
     show_progress: bool = True,
+    device: str | None = None,
 ) -> np.ndarray:
     """
     Unified entry point. Dispatches to the appropriate encoder.
 
     Args:
         encoder: "sbert", "bert", or "roberta"
+        device:  Force a specific device (e.g. "cpu") — useful when GPU memory
+                 is shared with an LLM inference process (Ollama).
+                 Defaults to CUDA if available.
     """
     if encoder == "sbert":
-        return encode_with_sbert(texts, sbert_model, batch_size, show_progress)
+        return encode_with_sbert(texts, sbert_model, batch_size, show_progress, device=device)
     elif encoder == "bert":
-        return encode_with_hf(texts, bert_model, batch_size, show_progress=show_progress)
+        return encode_with_hf(texts, bert_model, batch_size, show_progress=show_progress, device=device)
     elif encoder == "roberta":
-        return encode_with_hf(texts, roberta_model, batch_size, show_progress=show_progress)
+        return encode_with_hf(texts, roberta_model, batch_size, show_progress=show_progress, device=device)
     else:
         raise ValueError(f"Unknown encoder '{encoder}'. Choose: sbert, bert, roberta")
