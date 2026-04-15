@@ -10,6 +10,7 @@ Three encoder options (set in config.yaml → retrieval.encoder):
 from __future__ import annotations
 
 from pathlib import Path
+import os
 
 import numpy as np
 import torch
@@ -17,7 +18,7 @@ from tqdm import tqdm
 
 
 def get_sbert_encoder(
-    model_name: str = "sentence-transformers/all-mpnet-base-v2",
+    model_name: str = os.environ.get("SBERT_MODEL_PATH", "sentence-transformers/all-mpnet-base-v2"),
     device: str | None = None,
 ):
     from sentence_transformers import SentenceTransformer
@@ -26,7 +27,7 @@ def get_sbert_encoder(
 
 def encode_with_sbert(
     texts: list[str],
-    model_name: str = "sentence-transformers/all-mpnet-base-v2",
+    model_name: str = os.environ.get("SBERT_MODEL_PATH", "sentence-transformers/all-mpnet-base-v2"),
     batch_size: int = 64,
     show_progress: bool = True,
     device: str | None = None,
@@ -92,8 +93,8 @@ def encode_with_hf(
 def encode_texts(
     texts: list[str],
     encoder: str = "sbert",
-    sbert_model: str = "sentence-transformers/all-mpnet-base-v2",
-    bert_model: str = "bert-base-uncased",
+    sbert_model: str = os.environ.get("SBERT_MODEL_PATH", "sentence-transformers/all-mpnet-base-v2"),
+    bert_model: str = os.environ.get("BERT_MODEL_PATH", "bert-base-uncased"),
     roberta_model: str = "roberta-large",
     batch_size: int = 64,
     show_progress: bool = True,

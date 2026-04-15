@@ -126,3 +126,5 @@ desktop.ini
 *.temp
 
 *.md
+logs/
+*.sbatch

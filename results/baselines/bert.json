@@ -1,7 +1,7 @@
 {
   "model": "bert-base-uncased",
-  "best_val_macro_f1": 0.687075448443453,
-  "test_macro_f1": 0.8051013733016044,
+  "best_val_macro_f1": 0.6856733964479744,
+  "test_macro_f1": 0.8106787850327499,
   "classification_report": {
     "Forced Action": {
       "precision": 0.0,
@@ -11,14 +11,14 @@
     },
     "Misdirection": {
       "precision": 1.0,
-      "recall": 0.7777777777777778,
-      "f1-score": 0.875,
+      "recall": 0.8148148148148148,
+      "f1-score": 0.8979591836734694,
       "support": 27.0
     },
     "Not Dark Pattern": {
-      "precision": 0.9602272727272727,
-      "recall": 0.9941176470588236,
-      "f1-score": 0.976878612716763,
+      "precision": 0.9659090909090909,
+      "recall": 1.0,
+      "f1-score": 0.9826589595375722,
       "support": 170.0
     },
     "Obstruction": {
@@ -40,9 +40,9 @@
       "support": 2.0
     },
     "Social Proof": {
-      "precision": 0.9787234042553191,
+      "precision": 1.0,
       "recall": 0.9583333333333334,
-      "f1-score": 0.968421052631579,
+      "f1-score": 0.9787234042553191,
       "support": 48.0
     },
     "Urgency": {
@@ -51,17 +51,17 @@
       "f1-score": 0.972972972972973,
       "support": 36.0
     },
-    "accuracy": 0.9661016949152542,
+    "accuracy": 0.9717514124293786,
     "macro avg": {
-      "precision": 0.7027016519602852,
-      "recall": 0.7144403594771243,
-      "f1-score": 0.7044637016389039,
+      "precision": 0.7060714537010977,
+      "recall": 0.7198052832244008,
+      "f1-score": 0.7093439369036563,
       "support": 354.0
     },
     "weighted avg": {
-      "precision": 0.9620695562875322,
-      "recall": 0.9661016949152542,
-      "f1-score": 0.962646978210794,
+      "precision": 0.9676830751763846,
+      "recall": 0.9717514124293786,
+      "f1-score": 0.9685709041900618,
       "support": 354.0
     }
   },
@@ -78,8 +78,8 @@
     ],
     [
       0,
-      21,
-      5,
+      22,
+      4,
       0,
       0,
       0,
@@ -89,11 +89,11 @@
     [
       0,
       0,
-      169,
+      170,
       0,
       0,
       0,
-      1,
+      0,
       0
     ],
     [

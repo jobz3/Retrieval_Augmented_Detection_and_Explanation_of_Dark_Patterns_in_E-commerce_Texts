@@ -1,4 +1,4 @@
-        """
+"""
 Phase 1.5 — Synthetic Data Augmentation for Rare Classes
 ---------------------------------------------------------
 Generates synthetic product-text examples for underrepresented dark pattern

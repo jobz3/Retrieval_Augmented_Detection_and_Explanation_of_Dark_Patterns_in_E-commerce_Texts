@@ -72,6 +72,11 @@ def load_synthetic(label_map: dict[str, int]) -> pd.DataFrame:
         start_id += len(texts) + 1
 
     df = pd.DataFrame(rows)
+    if df.empty:
+        print("Synthetic pool: 0 examples")
+        return pd.DataFrame(columns=["page_id", "text", "binary_label", "category", "label_id", "synthetic"])
+    if "category" not in df.columns:
+        raise ValueError(f"Synthetic examples loaded but missing 'category' column. Columns: {list(df.columns)}")
     print(f"Synthetic pool: {len(df)} examples  "
           f"({df['category'].value_counts().to_dict()})")
     return df

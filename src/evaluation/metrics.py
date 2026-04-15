@@ -29,9 +29,13 @@ RESULTS_DIR = ROOT / "results" / "evaluation"
 PIPELINES   = ROOT / "results" / "pipelines"
 
 RUNS = [
-    {"name": "Zero-shot",           "file": "zero_shot.jsonl"},
-    {"name": "Random few-shot k=5", "file": "random_few_shot_k5.jsonl"},
-    {"name": "RAG sbert knn k=5",   "file": "rag_sbert_knn_k5.jsonl"},
+    {"name": "Zero-shot",               "file": "zero_shot.jsonl"},
+    {"name": "Random few-shot k=5",     "file": "random_few_shot_k5.jsonl"},
+    {"name": "Random few-shot k=3",     "file": "random_few_shot_k3.jsonl"},
+    {"name": "RAG sbert knn k=5",       "file": "rag_sbert_knn_k5.jsonl"},
+    {"name": "RAG sbert diversity k=5", "file": "rag_sbert_diversity_k5.jsonl"},
+    {"name": "RAG sbert prototype k=5", "file": "rag_sbert_prototype_k5.jsonl"},
+    {"name": "RAG bert knn k=5",        "file": "rag_bert_knn_k5.jsonl"},
 ]
 
 ALL_CLASSES = [
