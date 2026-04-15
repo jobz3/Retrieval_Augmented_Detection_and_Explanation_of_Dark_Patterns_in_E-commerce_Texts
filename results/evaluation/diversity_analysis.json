@@ -1,0 +1,44 @@
+[
+  {
+    "category": "Forced Action",
+    "real": {
+      "n": 4,
+      "avg_len": 34.0,
+      "vocab_size": 81,
+      "ttr": 0.5956,
+      "distinct_1": 0.5956,
+      "distinct_2": 0.8864,
+      "pairwise_bigram_overlap": 0.0556
+    },
+    "synthetic": {},
+    "cross_bigram_overlap": null
+  },
+  {
+    "category": "Sneaking",
+    "real": {
+      "n": 12,
+      "avg_len": 28.4,
+      "vocab_size": 200,
+      "ttr": 0.5865,
+      "distinct_1": 0.5865,
+      "distinct_2": 0.9635,
+      "pairwise_bigram_overlap": 0.0006
+    },
+    "synthetic": {},
+    "cross_bigram_overlap": null
+  },
+  {
+    "category": "Obstruction",
+    "real": {
+      "n": 27,
+      "avg_len": 70.9,
+      "vocab_size": 508,
+      "ttr": 0.2656,
+      "distinct_1": 0.2656,
+      "distinct_2": 0.6914,
+      "pairwise_bigram_overlap": 0.0293
+    },
+    "synthetic": {},
+    "cross_bigram_overlap": null
+  }
+]

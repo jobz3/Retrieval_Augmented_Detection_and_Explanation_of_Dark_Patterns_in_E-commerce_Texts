@@ -1,0 +1,224 @@
+[
+  {
+    "split": "All Mathur (7 shared categories)",
+    "n": 1512,
+    "macro_f1": 0.8995,
+    "classification_report": {
+      "Forced Action": {
+        "precision": 0.8,
+        "recall": 1.0,
+        "f1-score": 0.8888888888888888,
+        "support": 4.0
+      },
+      "Misdirection": {
+        "precision": 0.9953703703703703,
+        "recall": 0.9071729957805907,
+        "f1-score": 0.9492273730684326,
+        "support": 237.0
+      },
+      "Obstruction": {
+        "precision": 0.9090909090909091,
+        "recall": 1.0,
+        "f1-score": 0.9523809523809523,
+        "support": 30.0
+      },
+      "Scarcity": {
+        "precision": 0.9985207100591716,
+        "recall": 0.995575221238938,
+        "f1-score": 0.9970457902511078,
+        "support": 678.0
+      },
+      "Sneaking": {
+        "precision": 0.7142857142857143,
+        "recall": 0.4166666666666667,
+        "f1-score": 0.5263157894736842,
+        "support": 12.0
+      },
+      "Social Proof": {
+        "precision": 0.9968051118210862,
+        "recall": 0.9936305732484076,
+        "f1-score": 0.9952153110047847,
+        "support": 314.0
+      },
+      "Urgency": {
+        "precision": 0.9832635983263598,
+        "recall": 0.9915611814345991,
+        "f1-score": 0.9873949579831933,
+        "support": 237.0
+      },
+      "micro avg": {
+        "precision": 0.9912693082605776,
+        "recall": 0.9761904761904762,
+        "f1-score": 0.9836721092969011,
+        "support": 1512.0
+      },
+      "macro avg": {
+        "precision": 0.913905201993373,
+        "recall": 0.9006580911956003,
+        "f1-score": 0.8994955804358634,
+        "support": 1512.0
+      },
+      "weighted avg": {
+        "precision": 0.9907237122732938,
+        "recall": 0.9761904761904762,
+        "f1-score": 0.9827492853873393,
+        "support": 1512.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        215,
+        0,
+        1,
+        2,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        30,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        675,
+        0,
+        0,
+        2
+      ],
+      [
+        1,
+        0,
+        3,
+        0,
+        5,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        312,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        235
+      ]
+    ],
+    "label_names": [
+      "Forced Action",
+      "Misdirection",
+      "Obstruction",
+      "Scarcity",
+      "Sneaking",
+      "Social Proof",
+      "Urgency"
+    ]
+  },
+  {
+    "split": "Deceptive only (Deceptive?=Yes)",
+    "n": 140,
+    "macro_f1": 0.9986,
+    "classification_report": {
+      "Misdirection": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1.0
+      },
+      "Scarcity": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 17.0
+      },
+      "Social Proof": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 29.0
+      },
+      "Urgency": {
+        "precision": 1.0,
+        "recall": 0.989247311827957,
+        "f1-score": 0.9945945945945946,
+        "support": 93.0
+      },
+      "micro avg": {
+        "precision": 1.0,
+        "recall": 0.9928571428571429,
+        "f1-score": 0.996415770609319,
+        "support": 140.0
+      },
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 0.9973118279569892,
+        "f1-score": 0.9986486486486487,
+        "support": 140.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 0.9928571428571429,
+        "f1-score": 0.9964092664092665,
+        "support": 140.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        17,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        29,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        92
+      ]
+    ],
+    "label_names": [
+      "Misdirection",
+      "Scarcity",
+      "Social Proof",
+      "Urgency"
+    ]
+  }
+]
