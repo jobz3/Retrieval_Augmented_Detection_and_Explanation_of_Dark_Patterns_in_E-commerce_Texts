@@ -10,8 +10,16 @@
       "distinct_2": 0.8864,
       "pairwise_bigram_overlap": 0.0556
     },
-    "synthetic": {},
-    "cross_bigram_overlap": null
+    "synthetic": {
+      "n": 47,
+      "avg_len": 19.9,
+      "vocab_size": 161,
+      "ttr": 0.1726,
+      "distinct_1": 0.1726,
+      "distinct_2": 0.4221,
+      "pairwise_bigram_overlap": 0.0683
+    },
+    "cross_bigram_overlap": 0.1874
   },
   {
     "category": "Sneaking",
@@ -24,8 +32,16 @@
       "distinct_2": 0.9635,
       "pairwise_bigram_overlap": 0.0006
     },
-    "synthetic": {},
-    "cross_bigram_overlap": null
+    "synthetic": {
+      "n": 42,
+      "avg_len": 17.7,
+      "vocab_size": 272,
+      "ttr": 0.3666,
+      "distinct_1": 0.3666,
+      "distinct_2": 0.7729,
+      "pairwise_bigram_overlap": 0.0122
+    },
+    "cross_bigram_overlap": 0.0929
   },
   {
     "category": "Obstruction",
@@ -38,7 +54,15 @@
       "distinct_2": 0.6914,
       "pairwise_bigram_overlap": 0.0293
     },
-    "synthetic": {},
-    "cross_bigram_overlap": null
+    "synthetic": {
+      "n": 56,
+      "avg_len": 35.9,
+      "vocab_size": 453,
+      "ttr": 0.2254,
+      "distinct_1": 0.2254,
+      "distinct_2": 0.6044,
+      "pairwise_bigram_overlap": 0.0258
+    },
+    "cross_bigram_overlap": 0.2144
   }
 ]
