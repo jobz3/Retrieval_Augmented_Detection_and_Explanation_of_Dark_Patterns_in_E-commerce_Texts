@@ -1,247 +1,247 @@
 [
   {
     "name": "Zero-shot",
-    "n": 354,
+    "n": 376,
     "classification": {
-      "macro_f1": 0.3438,
-      "macro_precision": 0.3912,
-      "macro_recall": 0.3498,
+      "macro_f1": 0.4501,
+      "macro_precision": 0.58,
+      "macro_recall": 0.4244,
       "per_class": {
         "Forced Action": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 0.0
+          "f1": 0.4,
+          "precision": 0.375,
+          "recall": 0.4286,
+          "support": 7.0
         },
         "Misdirection": {
           "f1": 0.0,
           "precision": 0.0,
           "recall": 0.0,
-          "support": 27.0
+          "support": 30.0
         },
         "Not Dark Pattern": {
-          "f1": 0.8308,
-          "precision": 0.7198,
-          "recall": 0.9824,
-          "support": 170.0
+          "f1": 0.815,
+          "precision": 0.696,
+          "recall": 0.9831,
+          "support": 177.0
         },
         "Obstruction": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 3.0
+          "f1": 0.125,
+          "precision": 0.25,
+          "recall": 0.0833,
+          "support": 12.0
         },
         "Scarcity": {
-          "f1": 0.9781,
-          "precision": 0.971,
-          "recall": 0.9853,
-          "support": 68.0
+          "f1": 0.9612,
+          "precision": 0.9394,
+          "recall": 0.9841,
+          "support": 63.0
         },
         "Sneaking": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 2.0
+          "f1": 0.4,
+          "precision": 1.0,
+          "recall": 0.25,
+          "support": 8.0
         },
         "Social Proof": {
-          "f1": 0.339,
-          "precision": 0.9091,
-          "recall": 0.2083,
-          "support": 48.0
+          "f1": 0.5079,
+          "precision": 1.0,
+          "recall": 0.3404,
+          "support": 47.0
         },
         "Urgency": {
-          "f1": 0.9459,
-          "precision": 0.9211,
-          "recall": 0.9722,
-          "support": 36.0
+          "f1": 0.8421,
+          "precision": 0.96,
+          "recall": 0.75,
+          "support": 32.0
         }
       },
       "confusion_matrix": [
         [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          1,
-          0,
-          22,
+          3,
           0,
           1,
-          0,
-          0,
-          2
-        ],
-        [
-          1,
-          0,
-          167,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          0,
           3,
           0,
           0,
           0,
-          0,
           0
         ],
         [
+          2,
+          0,
+          26,
           0,
           0,
-          0,
-          0,
-          67,
           0,
           0,
           1
         ],
         [
+          1,
+          0,
+          174,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          10,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          62,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          5,
           0,
           0,
           2,
           0,
-          0,
-          0,
-          0,
           0
         ],
         [
           0,
           0,
-          37,
+          29,
           0,
           1,
           0,
-          10,
+          16,
           0
         ],
         [
           0,
           0,
-          1,
+          4,
+          0,
+          3,
           0,
           0,
-          0,
-          0,
-          35
+          24
         ]
       ]
     },
     "grounding": {
-      "exact_rate": 0.9887,
-      "ci_rate": 0.9887,
-      "avg_span_len": 31.06,
-      "empty_spans": 2
+      "exact_rate": 0.9867,
+      "ci_rate": 0.9867,
+      "avg_span_len": 33.13,
+      "empty_spans": 3
     },
     "confidence": {
-      "mean_confidence": 0.9343,
-      "accuracy": 0.7881,
-      "calibration_gap": 0.1462,
+      "mean_confidence": 0.9211,
+      "accuracy": 0.75,
+      "calibration_gap": 0.1711,
       "confidence_buckets": {
         "0.0-0.2": {
-          "count": 2,
+          "count": 3,
           "correct": 2
         },
         "0.2-0.4": {
-          "count": 1,
+          "count": 2,
           "correct": 0
         },
         "0.4-0.6": {
-          "count": 9,
-          "correct": 6
+          "count": 14,
+          "correct": 9
         },
         "0.6-0.8": {
           "count": 7,
-          "correct": 5
+          "correct": 4
         },
         "0.8-1.0": {
-          "count": 335,
-          "correct": 266
+          "count": 350,
+          "correct": 267
         }
       }
     },
     "output_quality": {
-      "rewrite_coverage": 0.4887,
-      "avg_rewrite_words": 7.37,
-      "avg_rationale_words": 16.26,
-      "avg_input_words": 6.73
+      "rewrite_coverage": 0.492,
+      "avg_rewrite_words": 8.55,
+      "avg_rationale_words": 16.75,
+      "avg_input_words": 8.69
     }
   },
   {
     "name": "Random few-shot k=5",
-    "n": 354,
+    "n": 376,
     "classification": {
-      "macro_f1": 0.4247,
-      "macro_precision": 0.5195,
-      "macro_recall": 0.405,
+      "macro_f1": 0.6205,
+      "macro_precision": 0.8186,
+      "macro_recall": 0.5763,
       "per_class": {
         "Forced Action": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 0.0
+          "f1": 0.7143,
+          "precision": 0.7143,
+          "recall": 0.7143,
+          "support": 7.0
         },
         "Misdirection": {
-          "f1": 0.3636,
+          "f1": 0.1818,
           "precision": 1.0,
-          "recall": 0.2222,
-          "support": 27.0
+          "recall": 0.1,
+          "support": 30.0
         },
         "Not Dark Pattern": {
-          "f1": 0.8705,
-          "precision": 0.7778,
-          "recall": 0.9882,
-          "support": 170.0
+          "f1": 0.8353,
+          "precision": 0.7231,
+          "recall": 0.9887,
+          "support": 177.0
         },
         "Obstruction": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 3.0
+          "f1": 0.1333,
+          "precision": 0.3333,
+          "recall": 0.0833,
+          "support": 12.0
         },
         "Scarcity": {
-          "f1": 0.9697,
-          "precision": 1.0,
-          "recall": 0.9412,
-          "support": 68.0
+          "f1": 0.9206,
+          "precision": 0.9206,
+          "recall": 0.9206,
+          "support": 63.0
         },
         "Sneaking": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 2.0
+          "f1": 0.6667,
+          "precision": 1.0,
+          "recall": 0.5,
+          "support": 8.0
         },
         "Social Proof": {
-          "f1": 0.6849,
+          "f1": 0.7123,
           "precision": 1.0,
-          "recall": 0.5208,
-          "support": 48.0
+          "recall": 0.5532,
+          "support": 47.0
         },
         "Urgency": {
-          "f1": 0.9333,
-          "precision": 0.8974,
-          "recall": 0.9722,
-          "support": 36.0
+          "f1": 0.8,
+          "precision": 0.8571,
+          "recall": 0.75,
+          "support": 32.0
         }
       },
       "confusion_matrix": [
         [
+          5,
           0,
           0,
-          0,
-          0,
+          2,
           0,
           0,
           0,
@@ -249,19 +249,29 @@
         ],
         [
           0,
-          6,
-          19,
+          3,
+          26,
           0,
           0,
           0,
           0,
-          2
+          1
         ],
         [
           1,
           0,
-          168,
+          175,
           0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          10,
+          1,
           0,
           0,
           0,
@@ -272,17 +282,7 @@
           0,
           3,
           0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          0,
-          64,
+          58,
           0,
           0,
           2
@@ -290,168 +290,168 @@
         [
           0,
           0,
-          1,
+          4,
           0,
           0,
-          0,
+          4,
           0,
           0
         ],
         [
           0,
           0,
-          22,
+          21,
           0,
           0,
           0,
-          25,
+          26,
           0
         ],
         [
           0,
           0,
-          1,
+          3,
+          0,
+          5,
           0,
           0,
-          0,
-          0,
-          35
+          24
         ]
       ]
     },
     "grounding": {
-      "exact_rate": 0.9831,
-      "ci_rate": 0.9859,
-      "avg_span_len": 31.42,
-      "empty_spans": 2
+      "exact_rate": 0.992,
+      "ci_rate": 0.992,
+      "avg_span_len": 33.47,
+      "empty_spans": 0
     },
     "confidence": {
-      "mean_confidence": 0.9504,
-      "accuracy": 0.8418,
-      "calibration_gap": 0.1086,
+      "mean_confidence": 0.9528,
+      "accuracy": 0.7872,
+      "calibration_gap": 0.1656,
       "confidence_buckets": {
         "0.0-0.2": {
-          "count": 2,
-          "correct": 0
-        },
-        "0.2-0.4": {
           "count": 0,
           "correct": 0
         },
+        "0.2-0.4": {
+          "count": 1,
+          "correct": 1
+        },
         "0.4-0.6": {
-          "count": 3,
-          "correct": 2
+          "count": 1,
+          "correct": 0
         },
         "0.6-0.8": {
-          "count": 2,
+          "count": 4,
           "correct": 2
         },
         "0.8-1.0": {
-          "count": 347,
-          "correct": 294
+          "count": 370,
+          "correct": 293
         }
       }
     },
     "output_quality": {
-      "rewrite_coverage": 0.3955,
-      "avg_rewrite_words": 6.62,
-      "avg_rationale_words": 15.68,
-      "avg_input_words": 6.73
+      "rewrite_coverage": 0.4441,
+      "avg_rewrite_words": 8.02,
+      "avg_rationale_words": 16.1,
+      "avg_input_words": 8.69
     }
   },
   {
     "name": "Random few-shot k=3",
-    "n": 354,
+    "n": 376,
     "classification": {
-      "macro_f1": 0.3748,
-      "macro_precision": 0.4647,
-      "macro_recall": 0.3672,
+      "macro_f1": 0.5173,
+      "macro_precision": 0.6926,
+      "macro_recall": 0.4886,
       "per_class": {
         "Forced Action": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 0.0
+          "f1": 0.375,
+          "precision": 0.3333,
+          "recall": 0.4286,
+          "support": 7.0
         },
         "Misdirection": {
-          "f1": 0.069,
-          "precision": 0.5,
-          "recall": 0.037,
-          "support": 27.0
+          "f1": 0.0645,
+          "precision": 1.0,
+          "recall": 0.0333,
+          "support": 30.0
         },
         "Not Dark Pattern": {
-          "f1": 0.8376,
-          "precision": 0.7366,
-          "recall": 0.9706,
-          "support": 170.0
+          "f1": 0.8353,
+          "precision": 0.7231,
+          "recall": 0.9887,
+          "support": 177.0
         },
         "Obstruction": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 3.0
+          "f1": 0.2353,
+          "precision": 0.4,
+          "recall": 0.1667,
+          "support": 12.0
         },
         "Scarcity": {
-          "f1": 0.9851,
-          "precision": 1.0,
-          "recall": 0.9706,
-          "support": 68.0
+          "f1": 0.9683,
+          "precision": 0.9683,
+          "recall": 0.9683,
+          "support": 63.0
         },
         "Sneaking": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 2.0
+          "f1": 0.7692,
+          "precision": 1.0,
+          "recall": 0.625,
+          "support": 8.0
         },
         "Social Proof": {
-          "f1": 0.5231,
-          "precision": 1.0,
-          "recall": 0.3542,
-          "support": 48.0
+          "f1": 0.6286,
+          "precision": 0.9565,
+          "recall": 0.4681,
+          "support": 47.0
         },
         "Urgency": {
-          "f1": 0.9589,
-          "precision": 0.9459,
-          "recall": 0.9722,
-          "support": 36.0
+          "f1": 0.7797,
+          "precision": 0.8519,
+          "recall": 0.7188,
+          "support": 32.0
         }
       },
       "confusion_matrix": [
         [
+          3,
           0,
-          0,
-          0,
-          0,
+          1,
+          3,
           0,
           0,
           0,
           0
         ],
         [
+          3,
+          1,
+          24,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          175,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          9,
           2,
-          1,
-          23,
-          0,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          3,
-          1,
-          165,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          3,
-          0,
           0,
           0,
           0,
@@ -462,7 +462,7 @@
           0,
           1,
           0,
-          66,
+          61,
           0,
           0,
           1
@@ -470,138 +470,138 @@
         [
           1,
           0,
-          1,
+          2,
           0,
           0,
-          0,
+          5,
           0,
           0
         ],
         [
           0,
           0,
-          31,
+          24,
           0,
           0,
           0,
-          17,
-          0
+          22,
+          1
         ],
         [
           0,
           0,
+          6,
+          0,
+          2,
           0,
           0,
-          0,
-          0,
-          0,
-          35
+          23
         ]
       ]
     },
     "grounding": {
-      "exact_rate": 0.9859,
-      "ci_rate": 0.9887,
-      "avg_span_len": 31.82,
-      "empty_spans": 0
+      "exact_rate": 0.9947,
+      "ci_rate": 0.9947,
+      "avg_span_len": 32.81,
+      "empty_spans": 1
     },
     "confidence": {
-      "mean_confidence": 0.9511,
-      "accuracy": 0.8023,
-      "calibration_gap": 0.1489,
+      "mean_confidence": 0.9418,
+      "accuracy": 0.7766,
+      "calibration_gap": 0.1652,
       "confidence_buckets": {
         "0.0-0.2": {
-          "count": 1,
-          "correct": 1
+          "count": 3,
+          "correct": 2
         },
         "0.2-0.4": {
           "count": 0,
           "correct": 0
         },
         "0.4-0.6": {
-          "count": 4,
-          "correct": 1
+          "count": 2,
+          "correct": 2
         },
         "0.6-0.8": {
-          "count": 7,
-          "correct": 5
+          "count": 10,
+          "correct": 7
         },
         "0.8-1.0": {
-          "count": 342,
-          "correct": 277
+          "count": 361,
+          "correct": 281
         }
       }
     },
     "output_quality": {
-      "rewrite_coverage": 0.4266,
-      "avg_rewrite_words": 6.81,
-      "avg_rationale_words": 15.87,
-      "avg_input_words": 6.73
+      "rewrite_coverage": 0.484,
+      "avg_rewrite_words": 8.16,
+      "avg_rationale_words": 16.25,
+      "avg_input_words": 8.69
     }
   },
   {
     "name": "RAG sbert knn k=5",
-    "n": 354,
+    "n": 376,
     "classification": {
-      "macro_f1": 0.9216,
-      "macro_precision": 0.9937,
-      "macro_recall": 0.8974,
+      "macro_f1": 0.8373,
+      "macro_precision": 0.9254,
+      "macro_recall": 0.8042,
       "per_class": {
         "Forced Action": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 0.0
+          "f1": 0.4444,
+          "precision": 1.0,
+          "recall": 0.2857,
+          "support": 7.0
         },
         "Misdirection": {
-          "f1": 0.9811,
-          "precision": 1.0,
-          "recall": 0.963,
-          "support": 27.0
+          "f1": 0.9667,
+          "precision": 0.9667,
+          "recall": 0.9667,
+          "support": 30.0
         },
         "Not Dark Pattern": {
-          "f1": 0.9913,
-          "precision": 0.9827,
-          "recall": 1.0,
-          "support": 170.0
+          "f1": 0.9644,
+          "precision": 0.9362,
+          "recall": 0.9944,
+          "support": 177.0
         },
         "Obstruction": {
-          "f1": 0.5,
-          "precision": 1.0,
+          "f1": 0.4,
+          "precision": 0.5,
           "recall": 0.3333,
-          "support": 3.0
+          "support": 12.0
         },
         "Scarcity": {
-          "f1": 0.9926,
+          "f1": 1.0,
           "precision": 1.0,
-          "recall": 0.9853,
-          "support": 68.0
+          "recall": 1.0,
+          "support": 63.0
         },
         "Sneaking": {
-          "f1": 1.0,
+          "f1": 0.9333,
           "precision": 1.0,
-          "recall": 1.0,
-          "support": 2.0
+          "recall": 0.875,
+          "support": 8.0
         },
         "Social Proof": {
+          "f1": 0.9892,
+          "precision": 1.0,
+          "recall": 0.9787,
+          "support": 47.0
+        },
+        "Urgency": {
           "f1": 1.0,
           "precision": 1.0,
           "recall": 1.0,
-          "support": 48.0
-        },
-        "Urgency": {
-          "f1": 0.9863,
-          "precision": 0.973,
-          "recall": 1.0,
-          "support": 36.0
+          "support": 32.0
         }
       },
       "confusion_matrix": [
         [
+          2,
           0,
-          0,
-          0,
-          0,
+          1,
+          4,
           0,
           0,
           0,
@@ -609,7 +609,7 @@
         ],
         [
           0,
-          26,
+          29,
           1,
           0,
           0,
@@ -619,8 +619,8 @@
         ],
         [
           0,
-          0,
-          170,
+          1,
+          176,
           0,
           0,
           0,
@@ -630,41 +630,41 @@
         [
           0,
           0,
-          2,
+          8,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          63,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          7,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
           1,
           0,
           0,
           0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          67,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          48,
+          46,
           0
         ],
         [
@@ -675,20 +675,20 @@
           0,
           0,
           0,
-          36
+          32
         ]
       ]
     },
     "grounding": {
-      "exact_rate": 0.9915,
-      "ci_rate": 0.9944,
-      "avg_span_len": 32.48,
+      "exact_rate": 0.9947,
+      "ci_rate": 0.9947,
+      "avg_span_len": 34.06,
       "empty_spans": 0
     },
     "confidence": {
-      "mean_confidence": 0.9813,
-      "accuracy": 0.9887,
-      "calibration_gap": 0.0074,
+      "mean_confidence": 0.9799,
+      "accuracy": 0.9548,
+      "calibration_gap": 0.0251,
       "confidence_buckets": {
         "0.0-0.2": {
           "count": 0,
@@ -699,99 +699,89 @@
           "correct": 0
         },
         "0.4-0.6": {
-          "count": 1,
-          "correct": 1
+          "count": 0,
+          "correct": 0
         },
         "0.6-0.8": {
           "count": 0,
           "correct": 0
         },
         "0.8-1.0": {
-          "count": 353,
-          "correct": 349
+          "count": 376,
+          "correct": 359
         }
       }
     },
     "output_quality": {
-      "rewrite_coverage": 0.4859,
-      "avg_rewrite_words": 7.33,
-      "avg_rationale_words": 15.78,
-      "avg_input_words": 6.73
+      "rewrite_coverage": 0.516,
+      "avg_rewrite_words": 8.86,
+      "avg_rationale_words": 16.42,
+      "avg_input_words": 8.69
     }
   },
   {
     "name": "RAG sbert diversity k=5",
-    "n": 354,
+    "n": 376,
     "classification": {
-      "macro_f1": 0.9647,
-      "macro_precision": 0.9975,
-      "macro_recall": 0.9418,
+      "macro_f1": 0.8853,
+      "macro_precision": 0.9478,
+      "macro_recall": 0.8451,
       "per_class": {
         "Forced Action": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 0.0
+          "f1": 0.7273,
+          "precision": 1.0,
+          "recall": 0.5714,
+          "support": 7.0
         },
         "Misdirection": {
-          "f1": 0.9615,
+          "f1": 0.9831,
           "precision": 1.0,
-          "recall": 0.9259,
-          "support": 27.0
+          "recall": 0.9667,
+          "support": 30.0
         },
         "Not Dark Pattern": {
-          "f1": 0.9913,
-          "precision": 0.9827,
-          "recall": 1.0,
-          "support": 170.0
+          "f1": 0.9697,
+          "precision": 0.9462,
+          "recall": 0.9944,
+          "support": 177.0
         },
         "Obstruction": {
-          "f1": 0.8,
-          "precision": 1.0,
-          "recall": 0.6667,
-          "support": 3.0
+          "f1": 0.5714,
+          "precision": 0.6667,
+          "recall": 0.5,
+          "support": 12.0
         },
         "Scarcity": {
           "f1": 1.0,
           "precision": 1.0,
           "recall": 1.0,
-          "support": 68.0
+          "support": 63.0
         },
         "Sneaking": {
-          "f1": 1.0,
+          "f1": 0.8571,
           "precision": 1.0,
-          "recall": 1.0,
-          "support": 2.0
+          "recall": 0.75,
+          "support": 8.0
         },
         "Social Proof": {
-          "f1": 1.0,
+          "f1": 0.9892,
           "precision": 1.0,
-          "recall": 1.0,
-          "support": 48.0
+          "recall": 0.9787,
+          "support": 47.0
         },
         "Urgency": {
-          "f1": 1.0,
-          "precision": 1.0,
+          "f1": 0.9846,
+          "precision": 0.9697,
           "recall": 1.0,
-          "support": 36.0
+          "support": 32.0
         }
       },
       "confusion_matrix": [
         [
+          4,
           0,
           0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          25,
-          2,
-          0,
+          3,
           0,
           0,
           0,
@@ -799,178 +789,8 @@
         ],
         [
           0,
-          0,
-          170,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
+          29,
           1,
-          2,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          68,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          2,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          48,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          36
-        ]
-      ]
-    },
-    "grounding": {
-      "exact_rate": 0.9887,
-      "ci_rate": 0.9915,
-      "avg_span_len": 32.54,
-      "empty_spans": 0
-    },
-    "confidence": {
-      "mean_confidence": 0.9821,
-      "accuracy": 0.9915,
-      "calibration_gap": 0.0095,
-      "confidence_buckets": {
-        "0.0-0.2": {
-          "count": 0,
-          "correct": 0
-        },
-        "0.2-0.4": {
-          "count": 0,
-          "correct": 0
-        },
-        "0.4-0.6": {
-          "count": 0,
-          "correct": 0
-        },
-        "0.6-0.8": {
-          "count": 0,
-          "correct": 0
-        },
-        "0.8-1.0": {
-          "count": 354,
-          "correct": 351
-        }
-      }
-    },
-    "output_quality": {
-      "rewrite_coverage": 0.4944,
-      "avg_rewrite_words": 7.47,
-      "avg_rationale_words": 15.77,
-      "avg_input_words": 6.73
-    }
-  },
-  {
-    "name": "RAG sbert prototype k=5",
-    "n": 354,
-    "classification": {
-      "macro_f1": 0.9617,
-      "macro_precision": 0.9937,
-      "macro_recall": 0.9397,
-      "per_class": {
-        "Forced Action": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 0.0
-        },
-        "Misdirection": {
-          "f1": 0.9615,
-          "precision": 1.0,
-          "recall": 0.9259,
-          "support": 27.0
-        },
-        "Not Dark Pattern": {
-          "f1": 0.9913,
-          "precision": 0.9827,
-          "recall": 1.0,
-          "support": 170.0
-        },
-        "Obstruction": {
-          "f1": 0.8,
-          "precision": 1.0,
-          "recall": 0.6667,
-          "support": 3.0
-        },
-        "Scarcity": {
-          "f1": 0.9926,
-          "precision": 1.0,
-          "recall": 0.9853,
-          "support": 68.0
-        },
-        "Sneaking": {
-          "f1": 1.0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "support": 2.0
-        },
-        "Social Proof": {
-          "f1": 1.0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "support": 48.0
-        },
-        "Urgency": {
-          "f1": 0.9863,
-          "precision": 0.973,
-          "recall": 1.0,
-          "support": 36.0
-        }
-      },
-      "confusion_matrix": [
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          25,
-          2,
           0,
           0,
           0,
@@ -980,29 +800,9 @@
         [
           0,
           0,
-          170,
+          176,
           0,
           0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          1,
-          2,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          67,
           0,
           0,
           1
@@ -1010,11 +810,41 @@
         [
           0,
           0,
+          6,
+          6,
           0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          63,
+          0,
+          0,
+          0
+        ],
+        [
           0,
           0,
           2,
           0,
+          0,
+          6,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          46,
           0
         ],
         [
@@ -1024,35 +854,25 @@
           0,
           0,
           0,
-          48,
-          0
-        ],
-        [
           0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          36
+          32
         ]
       ]
     },
     "grounding": {
-      "exact_rate": 0.9887,
-      "ci_rate": 0.9915,
-      "avg_span_len": 31.55,
+      "exact_rate": 0.9947,
+      "ci_rate": 0.9947,
+      "avg_span_len": 33.95,
       "empty_spans": 0
     },
     "confidence": {
-      "mean_confidence": 0.9804,
-      "accuracy": 0.9887,
-      "calibration_gap": 0.0083,
+      "mean_confidence": 0.9739,
+      "accuracy": 0.9628,
+      "calibration_gap": 0.0111,
       "confidence_buckets": {
         "0.0-0.2": {
-          "count": 0,
-          "correct": 0
+          "count": 1,
+          "correct": 1
         },
         "0.2-0.4": {
           "count": 0,
@@ -1063,138 +883,138 @@
           "correct": 0
         },
         "0.6-0.8": {
-          "count": 0,
-          "correct": 0
+          "count": 1,
+          "correct": 1
         },
         "0.8-1.0": {
-          "count": 354,
-          "correct": 350
+          "count": 374,
+          "correct": 360
         }
       }
     },
     "output_quality": {
-      "rewrite_coverage": 0.4915,
-      "avg_rewrite_words": 7.41,
-      "avg_rationale_words": 15.86,
-      "avg_input_words": 6.73
+      "rewrite_coverage": 0.5,
+      "avg_rewrite_words": 8.88,
+      "avg_rationale_words": 16.26,
+      "avg_input_words": 8.69
     }
   },
   {
-    "name": "RAG bert knn k=5",
-    "n": 354,
+    "name": "RAG sbert prototype k=5",
+    "n": 376,
     "classification": {
-      "macro_f1": 0.9216,
-      "macro_precision": 0.9922,
-      "macro_recall": 0.8986,
+      "macro_f1": 0.8092,
+      "macro_precision": 0.8457,
+      "macro_recall": 0.7824,
       "per_class": {
         "Forced Action": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "support": 0.0
+          "f1": 0.8333,
+          "precision": 1.0,
+          "recall": 0.7143,
+          "support": 7.0
         },
         "Misdirection": {
-          "f1": 0.963,
-          "precision": 0.963,
-          "recall": 0.963,
-          "support": 27.0
+          "f1": 0.9492,
+          "precision": 0.9655,
+          "recall": 0.9333,
+          "support": 30.0
         },
         "Not Dark Pattern": {
-          "f1": 0.9883,
-          "precision": 0.9826,
-          "recall": 0.9941,
-          "support": 170.0
+          "f1": 0.9694,
+          "precision": 0.956,
+          "recall": 0.9831,
+          "support": 177.0
         },
         "Obstruction": {
-          "f1": 0.5,
-          "precision": 1.0,
-          "recall": 0.3333,
-          "support": 3.0
+          "f1": 0.6667,
+          "precision": 0.7778,
+          "recall": 0.5833,
+          "support": 12.0
         },
         "Scarcity": {
-          "f1": 1.0,
+          "f1": 0.992,
           "precision": 1.0,
-          "recall": 1.0,
-          "support": 68.0
+          "recall": 0.9841,
+          "support": 63.0
         },
         "Sneaking": {
-          "f1": 1.0,
+          "f1": 0.9333,
           "precision": 1.0,
-          "recall": 1.0,
-          "support": 2.0
+          "recall": 0.875,
+          "support": 8.0
         },
         "Social Proof": {
           "f1": 1.0,
           "precision": 1.0,
           "recall": 1.0,
-          "support": 48.0
+          "support": 47.0
         },
         "Urgency": {
-          "f1": 1.0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "support": 36.0
+          "f1": 0.9394,
+          "precision": 0.9118,
+          "recall": 0.9688,
+          "support": 32.0
         }
       },
       "confusion_matrix": [
         [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          26,
-          1,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          1,
-          169,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          2,
-          1,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          68,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
+          5,
           0,
           0,
           2,
           0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          28,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          174,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          5,
+          7,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          62,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          7,
+          0,
           0
         ],
         [
@@ -1204,31 +1024,211 @@
           0,
           0,
           0,
-          48,
+          47,
           0
         ],
         [
           0,
           0,
+          1,
           0,
           0,
           0,
           0,
-          0,
-          36
+          31
         ]
       ]
     },
     "grounding": {
-      "exact_rate": 0.9887,
-      "ci_rate": 0.9915,
-      "avg_span_len": 32.16,
+      "exact_rate": 0.9947,
+      "ci_rate": 0.9973,
+      "avg_span_len": 33.49,
+      "empty_spans": 1
+    },
+    "confidence": {
+      "mean_confidence": 0.9705,
+      "accuracy": 0.9601,
+      "calibration_gap": 0.0104,
+      "confidence_buckets": {
+        "0.0-0.2": {
+          "count": 1,
+          "correct": 1
+        },
+        "0.2-0.4": {
+          "count": 1,
+          "correct": 0
+        },
+        "0.4-0.6": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.6-0.8": {
+          "count": 1,
+          "correct": 1
+        },
+        "0.8-1.0": {
+          "count": 373,
+          "correct": 359
+        }
+      }
+    },
+    "output_quality": {
+      "rewrite_coverage": 0.5186,
+      "avg_rewrite_words": 8.59,
+      "avg_rationale_words": 16.45,
+      "avg_input_words": 8.69
+    }
+  },
+  {
+    "name": "RAG bert knn k=5",
+    "n": 376,
+    "classification": {
+      "macro_f1": 0.8748,
+      "macro_precision": 0.9348,
+      "macro_recall": 0.8368,
+      "per_class": {
+        "Forced Action": {
+          "f1": 0.7273,
+          "precision": 1.0,
+          "recall": 0.5714,
+          "support": 7.0
+        },
+        "Misdirection": {
+          "f1": 0.9474,
+          "precision": 1.0,
+          "recall": 0.9,
+          "support": 30.0
+        },
+        "Not Dark Pattern": {
+          "f1": 0.9699,
+          "precision": 0.9415,
+          "recall": 1.0,
+          "support": 177.0
+        },
+        "Obstruction": {
+          "f1": 0.5,
+          "precision": 0.625,
+          "recall": 0.4167,
+          "support": 12.0
+        },
+        "Scarcity": {
+          "f1": 0.992,
+          "precision": 1.0,
+          "recall": 0.9841,
+          "support": 63.0
+        },
+        "Sneaking": {
+          "f1": 0.9333,
+          "precision": 1.0,
+          "recall": 0.875,
+          "support": 8.0
+        },
+        "Social Proof": {
+          "f1": 0.9892,
+          "precision": 1.0,
+          "recall": 0.9787,
+          "support": 47.0
+        },
+        "Urgency": {
+          "f1": 0.9394,
+          "precision": 0.9118,
+          "recall": 0.9688,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          4,
+          0,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          27,
+          1,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          177,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          5,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          62,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          7,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          46,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          31
+        ]
+      ]
+    },
+    "grounding": {
+      "exact_rate": 0.9973,
+      "ci_rate": 1.0,
+      "avg_span_len": 33.48,
       "empty_spans": 0
     },
     "confidence": {
-      "mean_confidence": 0.9825,
-      "accuracy": 0.9887,
-      "calibration_gap": 0.0062,
+      "mean_confidence": 0.9792,
+      "accuracy": 0.9548,
+      "calibration_gap": 0.0244,
       "confidence_buckets": {
         "0.0-0.2": {
           "count": 0,
@@ -1239,24 +1239,24 @@
           "correct": 0
         },
         "0.4-0.6": {
-          "count": 1,
-          "correct": 1
-        },
-        "0.6-0.8": {
-          "count": 1,
+          "count": 0,
           "correct": 0
         },
+        "0.6-0.8": {
+          "count": 2,
+          "correct": 1
+        },
         "0.8-1.0": {
-          "count": 352,
-          "correct": 349
+          "count": 374,
+          "correct": 358
         }
       }
     },
     "output_quality": {
-      "rewrite_coverage": 0.4774,
-      "avg_rewrite_words": 7.38,
-      "avg_rationale_words": 15.64,
-      "avg_input_words": 6.73
+      "rewrite_coverage": 0.5372,
+      "avg_rewrite_words": 8.88,
+      "avg_rationale_words": 16.07,
+      "avg_input_words": 8.69
     }
   }
 ]
