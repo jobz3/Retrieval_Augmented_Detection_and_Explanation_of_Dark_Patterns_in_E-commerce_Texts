@@ -1080,6 +1080,186 @@
     }
   },
   {
+    "name": "RAG sbert hyde k=5",
+    "n": 376,
+    "classification": {
+      "macro_f1": 0.7107,
+      "macro_precision": 0.8047,
+      "macro_recall": 0.683,
+      "per_class": {
+        "Forced Action": {
+          "f1": 0.75,
+          "precision": 0.6667,
+          "recall": 0.8571,
+          "support": 7.0
+        },
+        "Misdirection": {
+          "f1": 0.4211,
+          "precision": 1.0,
+          "recall": 0.2667,
+          "support": 30.0
+        },
+        "Not Dark Pattern": {
+          "f1": 0.8941,
+          "precision": 0.8238,
+          "recall": 0.9774,
+          "support": 177.0
+        },
+        "Obstruction": {
+          "f1": 0.6316,
+          "precision": 0.8571,
+          "recall": 0.5,
+          "support": 12.0
+        },
+        "Scarcity": {
+          "f1": 0.9593,
+          "precision": 0.9833,
+          "recall": 0.9365,
+          "support": 63.0
+        },
+        "Sneaking": {
+          "f1": 0.9333,
+          "precision": 1.0,
+          "recall": 0.875,
+          "support": 8.0
+        },
+        "Social Proof": {
+          "f1": 0.8675,
+          "precision": 1.0,
+          "recall": 0.766,
+          "support": 47.0
+        },
+        "Urgency": {
+          "f1": 0.9394,
+          "precision": 0.9118,
+          "recall": 0.9688,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          6,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          8,
+          18,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          173,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          6,
+          6,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          59,
+          0,
+          0,
+          2
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          10,
+          0,
+          1,
+          0,
+          36,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          31
+        ]
+      ]
+    },
+    "grounding": {
+      "exact_rate": 0.9973,
+      "ci_rate": 0.9973,
+      "avg_span_len": 34.49,
+      "empty_spans": 1
+    },
+    "confidence": {
+      "mean_confidence": 0.9584,
+      "accuracy": 0.867,
+      "calibration_gap": 0.0914,
+      "confidence_buckets": {
+        "0.0-0.2": {
+          "count": 1,
+          "correct": 0
+        },
+        "0.2-0.4": {
+          "count": 1,
+          "correct": 0
+        },
+        "0.4-0.6": {
+          "count": 6,
+          "correct": 1
+        },
+        "0.6-0.8": {
+          "count": 5,
+          "correct": 3
+        },
+        "0.8-1.0": {
+          "count": 363,
+          "correct": 322
+        }
+      }
+    },
+    "output_quality": {
+      "rewrite_coverage": 0.5372,
+      "avg_rewrite_words": 8.95,
+      "avg_rationale_words": 16.31,
+      "avg_input_words": 8.69
+    }
+  },
+  {
     "name": "RAG bert knn k=5",
     "n": 376,
     "classification": {
