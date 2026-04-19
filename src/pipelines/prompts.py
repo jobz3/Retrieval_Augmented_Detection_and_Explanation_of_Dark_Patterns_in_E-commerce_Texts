@@ -36,11 +36,12 @@ Dark pattern categories and their key signals:
   Not Dark Pattern — transparent, honest product text with no manipulation
 
 Rules you must follow:
-1. evidence_span MUST be an exact verbatim substring copied from the input text.
-2. confidence is your certainty [0.0–1.0] for the chosen label.
-3. For "Not Dark Pattern" set evidence_span to the most representative neutral phrase.
-4. Use "Uncertain" only when you genuinely cannot determine the label.
-5. rewrite must be the FULL product text rewritten to remove manipulation while preserving the core offer."""
+1. reasoning_steps MUST be populated FIRST — think step by step before committing to a label.
+2. evidence_span MUST be an exact verbatim substring copied from the input text.
+3. confidence is your certainty [0.0–1.0] for the chosen label.
+4. For "Not Dark Pattern" set evidence_span to the most representative neutral phrase.
+5. Use "Uncertain" only when you genuinely cannot determine the label.
+6. rewrite must be the FULL product text rewritten to remove manipulation while preserving the core offer."""
 
 
 # ---------------------------------------------------------------------------
