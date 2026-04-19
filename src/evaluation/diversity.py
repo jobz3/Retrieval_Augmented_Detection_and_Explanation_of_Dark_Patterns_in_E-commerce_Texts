@@ -140,9 +140,22 @@ def load_real_examples(category: str) -> list[str]:
 
 
 def load_synthetic_examples(category: str) -> list[str]:
+    # Primary: JSON augmentation log
     with open(SYNTHETIC_LOG) as f:
         log = json.load(f)
-    return log.get(category, [])
+    texts = log.get(category, [])
+    if texts:
+        return texts
+    # Fallback: load from train_v2.csv (synthetic == True rows)
+    path = PROCESSED_DIR / "train_v2.csv"
+    if not path.exists():
+        return []
+    result = []
+    with open(path) as f:
+        for row in csv.DictReader(f):
+            if row["category"] == category and row.get("synthetic", "").lower() in ("true", "1"):
+                result.append(row["text"])
+    return result
 
 
 # ---------------------------------------------------------------------------
