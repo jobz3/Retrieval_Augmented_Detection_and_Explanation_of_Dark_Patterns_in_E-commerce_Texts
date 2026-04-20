@@ -2,9 +2,9 @@
 Phase 3 — Pipeline comparison metrics.
 
 Reads the three completed JSONL prediction files and computes:
-  1. Classification: macro F1, per-class F1, precision, recall
+  1. Classification: macro F1, per-class F1, precision, recall, Cohen's κ
   2. Span grounding: exact-match rate, case-insensitive rate, avg span length
-  3. Confidence: mean, std, calibration gap (|mean_conf - accuracy|)
+  3. Confidence: mean, std, calibration gap, Brier score, macro AUROC
   4. Output quality: rewrite coverage, rationale length distribution
 
 Usage:
@@ -16,12 +16,15 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import numpy as np
 from sklearn.metrics import (
     classification_report,
+    cohen_kappa_score,
     confusion_matrix,
     f1_score,
     precision_score,
     recall_score,
+    roc_auc_score,
 )
 
 ROOT        = Path(__file__).resolve().parents[2]
@@ -61,6 +64,7 @@ def classification_metrics(records: list[dict]) -> dict:
     macro_f1  = f1_score(golds, preds, labels=present, average="macro",    zero_division=0)
     macro_p   = precision_score(golds, preds, labels=present, average="macro", zero_division=0)
     macro_r   = recall_score(golds, preds, labels=present, average="macro",   zero_division=0)
+    kappa     = cohen_kappa_score(golds, preds, labels=ALL_CLASSES)
 
     report = classification_report(
         golds, preds,
@@ -80,9 +84,10 @@ def classification_metrics(records: list[dict]) -> dict:
     }
 
     return {
-        "macro_f1":       round(macro_f1, 4),
+        "macro_f1":        round(macro_f1, 4),
         "macro_precision": round(macro_p,  4),
         "macro_recall":    round(macro_r,  4),
+        "cohen_kappa":     round(kappa,    4),
         "per_class":       per_class,
         "confusion_matrix": cm,
     }
@@ -112,6 +117,19 @@ def confidence_metrics(records: list[dict]) -> dict:
     accuracy  = sum(correct) / len(correct)
     calib_gap = abs(mean_conf - accuracy)
 
+    # Brier score: mean squared error between confidence and binary correctness
+    brier = float(np.mean([(c - float(ok)) ** 2 for c, ok in zip(confs, correct)]))
+
+    # Macro AUROC: one-vs-rest per class, averaged — requires confidence as a
+    # proxy for the positive class probability for each sample.
+    # Since we only have a single scalar confidence (not per-class probs),
+    # we use correct/incorrect as the binary signal and treat confidence
+    # as the score for the "correct" class.
+    try:
+        macro_auroc = float(roc_auc_score(correct, confs))
+    except ValueError:
+        macro_auroc = float("nan")
+
     # Bucket into [0,.2), [.2,.4), ..., [.8,1.0]
     buckets = {f"{i/5:.1f}-{(i+1)/5:.1f}": {"count": 0, "correct": 0}
                for i in range(5)}
@@ -121,9 +139,11 @@ def confidence_metrics(records: list[dict]) -> dict:
         buckets[bucket]["correct"] += int(ok)
 
     return {
-        "mean_confidence": round(mean_conf, 4),
-        "accuracy":        round(accuracy,  4),
-        "calibration_gap": round(calib_gap, 4),
+        "mean_confidence": round(mean_conf,   4),
+        "accuracy":        round(accuracy,    4),
+        "calibration_gap": round(calib_gap,   4),
+        "brier_score":     round(brier,        4),
+        "auroc":           round(macro_auroc,  4) if not np.isnan(macro_auroc) else None,
         "confidence_buckets": buckets,
     }
 
@@ -190,6 +210,7 @@ def main() -> None:
     print(row("Macro F1",        lambda r: f"{r['classification']['macro_f1']:.4f}"))
     print(row("Macro Precision", lambda r: f"{r['classification']['macro_precision']:.4f}"))
     print(row("Macro Recall",    lambda r: f"{r['classification']['macro_recall']:.4f}"))
+    print(row("Cohen's κ",       lambda r: f"{r['classification']['cohen_kappa']:.4f}"))
 
     print("\n  Per-class F1:")
     for cls in ALL_CLASSES:
@@ -209,6 +230,8 @@ def main() -> None:
     print(row("Mean confidence",   lambda r: f"{r['confidence']['mean_confidence']:.4f}"))
     print(row("Accuracy",          lambda r: f"{r['confidence']['accuracy']:.4f}"))
     print(row("Calibration gap",   lambda r: f"{r['confidence']['calibration_gap']:.4f}"))
+    print(row("Brier score",       lambda r: f"{r['confidence']['brier_score']:.4f}"))
+    print(row("AUROC",             lambda r: f"{r['confidence']['auroc']:.4f}" if r['confidence']['auroc'] is not None else "   N/A"))
 
     print("\n" + "=" * 75)
     print("OUTPUT QUALITY")
