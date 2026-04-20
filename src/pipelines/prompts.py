@@ -41,7 +41,9 @@ Rules you must follow:
 3. confidence is your certainty [0.0–1.0] for the chosen label.
 4. For "Not Dark Pattern" set evidence_span to the most representative neutral phrase.
 5. Use "Uncertain" only when you genuinely cannot determine the label.
-6. rewrite must be the FULL product text rewritten to remove manipulation while preserving the core offer."""
+6. rewrite must rewrite the product text to remove the dark pattern while preserving the core offer.
+   - If the text is a dark pattern: produce a complete, natural sentence even if the input is short (e.g. "LAST 1 LEFT" → "This item is available — add it to your cart.").
+   - If the label is "Not Dark Pattern": copy the input text unchanged."""
 
 
 # ---------------------------------------------------------------------------

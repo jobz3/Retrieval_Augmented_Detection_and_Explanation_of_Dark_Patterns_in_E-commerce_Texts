@@ -104,9 +104,13 @@ def check_grounding(
 
     if exact:
         out["best_tier"] = 1
-        return out
+        # Exact implies fuzzy and semantic also pass — mark them so cascade rates are cumulative
+        out["fuzzy"]  = True
+        out["semantic"] = True
+        if tiers == 1:
+            return out
 
-    if tiers >= 2 and span:
+    if tiers >= 2 and span and not exact:
         fuzz = _get_fuzz()
         score = fuzz.partial_ratio(span.lower(), input_text.lower())
         out["fuzzy_score"] = score
@@ -114,7 +118,7 @@ def check_grounding(
         if out["fuzzy"] and out["best_tier"] == 0:
             out["best_tier"] = 2
 
-    if tiers >= 3 and span:
+    if tiers >= 3 and span and not exact:
         import numpy as np
         model = _get_minilm()
         embs = model.encode([span, input_text], convert_to_numpy=True, normalize_embeddings=True)
@@ -198,9 +202,12 @@ def annotate_grounding(
 
 def cascade_summary(records: list[dict]) -> dict:
     """
-    Compute tier-by-tier grounding rates from annotated records.
+    Compute cumulative tier grounding rates from annotated records.
 
-    Expects records already processed by annotate_grounding(tiers=3).
+    Rates are cumulative: fuzzy_rate includes exact-passing records,
+    semantic_rate includes exact- and fuzzy-passing records.
+
+    Expects records already processed by annotate_grounding(tiers≥2).
 
     Returns:
         dict with exact_rate, fuzzy_rate, semantic_rate,
@@ -211,8 +218,8 @@ def cascade_summary(records: list[dict]) -> dict:
         return {}
 
     exact    = sum(r.get("span_exact",    False) for r in records)
-    fuzzy    = sum(r.get("span_fuzzy",    False) for r in records)
-    semantic = sum(r.get("span_semantic", False) for r in records)
+    fuzzy    = sum(r.get("span_fuzzy",    False) for r in records)   # cumulative: includes exact
+    semantic = sum(r.get("span_semantic", False) for r in records)   # cumulative: includes exact+fuzzy
     any_gr   = sum(r.get("span_best_tier", 0) > 0 for r in records)
 
     avg_fuzz = sum(r.get("span_fuzzy_score",    0.0) for r in records) / n

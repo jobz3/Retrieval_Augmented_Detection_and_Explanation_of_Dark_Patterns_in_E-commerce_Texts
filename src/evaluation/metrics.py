@@ -150,18 +150,31 @@ def confidence_metrics(records: list[dict]) -> dict:
 
 
 def output_quality_metrics(records: list[dict]) -> dict:
-    rewrite_lens  = [len(r.get("rewrite",  "").split()) for r in records]
+    rewrite_lens   = [len(r.get("rewrite",   "").split()) for r in records]
     rationale_lens = [len(r.get("rationale", "").split()) for r in records]
-    input_lens    = [len(r.get("input_text", "").split()) for r in records]
+    input_lens     = [len(r.get("input_text","").split()) for r in records]
 
-    # Rewrite coverage: did the model produce a rewrite (>5 tokens)?
-    rewrite_ok = sum(l > 5 for l in rewrite_lens)
+    # Rewrite coverage on dark-pattern records only:
+    # "Not Dark Pattern" inputs are often 1-4 word fragments with nothing to rewrite;
+    # echoing them back is correct behaviour, not a failure.
+    # A rewrite is "present" when it differs from the input AND has ≥ max(5, 0.5*input_len) words.
+    dp_records = [r for r in records if r.get("label") != "Not Dark Pattern"]
+    dp_rewrite_ok = 0
+    for r in dp_records:
+        rw_len = len(r.get("rewrite", "").split())
+        in_len = len(r.get("input_text", "").split())
+        threshold = max(5, int(in_len * 0.5))
+        rewrite_changed = r.get("rewrite", "").strip() != r.get("input_text", "").strip()
+        if rw_len >= threshold and rewrite_changed:
+            dp_rewrite_ok += 1
 
     return {
-        "rewrite_coverage":      round(rewrite_ok / len(records), 4),
-        "avg_rewrite_words":     round(sum(rewrite_lens) / len(records),   2),
+        "rewrite_coverage_dp":   round(dp_rewrite_ok / len(dp_records), 4) if dp_records else 0.0,
+        "rewrite_coverage_all":  round(sum(l > 5 for l in rewrite_lens) / len(records), 4),
+        "n_dp_records":          len(dp_records),
+        "avg_rewrite_words":     round(sum(rewrite_lens)   / len(records), 2),
         "avg_rationale_words":   round(sum(rationale_lens) / len(records), 2),
-        "avg_input_words":       round(sum(input_lens) / len(records),     2),
+        "avg_input_words":       round(sum(input_lens)     / len(records), 2),
     }
 
 
@@ -237,9 +250,10 @@ def main() -> None:
     print("\n" + "=" * 75)
     print("OUTPUT QUALITY")
     print("=" * 75)
-    print(row("Rewrite coverage",      lambda r: f"{r['output_quality']['rewrite_coverage']:.4f}"))
-    print(row("Avg rewrite (words)",   lambda r: f"{r['output_quality']['avg_rewrite_words']:.1f}"))
-    print(row("Avg rationale (words)", lambda r: f"{r['output_quality']['avg_rationale_words']:.1f}"))
+    print(row("Rewrite coverage (DP)",  lambda r: f"{r['output_quality']['rewrite_coverage_dp']:.4f}"))
+    print(row("Rewrite coverage (all)", lambda r: f"{r['output_quality']['rewrite_coverage_all']:.4f}"))
+    print(row("Avg rewrite (words)",    lambda r: f"{r['output_quality']['avg_rewrite_words']:.1f}"))
+    print(row("Avg rationale (words)",  lambda r: f"{r['output_quality']['avg_rationale_words']:.1f}"))
 
     print()
 
