@@ -38,6 +38,7 @@ RUNS = [
     {"name": "RAG sbert knn k=5",       "file": "rag_sbert_knn_k5.jsonl"},
     {"name": "RAG sbert diversity k=5", "file": "rag_sbert_diversity_k5.jsonl"},
     {"name": "RAG sbert prototype k=5", "file": "rag_sbert_prototype_k5.jsonl"},
+    {"name": "RAG sbert hyde k=5",     "file": "rag_sbert_hyde_k5.jsonl"},
     {"name": "RAG bert knn k=5",        "file": "rag_bert_knn_k5.jsonl"},
 ]
 
