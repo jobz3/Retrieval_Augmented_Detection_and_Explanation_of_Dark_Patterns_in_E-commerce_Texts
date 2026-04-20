@@ -38,7 +38,6 @@ secrets.json
 # =============================================================================
 data/raw/
 data/processed/
-data/german/
 
 # =============================================================================
 # Model checkpoints, FAISS indices, embeddings
