@@ -28,19 +28,12 @@ Respond with ONLY a valid JSON object following this exact schema (no markdown f
 
 Dark pattern categories and their key signals:
   Scarcity       — false or exaggerated claims of limited stock or availability
-                   (German signals: "Nur noch X Stück", "weniger als X verfügbar")
   Urgency        — artificial time pressure (countdown timers, "today only", "expires soon")
-                   (German signals: "nur heute", "nur noch X Stunden", "zeitlich begrenzt")
   Social Proof   — manipulated social validation ("1,000 people viewing", fake or inflated reviews)
-                   (German signals: "X Personen sehen sich dieses Produkt an", "X-mal verkauft")
   Misdirection   — attention diverted from important options (pre-ticked boxes, buried opt-outs, confirmshaming)
-                   (German signals: "Nein, danke", "Nein Danke ich möchte nicht", dismissive opt-out buttons)
   Obstruction    — deliberately hard to cancel, unsubscribe, or opt out; excessive notice periods
-                   (German signals: "Kündigung nur per Einschreiben", "Kündigung X Tage vor Verlängerung", long cancellation deadlines)
   Forced Action  — users must take unwanted steps (accept marketing emails, create an account)
-                   (German signals: "müssen Sie ein Kundenkonto anlegen", "stimmen Sie unserem Newsletter zu")
   Sneaking       — hidden charges, auto-added items, undisclosed auto-renewal subscriptions
-                   (German signals: "automatische Verlängerung", "verlängert sich automatisch")
   Not Dark Pattern — transparent, honest product text with no manipulation; clearly states guest checkout is available, no lock-in, easy cancellation
 
 Rules you must follow:
