@@ -1,47 +1,47 @@
 [
   {
-    "name": "rag_sbert_diversity_k5_english",
+    "name": "rag_sbert_knn_k5_english",
     "n": 376,
     "classification": {
-      "macro_f1": 0.7917,
-      "macro_precision": 0.8471,
-      "macro_recall": 0.7544,
-      "cohen_kappa": 0.9472,
+      "macro_f1": 0.8954,
+      "macro_precision": 0.9486,
+      "macro_recall": 0.8724,
+      "cohen_kappa": 0.9553,
       "per_class": {
         "Forced Action": {
-          "f1": 0.8333,
+          "f1": 0.6,
           "precision": 1.0,
-          "recall": 0.7143,
+          "recall": 0.4286,
           "support": 7.0
         },
         "Misdirection": {
-          "f1": 0.9831,
-          "precision": 1.0,
-          "recall": 0.9667,
+          "f1": 0.9677,
+          "precision": 0.9375,
+          "recall": 1.0,
           "support": 30.0
         },
         "Not Dark Pattern": {
-          "f1": 0.967,
-          "precision": 0.9412,
-          "recall": 0.9944,
+          "f1": 0.9777,
+          "precision": 0.9669,
+          "recall": 0.9887,
           "support": 177.0
         },
         "Obstruction": {
-          "f1": 0.5263,
-          "precision": 0.7143,
-          "recall": 0.4167,
+          "f1": 0.6364,
+          "precision": 0.7,
+          "recall": 0.5833,
           "support": 12.0
         },
         "Scarcity": {
-          "f1": 1.0,
-          "precision": 1.0,
+          "f1": 0.9921,
+          "precision": 0.9844,
           "recall": 1.0,
           "support": 63.0
         },
         "Sneaking": {
-          "f1": 0.8571,
+          "f1": 1.0,
           "precision": 1.0,
-          "recall": 0.75,
+          "recall": 1.0,
           "support": 8.0
         },
         "Social Proof": {
@@ -51,18 +51,18 @@
           "support": 47.0
         },
         "Urgency": {
-          "f1": 0.9688,
-          "precision": 0.9688,
-          "recall": 0.9688,
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
           "support": 32.0
         }
       },
       "confusion_matrix": [
         [
-          5,
+          3,
           0,
-          0,
-          2,
+          1,
+          3,
           0,
           0,
           0,
@@ -70,29 +70,29 @@
         ],
         [
           0,
-          29,
+          30,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          175,
+          0,
           1,
           0,
           0,
-          0,
-          0,
           0
         ],
         [
           0,
-          0,
-          176,
-          0,
-          0,
-          0,
-          0,
-          1
-        ],
-        [
-          0,
-          0,
+          1,
+          4,
           7,
-          5,
           0,
           0,
           0,
@@ -111,10 +111,10 @@
         [
           0,
           0,
-          2,
           0,
           0,
-          6,
+          0,
+          8,
           0,
           0
         ],
@@ -136,49 +136,51 @@
           0,
           0,
           0,
-          31
+          32
         ]
       ]
     },
     "grounding": {
-      "exact_rate": 0.9947,
-      "ci_rate": 0.9947,
-      "avg_span_len": 33.09,
-      "empty_spans": 1
+      "exact_rate": 0.9973,
+      "ci_rate": 0.9973,
+      "avg_span_len": 34.96,
+      "empty_spans": 0
     }
   },
   {
     "name": "zero_shot_german",
     "n": 76,
     "classification": {
-      "macro_f1": 0.5364,
-      "macro_precision": 0.591,
-      "macro_recall": 0.5782,
-      "cohen_kappa": 0.6042,
-      "accuracy": 0.6447,
+      "macro_f1": 0.8929,
+      "macro_precision": 0.919,
+      "macro_recall": 0.8997,
+      "cohen_kappa": 0.8797,
+      "accuracy": 0.8947,
+      "n_evaluated": 76,
+      "n_abstained": 0,
       "per_class": {
         "Forced Action": {
-          "f1": 0.6667,
-          "precision": 0.6,
-          "recall": 0.75,
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
           "support": 8.0
         },
         "Misdirection": {
-          "f1": 0.0,
-          "precision": 0.0,
-          "recall": 0.0,
+          "f1": 0.9474,
+          "precision": 1.0,
+          "recall": 0.9,
           "support": 10.0
         },
         "Not Dark Pattern": {
-          "f1": 0.4737,
-          "precision": 0.3103,
+          "f1": 0.7826,
+          "precision": 0.6429,
           "recall": 1.0,
           "support": 9.0
         },
         "Obstruction": {
-          "f1": 0.1667,
-          "precision": 0.5,
-          "recall": 0.1,
+          "f1": 0.6667,
+          "precision": 1.0,
+          "recall": 0.5,
           "support": 10.0
         },
         "Scarcity": {
@@ -188,9 +190,9 @@
           "support": 9.0
         },
         "Sneaking": {
-          "f1": 0.6154,
-          "precision": 1.0,
-          "recall": 0.4444,
+          "f1": 0.8421,
+          "precision": 0.8,
+          "recall": 0.8889,
           "support": 9.0
         },
         "Social Proof": {
@@ -211,42 +213,44 @@
       "exact_rate": 1.0,
       "ci_rate": 1.0,
       "fuzzy_rate": 1.0,
-      "avg_span_len": 53.08,
+      "avg_span_len": 47.88,
       "empty_spans": 0
     }
   },
   {
-    "name": "rag_sbert_knn_k5_german",
+    "name": "rag_sbert_knn_k1_german",
     "n": 76,
     "classification": {
-      "macro_f1": 0.689,
-      "macro_precision": 0.8678,
-      "macro_recall": 0.7149,
-      "cohen_kappa": 0.6699,
-      "accuracy": 0.7105,
+      "macro_f1": 0.9279,
+      "macro_precision": 0.9449,
+      "macro_recall": 0.9375,
+      "cohen_kappa": 0.9248,
+      "accuracy": 0.9342,
+      "n_evaluated": 76,
+      "n_abstained": 0,
       "per_class": {
         "Forced Action": {
-          "f1": 0.7778,
-          "precision": 0.7,
-          "recall": 0.875,
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
           "support": 8.0
         },
         "Misdirection": {
-          "f1": 0.3333,
+          "f1": 1.0,
           "precision": 1.0,
-          "recall": 0.2,
+          "recall": 1.0,
           "support": 10.0
         },
         "Not Dark Pattern": {
-          "f1": 0.5,
-          "precision": 0.3333,
+          "f1": 0.9474,
+          "precision": 0.9,
           "recall": 1.0,
           "support": 9.0
         },
         "Obstruction": {
-          "f1": 0.3333,
+          "f1": 0.6667,
           "precision": 1.0,
-          "recall": 0.2,
+          "recall": 0.5,
           "support": 10.0
         },
         "Scarcity": {
@@ -256,9 +260,9 @@
           "support": 9.0
         },
         "Sneaking": {
-          "f1": 0.6154,
-          "precision": 1.0,
-          "recall": 0.4444,
+          "f1": 0.8571,
+          "precision": 0.75,
+          "recall": 1.0,
           "support": 9.0
         },
         "Social Proof": {
@@ -279,8 +283,16 @@
       "exact_rate": 1.0,
       "ci_rate": 1.0,
       "fuzzy_rate": 1.0,
-      "avg_span_len": 52.88,
+      "avg_span_len": 46.76,
       "empty_spans": 0
-    }
+    },
+    "fallback": {
+      "n_fallback": 0,
+      "fallback_rate": 0.0,
+      "fallback_accuracy": null,
+      "rag_accuracy": 0.9342
+    },
+    "threshold": 0.15,
+    "diversity_alpha": 0.3
   }
 ]

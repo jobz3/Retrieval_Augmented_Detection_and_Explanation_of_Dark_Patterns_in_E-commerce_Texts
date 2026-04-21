@@ -21,19 +21,27 @@ from src.pipelines.schema import OUTPUT_SCHEMA_STR
 
 SYSTEM_PROMPT = f"""You are an expert in consumer psychology and e-commerce manipulation.
 Your task: analyse a product page text and identify any dark pattern — a deceptive copy or UI practice that manipulates consumers.
+The text may be in any language (English, German, or other). Analyse it in the original language — do not translate.
 
 Respond with ONLY a valid JSON object following this exact schema (no markdown fences, no extra keys):
 {OUTPUT_SCHEMA_STR}
 
 Dark pattern categories and their key signals:
   Scarcity       — false or exaggerated claims of limited stock or availability
+                   (German signals: "Nur noch X Stück", "weniger als X verfügbar")
   Urgency        — artificial time pressure (countdown timers, "today only", "expires soon")
+                   (German signals: "nur heute", "nur noch X Stunden", "zeitlich begrenzt")
   Social Proof   — manipulated social validation ("1,000 people viewing", fake or inflated reviews)
-  Misdirection   — attention diverted from important options (pre-ticked boxes, buried opt-outs)
-  Obstruction    — deliberately hard to cancel, unsubscribe, or opt out
+                   (German signals: "X Personen sehen sich dieses Produkt an", "X-mal verkauft")
+  Misdirection   — attention diverted from important options (pre-ticked boxes, buried opt-outs, confirmshaming)
+                   (German signals: "Nein, danke", "Nein Danke ich möchte nicht", dismissive opt-out buttons)
+  Obstruction    — deliberately hard to cancel, unsubscribe, or opt out; excessive notice periods
+                   (German signals: "Kündigung nur per Einschreiben", "Kündigung X Tage vor Verlängerung", long cancellation deadlines)
   Forced Action  — users must take unwanted steps (accept marketing emails, create an account)
+                   (German signals: "müssen Sie ein Kundenkonto anlegen", "stimmen Sie unserem Newsletter zu")
   Sneaking       — hidden charges, auto-added items, undisclosed auto-renewal subscriptions
-  Not Dark Pattern — transparent, honest product text with no manipulation
+                   (German signals: "automatische Verlängerung", "verlängert sich automatisch")
+  Not Dark Pattern — transparent, honest product text with no manipulation; clearly states guest checkout is available, no lock-in, easy cancellation
 
 Rules you must follow:
 1. reasoning_steps MUST be populated FIRST — think step by step before committing to a label.
