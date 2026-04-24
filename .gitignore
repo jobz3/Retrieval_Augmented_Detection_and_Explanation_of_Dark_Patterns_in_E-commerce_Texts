@@ -127,3 +127,5 @@ desktop.ini
 *.md
 logs/
 *.sbatch
+.codex
+26.0.1

@@ -12,6 +12,7 @@ Usage:
     python -m src.evaluation.cross_lingual_eval --mode both --strategy knn
     python -m src.evaluation.cross_lingual_eval --mode ktune
     python -m src.evaluation.cross_lingual_eval --mode both --strategy knn --threshold 0.15 --diversity-alpha 0.3
+    python -m src.evaluation.cross_lingual_eval --mode both --encoder multilingual --strategy knn --k 1
 """
 
 from __future__ import annotations
@@ -366,13 +367,17 @@ def run_ktune(
     model: str = DEFAULT_MODEL,
     threshold: float = 0.15,
     diversity_alpha: float = 0.3,
+    k_values: list[int] | None = None,
 ) -> dict:
-    """Sweep k in [1, 2, 3, 5] and report macro F1 for each."""
+    """Sweep k values and report macro F1 for each. Default: [1, 2, 3, 5, 7, 10, 15]."""
     from sklearn.metrics import f1_score
 
+    if k_values is None:
+        k_values = [1, 2, 3, 5, 7, 10, 15]
+
     results = {}
-    print(f"\nK-tuning sweep (strategy={strategy}, encoder={encoder}, threshold={threshold}) ...")
-    for k in [1, 2, 3, 5]:
+    print(f"\nK-tuning sweep (strategy={strategy}, encoder={encoder}, threshold={threshold}, k_values={k_values}) ...")
+    for k in k_values:
         recs = run_rag(
             records, strategy=strategy, k=k, encoder=encoder, model=model,
             threshold=threshold, diversity_alpha=diversity_alpha,
@@ -401,12 +406,14 @@ def main(
     mode:            str   = typer.Option("both",  help="zero_shot | rag | both | ktune"),
     strategy:        str   = typer.Option("knn",   help="RAG strategy: knn | diversity | prototype"),
     k:               int   = typer.Option(5,       help="RAG k"),
-    encoder:         str   = typer.Option("sbert", help="RAG encoder: sbert | bert"),
+    k_values:        str   = typer.Option("",      help="Comma-separated k values for ktune, e.g. '1,2,3,5,7,10,15'. Empty = default."),
+    encoder:         str   = typer.Option("sbert", help="RAG encoder: sbert | bert | multilingual | multilingual_de"),
     model:           str   = typer.Option(DEFAULT_MODEL, help="Ollama model tag"),
     threshold:       float = typer.Option(0.15,   help="[#1] Min retrieval score; below → zero-shot fallback. 0=disabled"),
     diversity_alpha: float = typer.Option(0.3,    help="[#3] Label diversity penalty weight. 0=disabled"),
     abstain:         bool  = typer.Option(False,   help="[#5] Exclude low-confidence predictions from metrics"),
 ) -> None:
+    parsed_k_values = [int(x) for x in k_values.split(",") if x.strip()] if k_values.strip() else None
     german = load_german()
     print(f"Loaded {len(german)} German records")
 
@@ -419,8 +426,9 @@ def main(
         ktune_result = run_ktune(
             german, strategy=strategy, encoder=encoder, model=model,
             threshold=threshold, diversity_alpha=diversity_alpha,
+            k_values=parsed_k_values,
         )
-        out = RESULTS_DIR / "german_ktune.json"
+        out = RESULTS_DIR / f"german_ktune_{encoder}_{strategy}.json"
         with open(out, "w") as f:
             json.dump(ktune_result, f, indent=2)
         print(f"\nK-tune results saved → {out}")
