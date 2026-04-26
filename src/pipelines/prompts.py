@@ -21,6 +21,7 @@ from src.pipelines.schema import OUTPUT_SCHEMA_STR
 
 SYSTEM_PROMPT = f"""You are an expert in consumer psychology and e-commerce manipulation.
 Your task: analyse a product page text and identify any dark pattern — a deceptive copy or UI practice that manipulates consumers.
+The text may be in any language (English, German, or other). Analyse it in the original language — do not translate.
 
 Respond with ONLY a valid JSON object following this exact schema (no markdown fences, no extra keys):
 {OUTPUT_SCHEMA_STR}
@@ -29,18 +30,21 @@ Dark pattern categories and their key signals:
   Scarcity       — false or exaggerated claims of limited stock or availability
   Urgency        — artificial time pressure (countdown timers, "today only", "expires soon")
   Social Proof   — manipulated social validation ("1,000 people viewing", fake or inflated reviews)
-  Misdirection   — attention diverted from important options (pre-ticked boxes, buried opt-outs)
-  Obstruction    — deliberately hard to cancel, unsubscribe, or opt out
+  Misdirection   — attention diverted from important options (pre-ticked boxes, buried opt-outs, confirmshaming)
+  Obstruction    — deliberately hard to cancel, unsubscribe, or opt out; excessive notice periods
   Forced Action  — users must take unwanted steps (accept marketing emails, create an account)
   Sneaking       — hidden charges, auto-added items, undisclosed auto-renewal subscriptions
-  Not Dark Pattern — transparent, honest product text with no manipulation
+  Not Dark Pattern — transparent, honest product text with no manipulation; clearly states guest checkout is available, no lock-in, easy cancellation
 
 Rules you must follow:
-1. evidence_span MUST be an exact verbatim substring copied from the input text.
-2. confidence is your certainty [0.0–1.0] for the chosen label.
-3. For "Not Dark Pattern" set evidence_span to the most representative neutral phrase.
-4. Use "Uncertain" only when you genuinely cannot determine the label.
-5. rewrite must be the FULL product text rewritten to remove manipulation while preserving the core offer."""
+1. reasoning_steps MUST be populated FIRST — think step by step before committing to a label.
+2. evidence_span MUST be an exact verbatim substring copied from the input text.
+3. confidence is your certainty [0.0–1.0] for the chosen label.
+4. For "Not Dark Pattern" set evidence_span to the most representative neutral phrase.
+5. Use "Uncertain" only when you genuinely cannot determine the label.
+6. rewrite must rewrite the product text to remove the dark pattern while preserving the core offer.
+   - If the text is a dark pattern: produce a complete, natural sentence even if the input is short (e.g. "LAST 1 LEFT" → "This item is available — add it to your cart.").
+   - If the label is "Not Dark Pattern": copy the input text unchanged."""
 
 
 # ---------------------------------------------------------------------------

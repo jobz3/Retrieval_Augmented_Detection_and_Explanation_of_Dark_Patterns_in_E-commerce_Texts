@@ -70,7 +70,7 @@ def load_index(
 
 @app.command()
 def main(
-    encoder: str = typer.Option("sbert", help="Encoder: sbert | bert | roberta"),
+    encoder: str = typer.Option("sbert", help="Encoder: sbert | bert | roberta | multilingual | multilingual_de"),
     split: str = typer.Option("train", help="Which split to index (usually 'train')"),
     batch_size: int = typer.Option(64, help="Encoding batch size"),
 ) -> None:

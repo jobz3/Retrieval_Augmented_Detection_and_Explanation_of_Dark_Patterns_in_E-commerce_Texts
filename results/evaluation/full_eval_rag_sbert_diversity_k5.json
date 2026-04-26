@@ -1,0 +1,197 @@
+{
+  "file": "rag_sbert_diversity_k5.jsonl",
+  "n": 376,
+  "layer1": {
+    "classification": {
+      "macro_f1": 0.7917,
+      "macro_precision": 0.8471,
+      "macro_recall": 0.7544,
+      "cohen_kappa": 0.9472,
+      "per_class": {
+        "Forced Action": {
+          "f1": 0.8333,
+          "precision": 1.0,
+          "recall": 0.7143,
+          "support": 7.0
+        },
+        "Misdirection": {
+          "f1": 0.9831,
+          "precision": 1.0,
+          "recall": 0.9667,
+          "support": 30.0
+        },
+        "Not Dark Pattern": {
+          "f1": 0.967,
+          "precision": 0.9412,
+          "recall": 0.9944,
+          "support": 177.0
+        },
+        "Obstruction": {
+          "f1": 0.5263,
+          "precision": 0.7143,
+          "recall": 0.4167,
+          "support": 12.0
+        },
+        "Scarcity": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 63.0
+        },
+        "Sneaking": {
+          "f1": 0.8571,
+          "precision": 1.0,
+          "recall": 0.75,
+          "support": 8.0
+        },
+        "Social Proof": {
+          "f1": 0.9892,
+          "precision": 1.0,
+          "recall": 0.9787,
+          "support": 47.0
+        },
+        "Urgency": {
+          "f1": 0.9688,
+          "precision": 0.9688,
+          "recall": 0.9688,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          5,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          29,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          176,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          7,
+          5,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          63,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          6,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          46,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          31
+        ]
+      ]
+    },
+    "confidence": {
+      "mean_confidence": 0.9755,
+      "accuracy": 0.9601,
+      "calibration_gap": 0.0154,
+      "brier_score": 0.038,
+      "auroc": 0.6115,
+      "confidence_buckets": {
+        "0.0-0.2": {
+          "count": 1,
+          "correct": 0
+        },
+        "0.2-0.4": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.4-0.6": {
+          "count": 1,
+          "correct": 1
+        },
+        "0.6-0.8": {
+          "count": 1,
+          "correct": 1
+        },
+        "0.8-1.0": {
+          "count": 373,
+          "correct": 359
+        }
+      }
+    },
+    "output_quality": {
+      "rewrite_coverage_dp": 0.8254,
+      "rewrite_coverage_all": 0.5399,
+      "n_dp_records": 189,
+      "avg_rewrite_words": 9.35,
+      "avg_rationale_words": 16.12,
+      "avg_input_words": 8.69
+    }
+  },
+  "layer2": {
+    "cascade": {
+      "exact_rate": 0.9973,
+      "fuzzy_rate": 0.9973,
+      "semantic_rate": 0.9973,
+      "any_grounded_rate": 0.9973,
+      "avg_fuzzy_score": 0.23,
+      "avg_semantic_score": 0.0017
+    },
+    "legacy": {
+      "exact_rate": 0.9973,
+      "ci_rate": 0.9973,
+      "avg_span_len": 33.09,
+      "empty_spans": 1
+    }
+  }
+}

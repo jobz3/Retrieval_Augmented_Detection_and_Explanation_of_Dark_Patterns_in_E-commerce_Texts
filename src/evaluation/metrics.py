@@ -2,9 +2,9 @@
 Phase 3 — Pipeline comparison metrics.
 
 Reads the three completed JSONL prediction files and computes:
-  1. Classification: macro F1, per-class F1, precision, recall
+  1. Classification: macro F1, per-class F1, precision, recall, Cohen's κ
   2. Span grounding: exact-match rate, case-insensitive rate, avg span length
-  3. Confidence: mean, std, calibration gap (|mean_conf - accuracy|)
+  3. Confidence: mean, std, calibration gap, Brier score, macro AUROC
   4. Output quality: rewrite coverage, rationale length distribution
 
 Usage:
@@ -16,12 +16,15 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import numpy as np
 from sklearn.metrics import (
     classification_report,
+    cohen_kappa_score,
     confusion_matrix,
     f1_score,
     precision_score,
     recall_score,
+    roc_auc_score,
 )
 
 ROOT        = Path(__file__).resolve().parents[2]
@@ -35,6 +38,7 @@ RUNS = [
     {"name": "RAG sbert knn k=5",       "file": "rag_sbert_knn_k5.jsonl"},
     {"name": "RAG sbert diversity k=5", "file": "rag_sbert_diversity_k5.jsonl"},
     {"name": "RAG sbert prototype k=5", "file": "rag_sbert_prototype_k5.jsonl"},
+    {"name": "RAG sbert hyde k=5",     "file": "rag_sbert_hyde_k5.jsonl"},
     {"name": "RAG bert knn k=5",        "file": "rag_bert_knn_k5.jsonl"},
 ]
 
@@ -61,6 +65,7 @@ def classification_metrics(records: list[dict]) -> dict:
     macro_f1  = f1_score(golds, preds, labels=present, average="macro",    zero_division=0)
     macro_p   = precision_score(golds, preds, labels=present, average="macro", zero_division=0)
     macro_r   = recall_score(golds, preds, labels=present, average="macro",   zero_division=0)
+    kappa     = cohen_kappa_score(golds, preds, labels=ALL_CLASSES)
 
     report = classification_report(
         golds, preds,
@@ -80,9 +85,10 @@ def classification_metrics(records: list[dict]) -> dict:
     }
 
     return {
-        "macro_f1":       round(macro_f1, 4),
+        "macro_f1":        round(macro_f1, 4),
         "macro_precision": round(macro_p,  4),
         "macro_recall":    round(macro_r,  4),
+        "cohen_kappa":     round(kappa,    4),
         "per_class":       per_class,
         "confusion_matrix": cm,
     }
@@ -112,6 +118,19 @@ def confidence_metrics(records: list[dict]) -> dict:
     accuracy  = sum(correct) / len(correct)
     calib_gap = abs(mean_conf - accuracy)
 
+    # Brier score: mean squared error between confidence and binary correctness
+    brier = float(np.mean([(c - float(ok)) ** 2 for c, ok in zip(confs, correct)]))
+
+    # Macro AUROC: one-vs-rest per class, averaged — requires confidence as a
+    # proxy for the positive class probability for each sample.
+    # Since we only have a single scalar confidence (not per-class probs),
+    # we use correct/incorrect as the binary signal and treat confidence
+    # as the score for the "correct" class.
+    try:
+        macro_auroc = float(roc_auc_score(correct, confs))
+    except ValueError:
+        macro_auroc = float("nan")
+
     # Bucket into [0,.2), [.2,.4), ..., [.8,1.0]
     buckets = {f"{i/5:.1f}-{(i+1)/5:.1f}": {"count": 0, "correct": 0}
                for i in range(5)}
@@ -121,26 +140,41 @@ def confidence_metrics(records: list[dict]) -> dict:
         buckets[bucket]["correct"] += int(ok)
 
     return {
-        "mean_confidence": round(mean_conf, 4),
-        "accuracy":        round(accuracy,  4),
-        "calibration_gap": round(calib_gap, 4),
+        "mean_confidence": round(mean_conf,   4),
+        "accuracy":        round(accuracy,    4),
+        "calibration_gap": round(calib_gap,   4),
+        "brier_score":     round(brier,        4),
+        "auroc":           round(macro_auroc,  4) if not np.isnan(macro_auroc) else None,
         "confidence_buckets": buckets,
     }
 
 
 def output_quality_metrics(records: list[dict]) -> dict:
-    rewrite_lens  = [len(r.get("rewrite",  "").split()) for r in records]
+    rewrite_lens   = [len(r.get("rewrite",   "").split()) for r in records]
     rationale_lens = [len(r.get("rationale", "").split()) for r in records]
-    input_lens    = [len(r.get("input_text", "").split()) for r in records]
+    input_lens     = [len(r.get("input_text","").split()) for r in records]
 
-    # Rewrite coverage: did the model produce a rewrite (>5 tokens)?
-    rewrite_ok = sum(l > 5 for l in rewrite_lens)
+    # Rewrite coverage on dark-pattern records only:
+    # "Not Dark Pattern" inputs are often 1-4 word fragments with nothing to rewrite;
+    # echoing them back is correct behaviour, not a failure.
+    # A rewrite is "present" when it differs from the input AND has ≥ max(5, 0.5*input_len) words.
+    dp_records = [r for r in records if r.get("label") != "Not Dark Pattern"]
+    dp_rewrite_ok = 0
+    for r in dp_records:
+        rw_len = len(r.get("rewrite", "").split())
+        in_len = len(r.get("input_text", "").split())
+        threshold = max(5, int(in_len * 0.5))
+        rewrite_changed = r.get("rewrite", "").strip() != r.get("input_text", "").strip()
+        if rw_len >= threshold and rewrite_changed:
+            dp_rewrite_ok += 1
 
     return {
-        "rewrite_coverage":      round(rewrite_ok / len(records), 4),
-        "avg_rewrite_words":     round(sum(rewrite_lens) / len(records),   2),
+        "rewrite_coverage_dp":   round(dp_rewrite_ok / len(dp_records), 4) if dp_records else 0.0,
+        "rewrite_coverage_all":  round(sum(l > 5 for l in rewrite_lens) / len(records), 4),
+        "n_dp_records":          len(dp_records),
+        "avg_rewrite_words":     round(sum(rewrite_lens)   / len(records), 2),
         "avg_rationale_words":   round(sum(rationale_lens) / len(records), 2),
-        "avg_input_words":       round(sum(input_lens) / len(records),     2),
+        "avg_input_words":       round(sum(input_lens)     / len(records), 2),
     }
 
 
@@ -190,6 +224,7 @@ def main() -> None:
     print(row("Macro F1",        lambda r: f"{r['classification']['macro_f1']:.4f}"))
     print(row("Macro Precision", lambda r: f"{r['classification']['macro_precision']:.4f}"))
     print(row("Macro Recall",    lambda r: f"{r['classification']['macro_recall']:.4f}"))
+    print(row("Cohen's κ",       lambda r: f"{r['classification']['cohen_kappa']:.4f}"))
 
     print("\n  Per-class F1:")
     for cls in ALL_CLASSES:
@@ -209,13 +244,16 @@ def main() -> None:
     print(row("Mean confidence",   lambda r: f"{r['confidence']['mean_confidence']:.4f}"))
     print(row("Accuracy",          lambda r: f"{r['confidence']['accuracy']:.4f}"))
     print(row("Calibration gap",   lambda r: f"{r['confidence']['calibration_gap']:.4f}"))
+    print(row("Brier score",       lambda r: f"{r['confidence']['brier_score']:.4f}"))
+    print(row("AUROC",             lambda r: f"{r['confidence']['auroc']:.4f}" if r['confidence']['auroc'] is not None else "   N/A"))
 
     print("\n" + "=" * 75)
     print("OUTPUT QUALITY")
     print("=" * 75)
-    print(row("Rewrite coverage",      lambda r: f"{r['output_quality']['rewrite_coverage']:.4f}"))
-    print(row("Avg rewrite (words)",   lambda r: f"{r['output_quality']['avg_rewrite_words']:.1f}"))
-    print(row("Avg rationale (words)", lambda r: f"{r['output_quality']['avg_rationale_words']:.1f}"))
+    print(row("Rewrite coverage (DP)",  lambda r: f"{r['output_quality']['rewrite_coverage_dp']:.4f}"))
+    print(row("Rewrite coverage (all)", lambda r: f"{r['output_quality']['rewrite_coverage_all']:.4f}"))
+    print(row("Avg rewrite (words)",    lambda r: f"{r['output_quality']['avg_rewrite_words']:.1f}"))
+    print(row("Avg rationale (words)",  lambda r: f"{r['output_quality']['avg_rationale_words']:.1f}"))
 
     print()
 

@@ -1,0 +1,3770 @@
+{
+  "n": 376,
+  "mean_sta": 0.9329,
+  "mean_sim": 0.7631,
+  "mean_fl": 0.2514,
+  "mean_j_score": 0.6492,
+  "entity_leak_rate": 0.125,
+  "per_record": [
+    {
+      "id": 0,
+      "label": "Scarcity",
+      "sta": 0.9424,
+      "sim": 0.707,
+      "fl": 0.0,
+      "j_score": 0.5498,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 1,
+      "label": "Misdirection",
+      "sta": 0.841,
+      "sim": 0.3342,
+      "fl": 0.65,
+      "j_score": 0.6084,
+      "entity_leak": false,
+      "rewrite_len": 15
+    },
+    {
+      "id": 2,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.069,
+      "j_score": 0.6897,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 3,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 4,
+      "label": "Not Dark Pattern",
+      "sta": 0.973,
+      "sim": 0.9181,
+      "fl": 0.0,
+      "j_score": 0.6304,
+      "entity_leak": true,
+      "rewrite_len": 3
+    },
+    {
+      "id": 5,
+      "label": "Obstruction",
+      "sta": 0.9394,
+      "sim": 0.9036,
+      "fl": 0.7001,
+      "j_score": 0.8477,
+      "entity_leak": true,
+      "rewrite_len": 28
+    },
+    {
+      "id": 6,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.6037,
+      "j_score": 0.8679,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 7,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.5542,
+      "j_score": 0.8514,
+      "entity_leak": false,
+      "rewrite_len": 49
+    },
+    {
+      "id": 8,
+      "label": "Urgency",
+      "sta": 0.8399,
+      "sim": 0.7325,
+      "fl": 0.2215,
+      "j_score": 0.598,
+      "entity_leak": false,
+      "rewrite_len": 12
+    },
+    {
+      "id": 9,
+      "label": "Obstruction",
+      "sta": 0.9107,
+      "sim": 0.7939,
+      "fl": 0.6723,
+      "j_score": 0.7923,
+      "entity_leak": false,
+      "rewrite_len": 33
+    },
+    {
+      "id": 10,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 11,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 12,
+      "label": "Obstruction",
+      "sta": 0.9094,
+      "sim": 0.9531,
+      "fl": 0.8982,
+      "j_score": 0.9202,
+      "entity_leak": false,
+      "rewrite_len": 22
+    },
+    {
+      "id": 13,
+      "label": "Social Proof",
+      "sta": 0.8772,
+      "sim": 0.7424,
+      "fl": 0.4521,
+      "j_score": 0.6905,
+      "entity_leak": true,
+      "rewrite_len": 8
+    },
+    {
+      "id": 14,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0772,
+      "j_score": 0.6924,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 15,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.2297,
+      "j_score": 0.7432,
+      "entity_leak": false,
+      "rewrite_len": 5
+    },
+    {
+      "id": 16,
+      "label": "Social Proof",
+      "sta": 0.8571,
+      "sim": 0.3001,
+      "fl": 0.4886,
+      "j_score": 0.5486,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 17,
+      "label": "Social Proof",
+      "sta": 0.8343,
+      "sim": 0.2969,
+      "fl": 0.4886,
+      "j_score": 0.5399,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 18,
+      "label": "Scarcity",
+      "sta": 0.8541,
+      "sim": 0.5088,
+      "fl": 0.4886,
+      "j_score": 0.6171,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 19,
+      "label": "Urgency",
+      "sta": 0.9655,
+      "sim": 0.9271,
+      "fl": 0.0,
+      "j_score": 0.6309,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 20,
+      "label": "Scarcity",
+      "sta": 0.821,
+      "sim": 0.5431,
+      "fl": 0.4886,
+      "j_score": 0.6176,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 21,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.4248,
+      "j_score": 0.8083,
+      "entity_leak": false,
+      "rewrite_len": 24
+    },
+    {
+      "id": 22,
+      "label": "Sneaking",
+      "sta": 0.9674,
+      "sim": 0.9623,
+      "fl": 0.4136,
+      "j_score": 0.7811,
+      "entity_leak": false,
+      "rewrite_len": 21
+    },
+    {
+      "id": 23,
+      "label": "Misdirection",
+      "sta": 0.8516,
+      "sim": 0.4971,
+      "fl": 0.4359,
+      "j_score": 0.5949,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 24,
+      "label": "Scarcity",
+      "sta": 0.8158,
+      "sim": 0.4949,
+      "fl": 0.4886,
+      "j_score": 0.5997,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 25,
+      "label": "Scarcity",
+      "sta": 0.8277,
+      "sim": 0.3744,
+      "fl": 0.4886,
+      "j_score": 0.5636,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 26,
+      "label": "Social Proof",
+      "sta": 0.9138,
+      "sim": 0.7543,
+      "fl": 0.0,
+      "j_score": 0.5561,
+      "entity_leak": true,
+      "rewrite_len": 8
+    },
+    {
+      "id": 27,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 28,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 29,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 30,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 31,
+      "label": "Scarcity",
+      "sta": 0.8049,
+      "sim": 0.2693,
+      "fl": 0.4886,
+      "j_score": 0.5209,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 32,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 33,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 34,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.3646,
+      "j_score": 0.7882,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 35,
+      "label": "Urgency",
+      "sta": 0.8855,
+      "sim": 0.6153,
+      "fl": 0.4545,
+      "j_score": 0.6517,
+      "entity_leak": false,
+      "rewrite_len": 14
+    },
+    {
+      "id": 36,
+      "label": "Scarcity",
+      "sta": 0.8577,
+      "sim": 0.5684,
+      "fl": 0.3356,
+      "j_score": 0.5872,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 37,
+      "label": "Scarcity",
+      "sta": 0.8284,
+      "sim": 0.3554,
+      "fl": 0.4886,
+      "j_score": 0.5575,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 38,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 39,
+      "label": "Scarcity",
+      "sta": 0.8671,
+      "sim": 0.421,
+      "fl": 0.4886,
+      "j_score": 0.5922,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 40,
+      "label": "Scarcity",
+      "sta": 0.8478,
+      "sim": 0.5083,
+      "fl": 0.4886,
+      "j_score": 0.6149,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 41,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 42,
+      "label": "Social Proof",
+      "sta": 0.8451,
+      "sim": 0.3637,
+      "fl": 0.4886,
+      "j_score": 0.5658,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 43,
+      "label": "Urgency",
+      "sta": 0.768,
+      "sim": 0.096,
+      "fl": 0.5665,
+      "j_score": 0.4768,
+      "entity_leak": false,
+      "rewrite_len": 13
+    },
+    {
+      "id": 44,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 5
+    },
+    {
+      "id": 45,
+      "label": "Scarcity",
+      "sta": 0.8525,
+      "sim": 0.4625,
+      "fl": 0.4886,
+      "j_score": 0.6012,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 46,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 47,
+      "label": "Scarcity",
+      "sta": 0.8496,
+      "sim": 0.4005,
+      "fl": 0.4886,
+      "j_score": 0.5796,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 48,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 49,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 50,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 51,
+      "label": "Scarcity",
+      "sta": 0.8802,
+      "sim": 0.7251,
+      "fl": 0.4293,
+      "j_score": 0.6782,
+      "entity_leak": false,
+      "rewrite_len": 13
+    },
+    {
+      "id": 52,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 53,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 54,
+      "label": "Misdirection",
+      "sta": 0.8737,
+      "sim": 0.3939,
+      "fl": 0.0,
+      "j_score": 0.4225,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 55,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 56,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 57,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 58,
+      "label": "Urgency",
+      "sta": 0.9477,
+      "sim": 0.9623,
+      "fl": 0.0,
+      "j_score": 0.6367,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 59,
+      "label": "Scarcity",
+      "sta": 0.8479,
+      "sim": 0.4299,
+      "fl": 0.4886,
+      "j_score": 0.5888,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 60,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 61,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 62,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 63,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 64,
+      "label": "Social Proof",
+      "sta": 0.8633,
+      "sim": 0.3606,
+      "fl": 0.4329,
+      "j_score": 0.5523,
+      "entity_leak": false,
+      "rewrite_len": 11
+    },
+    {
+      "id": 65,
+      "label": "Misdirection",
+      "sta": 0.8689,
+      "sim": 0.4835,
+      "fl": 0.0,
+      "j_score": 0.4508,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 66,
+      "label": "Scarcity",
+      "sta": 0.8132,
+      "sim": 0.4689,
+      "fl": 0.4886,
+      "j_score": 0.5902,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 67,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.991,
+      "j_score": 0.997,
+      "entity_leak": false,
+      "rewrite_len": 106
+    },
+    {
+      "id": 68,
+      "label": "Scarcity",
+      "sta": 0.8495,
+      "sim": 0.407,
+      "fl": 0.4886,
+      "j_score": 0.5817,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 69,
+      "label": "Social Proof",
+      "sta": 0.8637,
+      "sim": 0.6471,
+      "fl": 0.0,
+      "j_score": 0.5036,
+      "entity_leak": true,
+      "rewrite_len": 15
+    },
+    {
+      "id": 70,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 71,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 72,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 73,
+      "label": "Urgency",
+      "sta": 0.7715,
+      "sim": 0.2244,
+      "fl": 0.4886,
+      "j_score": 0.4949,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 74,
+      "label": "Obstruction",
+      "sta": 0.9763,
+      "sim": 0.9505,
+      "fl": 0.4908,
+      "j_score": 0.8058,
+      "entity_leak": false,
+      "rewrite_len": 22
+    },
+    {
+      "id": 75,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 76,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 77,
+      "label": "Scarcity",
+      "sta": 0.8472,
+      "sim": 0.361,
+      "fl": 0.4886,
+      "j_score": 0.5656,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 78,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 12
+    },
+    {
+      "id": 79,
+      "label": "Scarcity",
+      "sta": 0.8558,
+      "sim": 0.5039,
+      "fl": 0.4886,
+      "j_score": 0.6161,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 80,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.6062,
+      "j_score": 0.8687,
+      "entity_leak": false,
+      "rewrite_len": 32
+    },
+    {
+      "id": 81,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 82,
+      "label": "Social Proof",
+      "sta": 0.9068,
+      "sim": 0.6349,
+      "fl": 0.0,
+      "j_score": 0.5139,
+      "entity_leak": true,
+      "rewrite_len": 4
+    },
+    {
+      "id": 83,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.291,
+      "j_score": 0.7637,
+      "entity_leak": false,
+      "rewrite_len": 27
+    },
+    {
+      "id": 84,
+      "label": "Scarcity",
+      "sta": 0.8142,
+      "sim": 0.4693,
+      "fl": 0.4886,
+      "j_score": 0.5907,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 85,
+      "label": "Social Proof",
+      "sta": 0.881,
+      "sim": 0.2433,
+      "fl": 0.4886,
+      "j_score": 0.5377,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 86,
+      "label": "Urgency",
+      "sta": 0.8895,
+      "sim": 0.4389,
+      "fl": 0.0,
+      "j_score": 0.4428,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 87,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 88,
+      "label": "Scarcity",
+      "sta": 0.8028,
+      "sim": 0.4702,
+      "fl": 0.4886,
+      "j_score": 0.5872,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 89,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 90,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 91,
+      "label": "Scarcity",
+      "sta": 0.8301,
+      "sim": 0.2791,
+      "fl": 0.4886,
+      "j_score": 0.5326,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 92,
+      "label": "Urgency",
+      "sta": 0.8944,
+      "sim": 0.7087,
+      "fl": 0.1324,
+      "j_score": 0.5785,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 93,
+      "label": "Urgency",
+      "sta": 0.9707,
+      "sim": 0.9598,
+      "fl": 0.0,
+      "j_score": 0.6435,
+      "entity_leak": false,
+      "rewrite_len": 9
+    },
+    {
+      "id": 94,
+      "label": "Scarcity",
+      "sta": 0.849,
+      "sim": 0.5298,
+      "fl": 0.4886,
+      "j_score": 0.6225,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 95,
+      "label": "Social Proof",
+      "sta": 0.8364,
+      "sim": 0.3073,
+      "fl": 0.0,
+      "j_score": 0.3812,
+      "entity_leak": true,
+      "rewrite_len": 7
+    },
+    {
+      "id": 96,
+      "label": "Misdirection",
+      "sta": 0.825,
+      "sim": 0.3519,
+      "fl": 0.5906,
+      "j_score": 0.5892,
+      "entity_leak": false,
+      "rewrite_len": 15
+    },
+    {
+      "id": 97,
+      "label": "Social Proof",
+      "sta": 0.8306,
+      "sim": 0.2947,
+      "fl": 0.4886,
+      "j_score": 0.538,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 98,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 5
+    },
+    {
+      "id": 99,
+      "label": "Misdirection",
+      "sta": 0.8444,
+      "sim": 0.1606,
+      "fl": 0.5271,
+      "j_score": 0.5107,
+      "entity_leak": false,
+      "rewrite_len": 9
+    },
+    {
+      "id": 100,
+      "label": "Misdirection",
+      "sta": 0.8869,
+      "sim": 0.4021,
+      "fl": 0.0145,
+      "j_score": 0.4345,
+      "entity_leak": false,
+      "rewrite_len": 5
+    },
+    {
+      "id": 101,
+      "label": "Social Proof",
+      "sta": 0.9079,
+      "sim": 0.8067,
+      "fl": 0.0,
+      "j_score": 0.5715,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 102,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 103,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 104,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 105,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 106,
+      "label": "Scarcity",
+      "sta": 0.8184,
+      "sim": 0.4638,
+      "fl": 0.4886,
+      "j_score": 0.5903,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 107,
+      "label": "Misdirection",
+      "sta": 0.9146,
+      "sim": 0.9311,
+      "fl": 0.2125,
+      "j_score": 0.6861,
+      "entity_leak": false,
+      "rewrite_len": 12
+    },
+    {
+      "id": 108,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 109,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 110,
+      "label": "Scarcity",
+      "sta": 0.8193,
+      "sim": 0.4913,
+      "fl": 0.4886,
+      "j_score": 0.5998,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 111,
+      "label": "Social Proof",
+      "sta": 0.8485,
+      "sim": 0.2738,
+      "fl": 0.5082,
+      "j_score": 0.5435,
+      "entity_leak": false,
+      "rewrite_len": 13
+    },
+    {
+      "id": 112,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 113,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 114,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 115,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 116,
+      "label": "Social Proof",
+      "sta": 0.926,
+      "sim": 0.6299,
+      "fl": 0.7815,
+      "j_score": 0.7791,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 117,
+      "label": "Urgency",
+      "sta": 0.8005,
+      "sim": 0.5133,
+      "fl": 1.0,
+      "j_score": 0.7713,
+      "entity_leak": false,
+      "rewrite_len": 18
+    },
+    {
+      "id": 118,
+      "label": "Misdirection",
+      "sta": 0.8574,
+      "sim": 0.1835,
+      "fl": 0.6983,
+      "j_score": 0.5798,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 119,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.8417,
+      "j_score": 0.9472,
+      "entity_leak": false,
+      "rewrite_len": 30
+    },
+    {
+      "id": 120,
+      "label": "Sneaking",
+      "sta": 0.9033,
+      "sim": 0.8492,
+      "fl": 0.2342,
+      "j_score": 0.6622,
+      "entity_leak": true,
+      "rewrite_len": 34
+    },
+    {
+      "id": 121,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 122,
+      "label": "Scarcity",
+      "sta": 0.8369,
+      "sim": 0.4338,
+      "fl": 0.4886,
+      "j_score": 0.5865,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 123,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 124,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 125,
+      "label": "Scarcity",
+      "sta": 0.8658,
+      "sim": 0.5222,
+      "fl": 0.4886,
+      "j_score": 0.6255,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 126,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 127,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 128,
+      "label": "Sneaking",
+      "sta": 0.9346,
+      "sim": 0.8718,
+      "fl": 0.1678,
+      "j_score": 0.6581,
+      "entity_leak": false,
+      "rewrite_len": 25
+    },
+    {
+      "id": 129,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 130,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 131,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 132,
+      "label": "Social Proof",
+      "sta": 0.9473,
+      "sim": 0.8011,
+      "fl": 0.0,
+      "j_score": 0.5828,
+      "entity_leak": true,
+      "rewrite_len": 8
+    },
+    {
+      "id": 133,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.2453,
+      "j_score": 0.7484,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 134,
+      "label": "Urgency",
+      "sta": 0.9268,
+      "sim": 0.7296,
+      "fl": 0.0,
+      "j_score": 0.5522,
+      "entity_leak": false,
+      "rewrite_len": 5
+    },
+    {
+      "id": 135,
+      "label": "Social Proof",
+      "sta": 0.8521,
+      "sim": 0.0878,
+      "fl": 0.4886,
+      "j_score": 0.4762,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 136,
+      "label": "Scarcity",
+      "sta": 0.8501,
+      "sim": 0.2736,
+      "fl": 0.4886,
+      "j_score": 0.5374,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 137,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 138,
+      "label": "Not Dark Pattern",
+      "sta": 0.9359,
+      "sim": 0.9614,
+      "fl": 0.0,
+      "j_score": 0.6324,
+      "entity_leak": true,
+      "rewrite_len": 3
+    },
+    {
+      "id": 139,
+      "label": "Scarcity",
+      "sta": 0.8533,
+      "sim": 0.5163,
+      "fl": 0.4886,
+      "j_score": 0.6194,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 140,
+      "label": "Social Proof",
+      "sta": 0.8777,
+      "sim": 0.7513,
+      "fl": 0.0,
+      "j_score": 0.543,
+      "entity_leak": true,
+      "rewrite_len": 7
+    },
+    {
+      "id": 141,
+      "label": "Misdirection",
+      "sta": 0.9064,
+      "sim": 0.5976,
+      "fl": 0.0,
+      "j_score": 0.5013,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 142,
+      "label": "Social Proof",
+      "sta": 0.9127,
+      "sim": 0.3194,
+      "fl": 0.4886,
+      "j_score": 0.5736,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 143,
+      "label": "Scarcity",
+      "sta": 0.8508,
+      "sim": 0.4863,
+      "fl": 0.4886,
+      "j_score": 0.6086,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 144,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 145,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 146,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 147,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": true,
+      "rewrite_len": 3
+    },
+    {
+      "id": 148,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 149,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 150,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 151,
+      "label": "Obstruction",
+      "sta": 0.9739,
+      "sim": 0.9775,
+      "fl": 0.6568,
+      "j_score": 0.8694,
+      "entity_leak": false,
+      "rewrite_len": 27
+    },
+    {
+      "id": 152,
+      "label": "Scarcity",
+      "sta": 0.8473,
+      "sim": 0.3181,
+      "fl": 0.4886,
+      "j_score": 0.5513,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 153,
+      "label": "Social Proof",
+      "sta": 0.8642,
+      "sim": 0.2992,
+      "fl": 0.4724,
+      "j_score": 0.5453,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 154,
+      "label": "Social Proof",
+      "sta": 0.9186,
+      "sim": 0.7737,
+      "fl": 0.0,
+      "j_score": 0.5641,
+      "entity_leak": true,
+      "rewrite_len": 6
+    },
+    {
+      "id": 155,
+      "label": "Misdirection",
+      "sta": 0.8275,
+      "sim": 0.3074,
+      "fl": 0.2539,
+      "j_score": 0.463,
+      "entity_leak": false,
+      "rewrite_len": 11
+    },
+    {
+      "id": 156,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 157,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.9128,
+      "j_score": 0.9709,
+      "entity_leak": false,
+      "rewrite_len": 17
+    },
+    {
+      "id": 158,
+      "label": "Social Proof",
+      "sta": 0.8853,
+      "sim": 0.627,
+      "fl": 0.0,
+      "j_score": 0.5041,
+      "entity_leak": true,
+      "rewrite_len": 11
+    },
+    {
+      "id": 159,
+      "label": "Social Proof",
+      "sta": 0.8943,
+      "sim": 0.7168,
+      "fl": 0.0,
+      "j_score": 0.537,
+      "entity_leak": false,
+      "rewrite_len": 21
+    },
+    {
+      "id": 160,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 161,
+      "label": "Sneaking",
+      "sta": 0.9651,
+      "sim": 0.9794,
+      "fl": 0.6179,
+      "j_score": 0.8542,
+      "entity_leak": false,
+      "rewrite_len": 31
+    },
+    {
+      "id": 162,
+      "label": "Social Proof",
+      "sta": 0.8357,
+      "sim": 0.6588,
+      "fl": 0.0163,
+      "j_score": 0.5036,
+      "entity_leak": true,
+      "rewrite_len": 15
+    },
+    {
+      "id": 163,
+      "label": "Urgency",
+      "sta": 0.96,
+      "sim": 0.8324,
+      "fl": 0.6494,
+      "j_score": 0.8139,
+      "entity_leak": true,
+      "rewrite_len": 2
+    },
+    {
+      "id": 164,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 165,
+      "label": "Social Proof",
+      "sta": 0.8388,
+      "sim": 0.723,
+      "fl": 0.5732,
+      "j_score": 0.7117,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 166,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 167,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.1726,
+      "j_score": 0.7242,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 168,
+      "label": "Scarcity",
+      "sta": 0.8368,
+      "sim": 0.3717,
+      "fl": 0.4886,
+      "j_score": 0.5657,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 169,
+      "label": "Scarcity",
+      "sta": 0.8597,
+      "sim": 0.5435,
+      "fl": 0.4886,
+      "j_score": 0.6306,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 170,
+      "label": "Urgency",
+      "sta": 0.7807,
+      "sim": 0.1085,
+      "fl": 0.4886,
+      "j_score": 0.4593,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 171,
+      "label": "Obstruction",
+      "sta": 0.9339,
+      "sim": 0.832,
+      "fl": 0.7876,
+      "j_score": 0.8512,
+      "entity_leak": false,
+      "rewrite_len": 35
+    },
+    {
+      "id": 172,
+      "label": "Misdirection",
+      "sta": 0.846,
+      "sim": 0.0269,
+      "fl": 0.6866,
+      "j_score": 0.5198,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 173,
+      "label": "Scarcity",
+      "sta": 0.8242,
+      "sim": 0.2887,
+      "fl": 0.4886,
+      "j_score": 0.5338,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 174,
+      "label": "Scarcity",
+      "sta": 0.8386,
+      "sim": 0.2393,
+      "fl": 0.4886,
+      "j_score": 0.5222,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 175,
+      "label": "Scarcity",
+      "sta": 0.8342,
+      "sim": 0.4158,
+      "fl": 0.4886,
+      "j_score": 0.5795,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 176,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 177,
+      "label": "Scarcity",
+      "sta": 0.859,
+      "sim": 0.5112,
+      "fl": 0.4886,
+      "j_score": 0.6196,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 178,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 179,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 180,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 9
+    },
+    {
+      "id": 181,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 182,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.8118,
+      "j_score": 0.9373,
+      "entity_leak": false,
+      "rewrite_len": 44
+    },
+    {
+      "id": 183,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 184,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 185,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 5
+    },
+    {
+      "id": 186,
+      "label": "Scarcity",
+      "sta": 0.8324,
+      "sim": 0.3499,
+      "fl": 0.4886,
+      "j_score": 0.557,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 187,
+      "label": "Misdirection",
+      "sta": 0.8696,
+      "sim": 0.5614,
+      "fl": 0.3826,
+      "j_score": 0.6045,
+      "entity_leak": false,
+      "rewrite_len": 19
+    },
+    {
+      "id": 188,
+      "label": "Scarcity",
+      "sta": 0.8443,
+      "sim": 0.3542,
+      "fl": 0.4886,
+      "j_score": 0.5624,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 189,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.7835,
+      "j_score": 0.9278,
+      "entity_leak": false,
+      "rewrite_len": 15
+    },
+    {
+      "id": 190,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 191,
+      "label": "Misdirection",
+      "sta": 0.9305,
+      "sim": 0.9013,
+      "fl": 0.1326,
+      "j_score": 0.6548,
+      "entity_leak": true,
+      "rewrite_len": 13
+    },
+    {
+      "id": 192,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 193,
+      "label": "Misdirection",
+      "sta": 0.9007,
+      "sim": 0.4427,
+      "fl": 0.0,
+      "j_score": 0.4478,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 194,
+      "label": "Scarcity",
+      "sta": 0.8509,
+      "sim": 0.4625,
+      "fl": 0.4886,
+      "j_score": 0.6007,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 195,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 196,
+      "label": "Urgency",
+      "sta": 0.9086,
+      "sim": 0.966,
+      "fl": 0.0,
+      "j_score": 0.6249,
+      "entity_leak": true,
+      "rewrite_len": 16
+    },
+    {
+      "id": 197,
+      "label": "Urgency",
+      "sta": 0.9252,
+      "sim": 0.7502,
+      "fl": 0.9858,
+      "j_score": 0.8871,
+      "entity_leak": false,
+      "rewrite_len": 13
+    },
+    {
+      "id": 198,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 199,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 5
+    },
+    {
+      "id": 200,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 201,
+      "label": "Scarcity",
+      "sta": 0.8385,
+      "sim": 0.3765,
+      "fl": 0.4886,
+      "j_score": 0.5679,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 202,
+      "label": "Urgency",
+      "sta": 0.933,
+      "sim": 0.9027,
+      "fl": 0.6261,
+      "j_score": 0.8206,
+      "entity_leak": false,
+      "rewrite_len": 12
+    },
+    {
+      "id": 203,
+      "label": "Misdirection",
+      "sta": 0.8433,
+      "sim": 0.3402,
+      "fl": 0.1361,
+      "j_score": 0.4399,
+      "entity_leak": false,
+      "rewrite_len": 11
+    },
+    {
+      "id": 204,
+      "label": "Scarcity",
+      "sta": 0.8648,
+      "sim": 0.4005,
+      "fl": 0.4886,
+      "j_score": 0.5846,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 205,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 206,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 207,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 25
+    },
+    {
+      "id": 208,
+      "label": "Urgency",
+      "sta": 0.976,
+      "sim": 0.9748,
+      "fl": 0.4375,
+      "j_score": 0.7961,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 209,
+      "label": "Scarcity",
+      "sta": 0.8495,
+      "sim": 0.2811,
+      "fl": 0.4886,
+      "j_score": 0.5397,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 210,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 211,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 212,
+      "label": "Urgency",
+      "sta": 0.7877,
+      "sim": 0.1171,
+      "fl": 0.4886,
+      "j_score": 0.4645,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 213,
+      "label": "Social Proof",
+      "sta": 0.864,
+      "sim": 0.571,
+      "fl": 0.0,
+      "j_score": 0.4783,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 214,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 215,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 216,
+      "label": "Misdirection",
+      "sta": 0.8135,
+      "sim": 0.3537,
+      "fl": 1.0,
+      "j_score": 0.7224,
+      "entity_leak": false,
+      "rewrite_len": 16
+    },
+    {
+      "id": 217,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.16,
+      "j_score": 0.72,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 218,
+      "label": "Social Proof",
+      "sta": 0.8513,
+      "sim": 0.3697,
+      "fl": 0.4886,
+      "j_score": 0.5699,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 219,
+      "label": "Forced Action",
+      "sta": 0.9239,
+      "sim": 0.8347,
+      "fl": 0.8499,
+      "j_score": 0.8695,
+      "entity_leak": true,
+      "rewrite_len": 27
+    },
+    {
+      "id": 220,
+      "label": "Misdirection",
+      "sta": 0.8602,
+      "sim": 0.6249,
+      "fl": 0.0834,
+      "j_score": 0.5228,
+      "entity_leak": false,
+      "rewrite_len": 11
+    },
+    {
+      "id": 221,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 5
+    },
+    {
+      "id": 222,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 223,
+      "label": "Social Proof",
+      "sta": 0.818,
+      "sim": 0.2765,
+      "fl": 0.4886,
+      "j_score": 0.5277,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 224,
+      "label": "Social Proof",
+      "sta": 0.896,
+      "sim": 0.6906,
+      "fl": 0.2266,
+      "j_score": 0.6044,
+      "entity_leak": true,
+      "rewrite_len": 11
+    },
+    {
+      "id": 225,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.8459,
+      "j_score": 0.9486,
+      "entity_leak": false,
+      "rewrite_len": 19
+    },
+    {
+      "id": 226,
+      "label": "Misdirection",
+      "sta": 0.8448,
+      "sim": 0.2931,
+      "fl": 0.0621,
+      "j_score": 0.4,
+      "entity_leak": false,
+      "rewrite_len": 11
+    },
+    {
+      "id": 227,
+      "label": "Misdirection",
+      "sta": 0.8171,
+      "sim": 0.302,
+      "fl": 0.3861,
+      "j_score": 0.5017,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 228,
+      "label": "Scarcity",
+      "sta": 0.8195,
+      "sim": 0.4184,
+      "fl": 0.4886,
+      "j_score": 0.5755,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 229,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 230,
+      "label": "Social Proof",
+      "sta": 0.8616,
+      "sim": 0.3262,
+      "fl": 0.4724,
+      "j_score": 0.5534,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 231,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 232,
+      "label": "Social Proof",
+      "sta": 0.8432,
+      "sim": 0.1868,
+      "fl": 0.4886,
+      "j_score": 0.5062,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 233,
+      "label": "Urgency",
+      "sta": 0.8419,
+      "sim": 0.3055,
+      "fl": 0.4886,
+      "j_score": 0.5453,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 234,
+      "label": "Scarcity",
+      "sta": 0.844,
+      "sim": 0.4231,
+      "fl": 0.4886,
+      "j_score": 0.5852,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 235,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 236,
+      "label": "Scarcity",
+      "sta": 0.862,
+      "sim": 0.5566,
+      "fl": 0.4886,
+      "j_score": 0.6358,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 237,
+      "label": "Social Proof",
+      "sta": 0.9005,
+      "sim": 0.3975,
+      "fl": 0.4886,
+      "j_score": 0.5955,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 238,
+      "label": "Urgency",
+      "sta": 0.7979,
+      "sim": 0.6556,
+      "fl": 0.5322,
+      "j_score": 0.6619,
+      "entity_leak": true,
+      "rewrite_len": 15
+    },
+    {
+      "id": 239,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 240,
+      "label": "Misdirection",
+      "sta": 0.8413,
+      "sim": 0.4455,
+      "fl": 0.0471,
+      "j_score": 0.4446,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 241,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 242,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 243,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 244,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 245,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.496,
+      "j_score": 0.832,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 246,
+      "label": "Obstruction",
+      "sta": 0.9075,
+      "sim": 0.9363,
+      "fl": 0.6488,
+      "j_score": 0.8309,
+      "entity_leak": false,
+      "rewrite_len": 25
+    },
+    {
+      "id": 247,
+      "label": "Urgency",
+      "sta": 0.8884,
+      "sim": 0.8073,
+      "fl": 0.3934,
+      "j_score": 0.6964,
+      "entity_leak": true,
+      "rewrite_len": 12
+    },
+    {
+      "id": 248,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 14
+    },
+    {
+      "id": 249,
+      "label": "Urgency",
+      "sta": 0.8578,
+      "sim": 0.5439,
+      "fl": 0.6508,
+      "j_score": 0.6842,
+      "entity_leak": false,
+      "rewrite_len": 16
+    },
+    {
+      "id": 250,
+      "label": "Misdirection",
+      "sta": 0.9264,
+      "sim": 0.7166,
+      "fl": 0.5906,
+      "j_score": 0.7445,
+      "entity_leak": false,
+      "rewrite_len": 5
+    },
+    {
+      "id": 251,
+      "label": "Forced Action",
+      "sta": 0.9368,
+      "sim": 0.9187,
+      "fl": 0.8069,
+      "j_score": 0.8875,
+      "entity_leak": false,
+      "rewrite_len": 36
+    },
+    {
+      "id": 252,
+      "label": "Misdirection",
+      "sta": 0.8511,
+      "sim": 0.4341,
+      "fl": 0.1037,
+      "j_score": 0.463,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 253,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 254,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": true,
+      "rewrite_len": 2
+    },
+    {
+      "id": 255,
+      "label": "Urgency",
+      "sta": 0.8613,
+      "sim": 0.6329,
+      "fl": 0.24,
+      "j_score": 0.5781,
+      "entity_leak": false,
+      "rewrite_len": 11
+    },
+    {
+      "id": 256,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 257,
+      "label": "Scarcity",
+      "sta": 0.8467,
+      "sim": 0.4625,
+      "fl": 0.4886,
+      "j_score": 0.5993,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 258,
+      "label": "Misdirection",
+      "sta": 0.8904,
+      "sim": 0.712,
+      "fl": 0.4297,
+      "j_score": 0.6774,
+      "entity_leak": false,
+      "rewrite_len": 16
+    },
+    {
+      "id": 259,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": true,
+      "rewrite_len": 9
+    },
+    {
+      "id": 260,
+      "label": "Forced Action",
+      "sta": 0.9037,
+      "sim": 0.7863,
+      "fl": 0.3901,
+      "j_score": 0.6933,
+      "entity_leak": false,
+      "rewrite_len": 24
+    },
+    {
+      "id": 261,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.2367,
+      "j_score": 0.7456,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 262,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 263,
+      "label": "Misdirection",
+      "sta": 0.8893,
+      "sim": 0.6168,
+      "fl": 0.4257,
+      "j_score": 0.6439,
+      "entity_leak": false,
+      "rewrite_len": 15
+    },
+    {
+      "id": 264,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 265,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 266,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 267,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 268,
+      "label": "Social Proof",
+      "sta": 0.8537,
+      "sim": 0.2909,
+      "fl": 0.4886,
+      "j_score": 0.5444,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 269,
+      "label": "Scarcity",
+      "sta": 0.8515,
+      "sim": 0.3342,
+      "fl": 0.4886,
+      "j_score": 0.5581,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 270,
+      "label": "Forced Action",
+      "sta": 0.9379,
+      "sim": 0.9195,
+      "fl": 1.0,
+      "j_score": 0.9525,
+      "entity_leak": true,
+      "rewrite_len": 24
+    },
+    {
+      "id": 271,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.6591,
+      "j_score": 0.8864,
+      "entity_leak": false,
+      "rewrite_len": 29
+    },
+    {
+      "id": 272,
+      "label": "Social Proof",
+      "sta": 0.8929,
+      "sim": 0.5828,
+      "fl": 0.5274,
+      "j_score": 0.6677,
+      "entity_leak": false,
+      "rewrite_len": 13
+    },
+    {
+      "id": 273,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.4809,
+      "j_score": 0.827,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 274,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.2664,
+      "j_score": 0.7555,
+      "entity_leak": false,
+      "rewrite_len": 9
+    },
+    {
+      "id": 275,
+      "label": "Social Proof",
+      "sta": 0.8592,
+      "sim": 0.133,
+      "fl": 0.4886,
+      "j_score": 0.4936,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 276,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 277,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.067,
+      "j_score": 0.689,
+      "entity_leak": false,
+      "rewrite_len": 30
+    },
+    {
+      "id": 278,
+      "label": "Social Proof",
+      "sta": 0.8772,
+      "sim": 0.3753,
+      "fl": 0.6095,
+      "j_score": 0.6206,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 279,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 280,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 281,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 282,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 283,
+      "label": "Scarcity",
+      "sta": 0.8296,
+      "sim": 0.3116,
+      "fl": 0.4886,
+      "j_score": 0.5433,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 284,
+      "label": "Scarcity",
+      "sta": 0.8303,
+      "sim": 0.4508,
+      "fl": 0.4886,
+      "j_score": 0.5899,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 285,
+      "label": "Scarcity",
+      "sta": 0.8558,
+      "sim": 0.4854,
+      "fl": 0.4886,
+      "j_score": 0.6099,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 286,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 287,
+      "label": "Scarcity",
+      "sta": 0.8479,
+      "sim": 0.3469,
+      "fl": 0.4886,
+      "j_score": 0.5611,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 288,
+      "label": "Scarcity",
+      "sta": 0.853,
+      "sim": 0.4497,
+      "fl": 0.4886,
+      "j_score": 0.5971,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 289,
+      "label": "Misdirection",
+      "sta": 0.8054,
+      "sim": 0.1066,
+      "fl": 0.9341,
+      "j_score": 0.6153,
+      "entity_leak": false,
+      "rewrite_len": 13
+    },
+    {
+      "id": 290,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 291,
+      "label": "Urgency",
+      "sta": 0.9293,
+      "sim": 0.9119,
+      "fl": 0.2325,
+      "j_score": 0.6912,
+      "entity_leak": true,
+      "rewrite_len": 15
+    },
+    {
+      "id": 292,
+      "label": "Social Proof",
+      "sta": 0.8071,
+      "sim": 0.2738,
+      "fl": 0.4886,
+      "j_score": 0.5232,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 293,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 294,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.2405,
+      "j_score": 0.7468,
+      "entity_leak": false,
+      "rewrite_len": 11
+    },
+    {
+      "id": 295,
+      "label": "Scarcity",
+      "sta": 0.8116,
+      "sim": 0.5203,
+      "fl": 0.4886,
+      "j_score": 0.6068,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 296,
+      "label": "Scarcity",
+      "sta": 0.8673,
+      "sim": 0.4357,
+      "fl": 0.4886,
+      "j_score": 0.5972,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 297,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 298,
+      "label": "Urgency",
+      "sta": 0.9653,
+      "sim": 0.9142,
+      "fl": 0.4181,
+      "j_score": 0.7659,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 299,
+      "label": "Scarcity",
+      "sta": 0.8327,
+      "sim": 0.3431,
+      "fl": 0.4886,
+      "j_score": 0.5548,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 300,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 301,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 302,
+      "label": "Obstruction",
+      "sta": 0.8962,
+      "sim": 0.9591,
+      "fl": 0.6432,
+      "j_score": 0.8328,
+      "entity_leak": true,
+      "rewrite_len": 44
+    },
+    {
+      "id": 303,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.4314,
+      "j_score": 0.8105,
+      "entity_leak": false,
+      "rewrite_len": 18
+    },
+    {
+      "id": 304,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.1268,
+      "j_score": 0.7089,
+      "entity_leak": false,
+      "rewrite_len": 28
+    },
+    {
+      "id": 305,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 306,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 307,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 308,
+      "label": "Social Proof",
+      "sta": 0.7966,
+      "sim": 0.3115,
+      "fl": 0.4886,
+      "j_score": 0.5322,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 309,
+      "label": "Misdirection",
+      "sta": 0.8662,
+      "sim": 0.5656,
+      "fl": 0.0,
+      "j_score": 0.4773,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 310,
+      "label": "Misdirection",
+      "sta": 0.9158,
+      "sim": 0.7328,
+      "fl": 0.5536,
+      "j_score": 0.7341,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 311,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 312,
+      "label": "Scarcity",
+      "sta": 0.8388,
+      "sim": 0.2949,
+      "fl": 0.4886,
+      "j_score": 0.5408,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 313,
+      "label": "Social Proof",
+      "sta": 0.8917,
+      "sim": 0.7334,
+      "fl": 0.0,
+      "j_score": 0.5417,
+      "entity_leak": true,
+      "rewrite_len": 14
+    },
+    {
+      "id": 314,
+      "label": "Social Proof",
+      "sta": 0.7866,
+      "sim": 0.3331,
+      "fl": 0.4886,
+      "j_score": 0.5361,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 315,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 1.0,
+      "j_score": 1.0,
+      "entity_leak": false,
+      "rewrite_len": 17
+    },
+    {
+      "id": 316,
+      "label": "Misdirection",
+      "sta": 0.8496,
+      "sim": 0.1651,
+      "fl": 0.0,
+      "j_score": 0.3382,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 317,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 318,
+      "label": "Obstruction",
+      "sta": 0.9079,
+      "sim": 0.8751,
+      "fl": 0.8661,
+      "j_score": 0.883,
+      "entity_leak": true,
+      "rewrite_len": 55
+    },
+    {
+      "id": 319,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.078,
+      "j_score": 0.6927,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 320,
+      "label": "Obstruction",
+      "sta": 0.8953,
+      "sim": 0.8296,
+      "fl": 0.906,
+      "j_score": 0.877,
+      "entity_leak": false,
+      "rewrite_len": 33
+    },
+    {
+      "id": 321,
+      "label": "Urgency",
+      "sta": 0.9451,
+      "sim": 0.8614,
+      "fl": 0.1295,
+      "j_score": 0.6453,
+      "entity_leak": false,
+      "rewrite_len": 9
+    },
+    {
+      "id": 322,
+      "label": "Social Proof",
+      "sta": 0.8115,
+      "sim": 0.5948,
+      "fl": 0.8084,
+      "j_score": 0.7383,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 323,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 324,
+      "label": "Social Proof",
+      "sta": 0.9218,
+      "sim": 0.5447,
+      "fl": 0.0,
+      "j_score": 0.4888,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 325,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 326,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 327,
+      "label": "Social Proof",
+      "sta": 0.8385,
+      "sim": 0.6762,
+      "fl": 0.3962,
+      "j_score": 0.6369,
+      "entity_leak": true,
+      "rewrite_len": 17
+    },
+    {
+      "id": 328,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.3123,
+      "j_score": 0.7708,
+      "entity_leak": false,
+      "rewrite_len": 5
+    },
+    {
+      "id": 329,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 330,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 13
+    },
+    {
+      "id": 331,
+      "label": "Urgency",
+      "sta": 0.8479,
+      "sim": 0.5451,
+      "fl": 0.0127,
+      "j_score": 0.4686,
+      "entity_leak": false,
+      "rewrite_len": 9
+    },
+    {
+      "id": 332,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 333,
+      "label": "Urgency",
+      "sta": 0.8296,
+      "sim": 0.4837,
+      "fl": 0.4602,
+      "j_score": 0.5911,
+      "entity_leak": false,
+      "rewrite_len": 11
+    },
+    {
+      "id": 334,
+      "label": "Scarcity",
+      "sta": 0.8614,
+      "sim": 0.4508,
+      "fl": 0.4886,
+      "j_score": 0.6003,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 335,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 336,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 337,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 338,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.8872,
+      "j_score": 0.9624,
+      "entity_leak": false,
+      "rewrite_len": 13
+    },
+    {
+      "id": 339,
+      "label": "Urgency",
+      "sta": 0.9244,
+      "sim": 0.7349,
+      "fl": 0.9197,
+      "j_score": 0.8597,
+      "entity_leak": false,
+      "rewrite_len": 25
+    },
+    {
+      "id": 340,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.2769,
+      "j_score": 0.759,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 341,
+      "label": "Urgency",
+      "sta": 0.8409,
+      "sim": 0.3385,
+      "fl": 0.4886,
+      "j_score": 0.556,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 342,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 343,
+      "label": "Scarcity",
+      "sta": 0.8493,
+      "sim": 0.4387,
+      "fl": 0.4886,
+      "j_score": 0.5922,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 344,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 345,
+      "label": "Misdirection",
+      "sta": 0.9168,
+      "sim": 0.8324,
+      "fl": 0.1568,
+      "j_score": 0.6353,
+      "entity_leak": false,
+      "rewrite_len": 18
+    },
+    {
+      "id": 346,
+      "label": "Urgency",
+      "sta": 0.9493,
+      "sim": 0.9118,
+      "fl": 0.0,
+      "j_score": 0.6204,
+      "entity_leak": false,
+      "rewrite_len": 6
+    },
+    {
+      "id": 347,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 348,
+      "label": "Sneaking",
+      "sta": 0.9382,
+      "sim": 0.9193,
+      "fl": 0.1653,
+      "j_score": 0.6743,
+      "entity_leak": false,
+      "rewrite_len": 11
+    },
+    {
+      "id": 349,
+      "label": "Not Dark Pattern",
+      "sta": 0.9528,
+      "sim": 0.8814,
+      "fl": 0.0,
+      "j_score": 0.6114,
+      "entity_leak": true,
+      "rewrite_len": 5
+    },
+    {
+      "id": 350,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 351,
+      "label": "Misdirection",
+      "sta": 0.9566,
+      "sim": 0.9601,
+      "fl": 0.3078,
+      "j_score": 0.7415,
+      "entity_leak": true,
+      "rewrite_len": 26
+    },
+    {
+      "id": 352,
+      "label": "Scarcity",
+      "sta": 0.8066,
+      "sim": 0.2923,
+      "fl": 0.4886,
+      "j_score": 0.5292,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 353,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 354,
+      "label": "Sneaking",
+      "sta": 0.9269,
+      "sim": 0.9225,
+      "fl": 0.126,
+      "j_score": 0.6585,
+      "entity_leak": false,
+      "rewrite_len": 14
+    },
+    {
+      "id": 355,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 356,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 357,
+      "label": "Urgency",
+      "sta": 0.9479,
+      "sim": 0.851,
+      "fl": 0.0,
+      "j_score": 0.5997,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 358,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 359,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 2
+    },
+    {
+      "id": 360,
+      "label": "Social Proof",
+      "sta": 0.8539,
+      "sim": 0.238,
+      "fl": 0.4886,
+      "j_score": 0.5268,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 361,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 8
+    },
+    {
+      "id": 362,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 7
+    },
+    {
+      "id": 363,
+      "label": "Social Proof",
+      "sta": 0.9118,
+      "sim": 0.3305,
+      "fl": 0.4886,
+      "j_score": 0.577,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 364,
+      "label": "Forced Action",
+      "sta": 0.9029,
+      "sim": 0.9539,
+      "fl": 0.8558,
+      "j_score": 0.9042,
+      "entity_leak": false,
+      "rewrite_len": 24
+    },
+    {
+      "id": 365,
+      "label": "Social Proof",
+      "sta": 0.945,
+      "sim": 0.7984,
+      "fl": 0.0,
+      "j_score": 0.5811,
+      "entity_leak": true,
+      "rewrite_len": 11
+    },
+    {
+      "id": 366,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0953,
+      "j_score": 0.6984,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 367,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 3
+    },
+    {
+      "id": 368,
+      "label": "Urgency",
+      "sta": 0.9082,
+      "sim": 0.6593,
+      "fl": 0.0,
+      "j_score": 0.5225,
+      "entity_leak": false,
+      "rewrite_len": 1
+    },
+    {
+      "id": 369,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.1601,
+      "j_score": 0.72,
+      "entity_leak": false,
+      "rewrite_len": 9
+    },
+    {
+      "id": 370,
+      "label": "Social Proof",
+      "sta": 0.7899,
+      "sim": 0.1889,
+      "fl": 0.4886,
+      "j_score": 0.4891,
+      "entity_leak": true,
+      "rewrite_len": 10
+    },
+    {
+      "id": 371,
+      "label": "Scarcity",
+      "sta": 0.8119,
+      "sim": 0.3532,
+      "fl": 0.4886,
+      "j_score": 0.5512,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 372,
+      "label": "Scarcity",
+      "sta": 0.8494,
+      "sim": 0.4474,
+      "fl": 0.4886,
+      "j_score": 0.5951,
+      "entity_leak": false,
+      "rewrite_len": 10
+    },
+    {
+      "id": 373,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.0,
+      "j_score": 0.6667,
+      "entity_leak": false,
+      "rewrite_len": 4
+    },
+    {
+      "id": 374,
+      "label": "Not Dark Pattern",
+      "sta": 1.0,
+      "sim": 1.0,
+      "fl": 0.5114,
+      "j_score": 0.8371,
+      "entity_leak": false,
+      "rewrite_len": 12
+    },
+    {
+      "id": 375,
+      "label": "Sneaking",
+      "sta": 0.9394,
+      "sim": 0.9448,
+      "fl": 0.3378,
+      "j_score": 0.7407,
+      "entity_leak": false,
+      "rewrite_len": 17
+    }
+  ]
+}

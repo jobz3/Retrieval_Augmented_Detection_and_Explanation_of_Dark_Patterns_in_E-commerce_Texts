@@ -30,6 +30,7 @@ class PredictionResult(BaseModel):
     Structured output produced by the LLM for a single product text.
 
     Fields:
+        reasoning_steps:        Ordered list of reasoning steps before the final label.
         label:                  Dark pattern category or "Not Dark Pattern" / "Uncertain".
         confidence:             Self-assessed probability [0, 1] for the label.
         psychological_mechanism: Named cognitive bias or persuasion principle.
@@ -39,6 +40,10 @@ class PredictionResult(BaseModel):
         rewrite:                Detoxified version of the full product text.
     """
 
+    reasoning_steps: list[str] = Field(
+        default_factory=list,
+        description="Ordered chain-of-thought steps leading to the label (populate before label)"
+    )
     label: PatternType = Field(description="Dark pattern category or 'Not Dark Pattern'")
     confidence: float = Field(ge=0.0, le=1.0, description="Model confidence in the label [0,1]")
     psychological_mechanism: str = Field(
@@ -77,6 +82,11 @@ class PredictionResult(BaseModel):
 
 # JSON schema string to embed in prompts
 OUTPUT_SCHEMA_STR = """{
+  "reasoning_steps": [
+    "<step 1: identify any manipulation tactics present in the text>",
+    "<step 2: match tactics to the most fitting dark pattern category>",
+    "<step 3: assess confidence and note any ambiguities>"
+  ],
   "label": "<one of: Scarcity | Urgency | Social Proof | Misdirection | Obstruction | Forced Action | Sneaking | Not Dark Pattern | Uncertain>",
   "confidence": <float between 0.0 and 1.0>,
   "psychological_mechanism": "<name of cognitive bias or persuasion principle>",

@@ -38,7 +38,6 @@ secrets.json
 # =============================================================================
 data/raw/
 data/processed/
-data/german/
 
 # =============================================================================
 # Model checkpoints, FAISS indices, embeddings
@@ -128,3 +127,5 @@ desktop.ini
 *.md
 logs/
 *.sbatch
+.codex
+26.0.1

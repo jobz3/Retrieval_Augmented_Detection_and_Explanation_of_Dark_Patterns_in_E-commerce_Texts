@@ -1,10 +1,11 @@
 """
 Encode texts into fixed-size embeddings using sentence-transformers, BERT, or RoBERTa.
 
-Three encoder options (set in config.yaml → retrieval.encoder):
-  "sbert"   — sentence-transformers/all-mpnet-base-v2  (fast, good quality)
-  "bert"    — bert-base-uncased CLS pooling
-  "roberta" — roberta-large CLS pooling
+Four encoder options (set in config.yaml → retrieval.encoder):
+  "sbert"          — sentence-transformers/all-mpnet-base-v2  (fast, good quality, English-only)
+  "bert"           — bert-base-uncased CLS pooling
+  "roberta"        — roberta-large CLS pooling
+  "multilingual"   — paraphrase-multilingual-MiniLM-L12-v2 (50+ languages, same dim as sbert)
 """
 
 from __future__ import annotations
@@ -17,12 +18,18 @@ import torch
 from tqdm import tqdm
 
 
+_SBERT_CACHE: dict[str, object] = {}
+
+
 def get_sbert_encoder(
     model_name: str = os.environ.get("SBERT_MODEL_PATH", "sentence-transformers/all-mpnet-base-v2"),
     device: str | None = None,
 ):
     from sentence_transformers import SentenceTransformer
-    return SentenceTransformer(model_name, device=device)
+    key = f"{model_name}::{device}"
+    if key not in _SBERT_CACHE:
+        _SBERT_CACHE[key] = SentenceTransformer(model_name, device=device)
+    return _SBERT_CACHE[key]
 
 
 def encode_with_sbert(
@@ -90,6 +97,12 @@ def encode_with_hf(
     return np.vstack(all_embeddings).astype(np.float32)
 
 
+MULTILINGUAL_MODEL = os.environ.get(
+    "MULTILINGUAL_MODEL_PATH",
+    "paraphrase-multilingual-MiniLM-L12-v2",
+)
+
+
 def encode_texts(
     texts: list[str],
     encoder: str = "sbert",
@@ -104,7 +117,7 @@ def encode_texts(
     Unified entry point. Dispatches to the appropriate encoder.
 
     Args:
-        encoder: "sbert", "bert", or "roberta"
+        encoder: "sbert", "bert", "roberta", or "multilingual"
         device:  Force a specific device (e.g. "cpu") — useful when GPU memory
                  is shared with an LLM inference process (Ollama).
                  Defaults to CUDA if available.
@@ -115,5 +128,7 @@ def encode_texts(
         return encode_with_hf(texts, bert_model, batch_size, show_progress=show_progress, device=device)
     elif encoder == "roberta":
         return encode_with_hf(texts, roberta_model, batch_size, show_progress=show_progress, device=device)
+    elif encoder in ("multilingual", "multilingual_de"):
+        return encode_with_sbert(texts, MULTILINGUAL_MODEL, batch_size, show_progress, device=device)
     else:
-        raise ValueError(f"Unknown encoder '{encoder}'. Choose: sbert, bert, roberta")
+        raise ValueError(f"Unknown encoder '{encoder}'. Choose: sbert, bert, roberta, multilingual, multilingual_de")

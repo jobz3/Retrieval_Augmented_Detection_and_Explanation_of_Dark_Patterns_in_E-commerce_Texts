@@ -87,6 +87,13 @@ def parse_prediction(raw: dict, input_text: str) -> PredictionResult:
     if not isinstance(raw, dict):
         raise ParseError(f"Expected dict, got {type(raw).__name__}: {raw!r}")
 
+    # --- reasoning_steps ---
+    raw_steps = raw.get("reasoning_steps", [])
+    if isinstance(raw_steps, list):
+        reasoning_steps = [str(s).strip() for s in raw_steps if str(s).strip()]
+    else:
+        reasoning_steps = [str(raw_steps).strip()] if raw_steps else []
+
     # --- label ---
     label_str = str(raw.get("label", "Uncertain"))
     label = _resolve_label(label_str)
@@ -126,6 +133,7 @@ def parse_prediction(raw: dict, input_text: str) -> PredictionResult:
 
     try:
         return PredictionResult(
+            reasoning_steps=reasoning_steps,
             label=label,
             confidence=confidence,
             psychological_mechanism=psych,
@@ -160,6 +168,7 @@ def parse_batch(
             failed.append(i)
             results.append(
                 PredictionResult(
+                    reasoning_steps=[],
                     label=PatternType.UNCERTAIN,
                     confidence=0.0,
                     psychological_mechanism="parse error",

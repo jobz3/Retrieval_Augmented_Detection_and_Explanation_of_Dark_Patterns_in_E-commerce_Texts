@@ -3,7 +3,7 @@ Thin wrapper around the Ollama Python client.
 Handles JSON-mode requests and retries on malformed output.
 
 Project-specific behavior:
-- true qwen3:* can use chat JSON mode with think disabled
+- qwen3:* uses client.chat() with think=False via the HTTP API (avoids CLI timeout)
 - qwen3.5:* runs correctly on GPU on this HPC setup
 - but the Python client path can return empty output
 - for qwen3.5:* we therefore use generate(), and if that returns empty text,
@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import json
 import os
-import subprocess
 import time
 
 import ollama
@@ -23,19 +22,6 @@ import ollama
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_BIN = os.getenv("OLLAMA_BIN", "ollama")
 DEFAULT_MODEL = "qwen3:8b"
-
-_THINKING_MODELS = set()
-_GENERATE_JSON_MODELS = {"qwen3.5:"}
-
-
-def _is_thinking_model(model: str) -> bool:
-    model_l = model.lower()
-    return any(model_l.startswith(tag) for tag in _THINKING_MODELS)
-
-
-def _use_generate_json_mode(model: str) -> bool:
-    model_l = model.lower()
-    return any(model_l.startswith(tag) for tag in _GENERATE_JSON_MODELS)
 
 
 def _extract_json_object(raw: str) -> dict:
@@ -111,44 +97,6 @@ def _extract_json_object(raw: str) -> dict:
     )
 
 
-def _flatten_prompt(prompt: str, system: str | None) -> str:
-    pieces: list[str] = []
-    if system:
-        pieces.append("SYSTEM INSTRUCTION:\n" + system.strip())
-    pieces.append(
-        "USER REQUEST:\n"
-        + prompt.strip()
-        + "\n\nReturn exactly one JSON object and nothing else."
-    )
-    return "\n\n".join(pieces).strip()
-
-
-def _cli_generate_text(prompt: str, model: str, timeout: float) -> str:
-    """
-    Fall back to `ollama run` because the Python client path for qwen3.5:* can
-    return empty content on this HPC setup even while GPU inference works.
-    """
-    env = os.environ.copy()
-
-    if "OLLAMA_HOST" not in env and OLLAMA_BASE_URL.startswith("http://"):
-        env["OLLAMA_HOST"] = OLLAMA_BASE_URL[len("http://") :]
-    elif "OLLAMA_HOST" not in env and OLLAMA_BASE_URL.startswith("https://"):
-        env["OLLAMA_HOST"] = OLLAMA_BASE_URL[len("https://") :]
-
-    proc = subprocess.run(
-        [OLLAMA_BIN, "run", model, prompt],
-        capture_output=True,
-        text=True,
-        timeout=int(timeout) + 30,
-        env=env,
-    )
-    if proc.returncode != 0:
-        raise ValueError(
-            f"Ollama CLI fallback failed with exit code {proc.returncode}.\n"
-            f"STDERR:\n{proc.stderr}\nSTDOUT:\n{proc.stdout}"
-        )
-    return proc.stdout
-
 
 def chat_json(
     prompt: str,
@@ -164,31 +112,29 @@ def chat_json(
         messages.append({"role": "system", "content": system})
     messages.append({"role": "user", "content": prompt})
 
-    flattened_prompt = (
-        prompt
-        if not system
-        else f"SYSTEM INSTRUCTION:\n{system}\n\nUSER REQUEST:\n{prompt}"
-    )
-
     options = {"temperature": temperature}
 
     for attempt in range(1, max_retries + 1):
         try:
-            # Qwen3 on this Ollama build puts its reasoning into message.thinking
-            # and may leave message.content empty when using chat(format="json").
-            # Force the CLI no-think path for qwen3 models.
+            client = ollama.Client(host=OLLAMA_BASE_URL, timeout=timeout)
+
+            # qwen3:* supports think=False via the HTTP API — use that instead of
+            # the CLI subprocess path, which times out on long prompts.
             if model.lower().startswith("qwen3:"):
-                raw = _cli_generate_text("/no_think\n" + flattened_prompt, model, timeout)
-                return _extract_json_object(raw)
-
-            client = Client(host=OLLAMA_BASE_URL, timeout=timeout)
-
-            response = client.chat(
-                model=model,
-                messages=messages,
-                format="json",
-                options=options,
-            )
+                options_with_think = {**options, "think": False}
+                response = client.chat(
+                    model=model,
+                    messages=messages,
+                    format="json",
+                    options=options_with_think,
+                )
+            else:
+                response = client.chat(
+                    model=model,
+                    messages=messages,
+                    format="json",
+                    options=options,
+                )
 
             if isinstance(response, dict):
                 resp_dict = response

@@ -1,10 +1,12 @@
 """
 Retrieval interface — given a query text, return the top-k training examples.
 
-Three strategies:
+Four strategies:
   "knn"       — naive top-k by cosine similarity
   "prototype" — prefer examples closest to their class centroid
   "diversity" — MMR: balance similarity and diversity (penalise near-duplicates)
+  "hyde"      — HyDE: generate a hypothetical dark-pattern example via LLM,
+                encode it, then retrieve by KNN on that hypothesis embedding
 
 Usage example:
     from src.retrieval.retrieve import Retriever
@@ -22,6 +24,7 @@ import numpy as np
 
 from src.retrieval.embeddings import encode_texts
 from src.retrieval.index import load_index, INDEX_DIR
+from src.utils.ollama_client import chat_json, DEFAULT_MODEL
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -66,6 +69,9 @@ class Retriever:
         """
         Return k dicts: {"text": str, "category": str, "score": float}.
         """
+        if self.strategy == "hyde":
+            return self._hyde(query)
+
         query_emb = encode_texts([query], encoder=self.encoder, show_progress=False, device=self.device)  # (1, D)
 
         if self.strategy == "knn":
@@ -190,6 +196,56 @@ class Retriever:
             selected_embs.append(chosen["emb"])
 
         return selected
+
+    def _hyde(self, query: str) -> list[dict]:
+        """
+        Hypothetical Document Embeddings (HyDE — Gao et al., 2022).
+
+        Instead of encoding the raw query, ask the LLM to generate a
+        hypothetical ideal example of a dark-pattern snippet similar to
+        the query. Encoding that hypothesis typically lands closer to the
+        training distribution than the raw query, improving retrieval of
+        rare-class examples.
+
+        Steps:
+          1. Prompt the LLM to write one hypothetical dark-pattern example.
+          2. Encode the hypothesis (fallback to raw query on failure).
+          3. KNN on the hypothesis embedding.
+
+        The hypothesis is generated at temperature 0.7 to encourage
+        variation across different queries.
+        """
+        from src.utils.ollama_client import chat_json, DEFAULT_MODEL
+
+        hyde_prompt = (
+            "You are an expert in e-commerce dark patterns.\n"
+            "Given the product text below, write ONE short hypothetical product "
+            "description that exemplifies the most likely dark pattern it contains. "
+            "Your output must be a realistic product snippet (1-3 sentences), "
+            "not an explanation.\n\n"
+            f'Product text: """{query}"""\n\n'
+            'Return JSON: {"hypothesis": "<your hypothetical dark-pattern snippet>"}'
+        )
+
+        try:
+            raw = chat_json(hyde_prompt, model=DEFAULT_MODEL, temperature=0.7)
+            hypothesis = raw.get("hypothesis", "").strip()
+            if not hypothesis:
+                raise ValueError("empty hypothesis")
+        except Exception:
+            # Graceful fallback: use the original query as the hypothesis
+            hypothesis = query
+
+        hypo_emb = encode_texts(
+            [hypothesis], encoder=self.encoder,
+            show_progress=False, device=self.device,
+        )
+        results = self._knn(hypo_emb)
+
+        # Tag each result so we can inspect what hypothesis was used
+        for r in results:
+            r["hyde_hypothesis"] = hypothesis
+        return results
 
     # ------------------------------------------------------------------
     # Helpers
