@@ -16,18 +16,18 @@ de_0012,99K+ Kürzlich verkauft,Social Proof,de,shein.de,jobin,seller claims tha
 de_0013,99K+ Erneut kaufen,Social Proof,de,shein.de,jobin,seller claims that a lot of people bought again
 de_0014,"68%RABATT - Kein Min.-Kauf
 Allgemeiner Coupon -Maximal 22€
-Zeitlich begrenzt",Obstruction,de,shein.de,jobin,comes up when the page loads
-de_0015,„Nur Noch 1 Stück auf Lager“,Scarcity,de,der-keller.de,jobin,direct page (Der Keller)
-de_0016,„Nur noch 1 Tag Frühlingsstart mit STIER: Bis zu 30 € geschenkt“,Urgency,de,contorion.de,jobin,direct page (Contorion)
-de_0017,„27 Personen sehen sich dieses Produkt gerade an.“,Social Proof,de,flamesa.de,jobin,direct page (Flamesa.de)
-de_0018,"„Nein, danke. Ich möchte ohne Rabatt Code Aufsteckbürsten einkaufen“",Misdirection,de,oralb.de,jobin,direct page (Oral-B)
-de_0019,"„Ja, für den Kauf von E-Books müssen Sie ein Kundenkonto anlegen.“",Forced Action,de,shop.kohlhammer.de,jobin,direct page (Kohlhammer Shop)
-de_0020,„Die Kündigung muss spätestens 3 Tage vor der automatischen Verlängerung erfolgen.“,Obstruction,de,icecabine.de,jobin,direct page (Vitalcenter - Ice Cabine Biberach)
-de_0021,„Nach dem Testzeitraum erfolgt eine automatische Verlängerung.“,Sneaking,de,berliner-zeitung.de,jobin,direct page (Berliner Zeitung)
-de_0022,"„100% Baumwolle, 150 cm breit, waschbar bis 40°C.“",Not Dark Pattern,de,shop.schwaaba.de,jobin,direct page (Schwaaba)
-de_0023,„9 Personen sehen sich dieses Produkt gerade an.“,Social Proof,de,vitavien.de,jobin,direct page (Vitavien)
-de_0024,„nur heute“ on OTTO sale listings,Urgency,de,otto.de,jobin,direct page (Otto)
-de_0025,„Für Bestellungen auf unserer Webseite müssen Sie ein Kundenkonto anlegen.“,Forced Action,de,seeyouoptics.de,jobin,direct page (see.you optics)
+Zeitlich begrenzt",Urgency,de,shein.de,jobin,comes up when the page loads
+de_0015,Nur Noch 1 Stück auf Lager,Scarcity,de,der-keller.de,jobin,direct page (Der Keller)
+de_0016,Nur noch 1 Tag Frühlingsstart mit STIER: Bis zu 30 € geschenkt,Urgency,de,contorion.de,jobin,direct page (Contorion)
+de_0017,27 Personen sehen sich dieses Produkt gerade an.,Social Proof,de,flamesa.de,jobin,direct page (Flamesa.de)
+de_0018,"Nein, danke. Ich möchte ohne Rabatt Code Aufsteckbürsten einkaufen.",Misdirection,de,oralb.de,jobin,direct page (Oral-B)
+de_0019,"Ja, für den Kauf von E-Books müssen Sie ein Kundenkonto anlegen.",Forced Action,de,shop.kohlhammer.de,jobin,direct page (Kohlhammer Shop)
+de_0020,Die Kündigung muss spätestens 3 Tage vor der automatischen Verlängerung erfolgen.,Obstruction,de,icecabine.de,jobin,direct page (Vitalcenter - Ice Cabine Biberach)
+de_0021,Nach dem Testzeitraum erfolgt eine automatische Verlängerung.,Sneaking,de,berliner-zeitung.de,jobin,direct page (Berliner Zeitung)
+de_0022,"100% Baumwolle, 150 cm breit, waschbar bis 40°C.",Not Dark Pattern,de,shop.schwaaba.de,jobin,direct page (Schwaaba)
+de_0023,9 Personen sehen sich dieses Produkt gerade an.,Social Proof,de,vitavien.de,jobin,direct page (Vitavien)
+de_0024,nur heute,Urgency,de,otto.de,jobin,direct page (Otto)
+de_0025,Für Bestellungen auf unserer Webseite müssen Sie ein Kundenkonto anlegen.,Forced Action,de,seeyouoptics.de,jobin,direct page (see.you optics)
 de_0026,Nur noch 1 Stück verfügbar!,Scarcity,de,1zu45-shop.de,jobin,indexed shop text. (1zu45 Shop)
 de_0027,Nur noch 2 Stück verfügbar!,Scarcity,de,1zu45-shop.de,jobin,indexed shop text. (1zu45 Shop)
 de_0028,weniger als 10 Stück verfügbar!,Scarcity,de,1zu45-shop.de,jobin,indexed shop text. (1zu45 Shop)
@@ -40,41 +40,36 @@ de_0034,Nur heute: 20 STD 33 MIN 46 SEK App Deal -20% auf Kleider,Urgency,de,ull
 de_0035,TOP-Rabatt nur jetzt!,Urgency,de,ferwer.de,jobin,live page text. (Ferwer)
 de_0036,"Nur heute: Rabatt Countdown! Je früher du zugreifst, desto mehr sparst du, bis zu 25%!",Urgency,de,motatos.de,shifin,indexed shop text. (Motatos)
 de_0037,Nur heute: 7 STD 24 MIN 55 SEK. -20% auf ausgewählte Artikel*,Urgency,de,happy-size.de,shifin,indexed shop text. (Happy Size)
-de_0038,9 Personen sehen sich dieses Produkt gerade an.,Social Proof,de,vitavien.de,shifin,live product text. (Vitavien)
-de_0039,29 Personen sehen sich dieses Produkt gerade an.,Social Proof,de,flamesa.de,shifin,live product text. (Flamesa.de)
-de_0040,12 Personen sehen sich dieses Produkt gerade an.,Social Proof,de,parlajewelry.de,shifin,indexed product text. (Parla Fine Jewelry)
-de_0041,50 Personen sehen sich dieses Produkt gerade an,Social Proof,de,arebos.de,shifin,live product text. (Arebos)
-de_0042,27 Personen sehen sich dieses Produkt gerade an. In den letzten 24 Stunden haben 11 Personen dieses Produkt gekauft.,Social Proof,de,argahome.de,shifin,indexed product text. (ArgaHome)
-de_0043,"Nein Danke, ich möchte nicht sparen.",Misdirection,de,nutriment.de,shifin,indexed promo text. (Nutriment Deutschland)
-de_0044,"Nein, danke. Ich möchte ohne Rabatt Code Aufsteckbürsten einkaufen.",Misdirection,de,oralb.de,shifin,indexed promo text. (Oral-B)
-de_0045,"nein, Danke.",Misdirection,de,kathy-jewels.de,shifin,"live popup text, weak alone without full screenshot context. (KathyJewels)"
-de_0046,"Um bei uns bestellen zu können, müssen Sie ein Kundenkonto anlegen.",Forced Action,de,plotter-papier.de,shifin,FAQ text. (F-Punkt)
-de_0047,Für Ihre Bestellung müssen Sie ein Kundenkonto anlegen.,Forced Action,de,wecare2.de,shifin,AGB text. (we:care2)
-de_0048,Für Bestellungen auf unserer Webseite müssen Sie ein Kundenkonto anlegen.,Forced Action,de,seeyouoptics.de,shifin,privacy/order text. (see.you optics)
-de_0049,"Ja, für den Kauf von E-Books müssen Sie ein Kundenkonto anlegen.",Forced Action,de,shop.kohlhammer.de,shifin,FAQ text. (Kohlhammer Shop)
-de_0050,Die Kündigung muss spätestens 3 Tage vor der automatischen Verlängerung erfolgen.,Obstruction,de,icecabine.de,shifin,subscription policy text; friction depends on full flow. (Vitalcenter - Ice Cabine Biberach)
-de_0051,muss eine Kündigung spätestens 14 Tage vor dem nächsten Versandtermin erfolgen,Obstruction,de,vegdog.de,shifin,cancellation text; needs UI-level review before final gold labeling. (VEGDOG DE)
-de_0052,Nach dem Testzeitraum erfolgt eine automatische Verlängerung.,Sneaking,de,berliner-zeitung.de,shifin,indexed subscription text; disclosure prominence not visible here. (Berliner Zeitung Aboshop)
-de_0053,"automatische Verlängerung, wenn nicht 1 Tag vor Ablauf gekündigt",Sneaking,de,meinstofflager.de,shifin,"indexed subscription text; strong candidate, but needs screenshot confirmation. (Mein Stofflager)"
-de_0054,"Schmutzabweisend & Anti-Allergen! Rutschfeste Unterseite, dadurch bleibt Ihr Teppich immer ordentlich an seinem Platz liegen. Geeignet für Fußbodenheizung.",Not Dark Pattern,de,vitavien.de,shifin,plain product description/features. (Vitavien)
-de_0055,Materialzusammensetzung: 100% Baumwolle aus biologischem Anbau,Not Dark Pattern,de,shop.gunold.de,shifin,plain material description. (Gunold Webshop)
-de_0056,"Nein, Danke.",Misdirection,de,sissel.de,shifin,Dismissive opt-out wording on newsletter discount/signup page.
-de_0057,"Rabatt sichern. Nein, Danke.",Misdirection,de,bymi.de,shifin,Newsletter popup/landing phrasing with discount framing and dismissive refusal.
-de_0058,REGISTRIEREN. NEIN. DANKE.,Misdirection,de,frihed.de,shifin,Confirmshaming-style refusal captured in snippet on discount signup flow.
-de_0059,"Nein, danke ich will nicht sparen.",Misdirection,de,belune.de,shifin,Clear confirmshaming-style opt-out on newsletter discount page.
-de_0060,"Nein, danke.",Misdirection,de,heldenglueck.de,shifin,"Likely dismissive opt-out in voucher flow, but wording was recovered from snippet rather than robust page text."
-de_0061,Die Kündigung muss spätestens 3 Tage vor der automatischen Verlängerung erfolgen.,Obstruction,de,icecabine.de,shifin,Cancellation timing constraint in recurring subscription policy.
-de_0062,"Der Vertrag verlängert sich nach Ablauf der Mindestlaufzeit automatisch um 12 Monate, sofern nicht mit einer Frist von 3 Monaten zum Laufzeitende schriftlich gekündigt wird.",Obstruction,de,careville.de,shifin,Long notice period plus written cancellation requirement.
-de_0063,Kündigungsfristen: 3 Monate zum Ende der Vertragslaufzeit.,Obstruction,de,dreske.de,shifin,Subscription cancellation friction in product subscription conditions.
-de_0064,"Die Kündigung des Mitglieds ist gegenüber Artemis Fitness Melanie Lassotta schriftlich zu erklären (§§ 126, 126 b BGB), die elektronische Form (§ 126 a BGB) ist ausgeschlossen.",Obstruction,de,artemis-fitness.de,shifin,Explicit exclusion of electronic cancellation form.
-de_0065,bei nicht fristgerechter Kündigung verlängert sich das Abonnement automatisch um weitere 12 Monate - 8 Wochen zum Jahresende.,Obstruction,de,dreske.de,shifin,Automatic extension plus long cancellation window.
-de_0066,Automatische Verlängerung,Sneaking,de,yoga-aktuell.de,shifin,Auto-renewal disclosed on digital subscription offer page.
-de_0067,"YOGA AKTUELL Plus verlängert sich automatisch (um den ausgewählten Zeitraum), wenn du nicht kündigst.",Sneaking,de,yoga-aktuell.de,shifin,Plain auto-renewal condition on subscription FAQ text.
-de_0068,"Das Jahres-Abonnement bzw. Studenten-Abonnement für die Zeitschrift läuft für die Dauer von einem Jahr. Das Abonnement verlängert sich automatisch um ein weiteres Jahr, wenn es nicht spätestens vier Wochen zum nächsten Erstverkaufstag des Heftes schriftlich gekündigt wird.",Sneaking,de,shop.monopol-magazin.de,shifin,Annual renewal condition in subscription terms.
-de_0069,"Wird das Mini-Abonnement nicht binnen 14 Tagen nach Erhalt der dritten Ausgabe schriftlich abbestellt, verlängert es sich automatisch zum Jahresabonnement.",Sneaking,de,shop.monopol-magazin.de,shifin,Trial/mini subscription converts into full annual subscription unless canceled.
-de_0070,"Hat der Kunde die Option „automatische Verlängerung“ aktiviert, verlängert sich der Vertrag jeweils um ein weiteres Jahr, sofern er nicht spätestens einen Tag vor Ablauf der aktuellen Laufzeit im Kundenkonto deaktiviert oder schriftlich gekündigt wird.",Sneaking,de,cleangang.de,shifin,Auto-renewal tied to prior activation and stored payment details.
-de_0071,"Ja, du kannst auch ohne ein Kundenkonto im Online-Shop bestellen.",Not Dark Pattern,de,jack-wolfskin.de,shifin,Hard negative against Forced Action because guest checkout is allowed.
-de_0072,"Ja, du kannst problemlos als Gast bestellen, ohne dafür ein Kundenkonto anlegen zu müssen.",Not Dark Pattern,de,help.parfumdreams.de,shifin,Hard negative against Forced Action because guest checkout is explicitly available.
-de_0073,Keine automatische Verlängerung,Not Dark Pattern,de,shop.jahr-media.de,shifin,Hard negative against Sneaking in weekpass access terms.
-de_0074,jederzeit abbestellbar,Not Dark Pattern,de,bikebox-shop.de,shifin,Transparent newsletter marketing without hidden lock-in.
-de_0075,Bestellen kannst Du bei dm als Gast oder noch einfacher über Dein dm-Konto.,Not Dark Pattern,de,dm.de,shifin,Hard negative against Forced Action because guest checkout is explicitly supported.
+de_0038,29 Personen sehen sich dieses Produkt gerade an.,Social Proof,de,flamesa.de,shifin,live product text. (Flamesa.de)
+de_0039,12 Personen sehen sich dieses Produkt gerade an.,Social Proof,de,parlajewelry.de,shifin,indexed product text. (Parla Fine Jewelry)
+de_0040,50 Personen sehen sich dieses Produkt gerade an,Social Proof,de,arebos.de,shifin,live product text. (Arebos)
+de_0041,27 Personen sehen sich dieses Produkt gerade an. In den letzten 24 Stunden haben 11 Personen dieses Produkt gekauft.,Social Proof,de,argahome.de,shifin,indexed product text. (ArgaHome)
+de_0042,"Nein Danke, ich möchte nicht sparen.",Misdirection,de,nutriment.de,shifin,indexed promo text. (Nutriment Deutschland)
+de_0043,"nein, Danke.",Misdirection,de,kathy-jewels.de,shifin,"live popup text, weak alone without full screenshot context. (KathyJewels)"
+de_0044,"Um bei uns bestellen zu können, müssen Sie ein Kundenkonto anlegen.",Forced Action,de,plotter-papier.de,shifin,FAQ text. (F-Punkt)
+de_0045,Für Ihre Bestellung müssen Sie ein Kundenkonto anlegen.,Forced Action,de,wecare2.de,shifin,AGB text. (we:care2)
+de_0046,muss eine Kündigung spätestens 14 Tage vor dem nächsten Versandtermin erfolgen,Obstruction,de,vegdog.de,shifin,cancellation text; needs UI-level review before final gold labeling. (VEGDOG DE)
+de_0047,"automatische Verlängerung, wenn nicht 1 Tag vor Ablauf gekündigt",Sneaking,de,meinstofflager.de,shifin,"indexed subscription text; strong candidate, but needs screenshot confirmation. (Mein Stofflager)"
+de_0048,"Schmutzabweisend & Anti-Allergen! Rutschfeste Unterseite, dadurch bleibt Ihr Teppich immer ordentlich an seinem Platz liegen. Geeignet für Fußbodenheizung.",Not Dark Pattern,de,vitavien.de,shifin,plain product description/features. (Vitavien)
+de_0049,Materialzusammensetzung: 100% Baumwolle aus biologischem Anbau,Not Dark Pattern,de,shop.gunold.de,shifin,plain material description. (Gunold Webshop)
+de_0050,"Rabatt sichern. Nein, Danke.",Misdirection,de,bymi.de,shifin,Newsletter popup/landing phrasing with discount framing and dismissive refusal.
+de_0051,REGISTRIEREN. NEIN. DANKE.,Misdirection,de,frihed.de,shifin,Confirmshaming-style refusal captured in snippet on discount signup flow.
+de_0052,"Nein, danke ich will nicht sparen.",Misdirection,de,belune.de,shifin,Clear confirmshaming-style opt-out on newsletter discount page.
+de_0053,"Der Vertrag verlängert sich nach Ablauf der Mindestlaufzeit automatisch um 12 Monate, sofern nicht mit einer Frist von 3 Monaten zum Laufzeitende schriftlich gekündigt wird.",Obstruction,de,careville.de,shifin,Long notice period plus written cancellation requirement.
+de_0054,Kündigungsfristen: 3 Monate zum Ende der Vertragslaufzeit.,Obstruction,de,dreske.de,shifin,Subscription cancellation friction in product subscription conditions.
+de_0055,"Die Kündigung des Mitglieds ist gegenüber Artemis Fitness Melanie Lassotta schriftlich zu erklären (§§ 126, 126 b BGB), die elektronische Form (§ 126 a BGB) ist ausgeschlossen.",Obstruction,de,artemis-fitness.de,shifin,Explicit exclusion of electronic cancellation form.
+de_0056,bei nicht fristgerechter Kündigung verlängert sich das Abonnement automatisch um weitere 12 Monate - 8 Wochen zum Jahresende.,Obstruction,de,dreske.de,shifin,Automatic extension plus long cancellation window.
+de_0057,Automatische Verlängerung,Sneaking,de,yoga-aktuell.de,shifin,Auto-renewal disclosed on digital subscription offer page.
+de_0058,"YOGA AKTUELL Plus verlängert sich automatisch (um den ausgewählten Zeitraum), wenn du nicht kündigst.",Sneaking,de,yoga-aktuell.de,shifin,Plain auto-renewal condition on subscription FAQ text.
+de_0059,"Das Jahres-Abonnement bzw. Studenten-Abonnement für die Zeitschrift läuft für die Dauer von einem Jahr. Das Abonnement verlängert sich automatisch um ein weiteres Jahr, wenn es nicht spätestens vier Wochen zum nächsten Erstverkaufstag des Heftes schriftlich gekündigt wird.",Sneaking,de,shop.monopol-magazin.de,shifin,Annual renewal condition in subscription terms.
+de_0060,"Wird das Mini-Abonnement nicht binnen 14 Tagen nach Erhalt der dritten Ausgabe schriftlich abbestellt, verlängert es sich automatisch zum Jahresabonnement.",Sneaking,de,shop.monopol-magazin.de,shifin,Trial/mini subscription converts into full annual subscription unless canceled.
+de_0061,"Hat der Kunde die Option „automatische Verlängerung“ aktiviert, verlängert sich der Vertrag jeweils um ein weiteres Jahr, sofern er nicht spätestens einen Tag vor Ablauf der aktuellen Laufzeit im Kundenkonto deaktiviert oder schriftlich gekündigt wird.",Sneaking,de,cleangang.de,shifin,Auto-renewal tied to prior activation and stored payment details.
+de_0062,"Ja, du kannst auch ohne ein Kundenkonto im Online-Shop bestellen.",Not Dark Pattern,de,jack-wolfskin.de,shifin,Hard negative against Forced Action because guest checkout is allowed.
+de_0063,"Ja, du kannst problemlos als Gast bestellen, ohne dafür ein Kundenkonto anlegen zu müssen.",Not Dark Pattern,de,help.parfumdreams.de,shifin,Hard negative against Forced Action because guest checkout is explicitly available.
+de_0064,Keine automatische Verlängerung,Not Dark Pattern,de,shop.jahr-media.de,shifin,Hard negative against Sneaking in weekpass access terms.
+de_0065,jederzeit abbestellbar,Not Dark Pattern,de,bikebox-shop.de,shifin,Transparent newsletter marketing without hidden lock-in.
+de_0066,Bestellen kannst Du bei dm als Gast oder noch einfacher über Dein dm-Konto.,Not Dark Pattern,de,dm.de,shifin,Hard negative against Forced Action because guest checkout is explicitly supported.
+de_0067,"Nein Danke, ich möchte den vollen Preis bezahlen",Misdirection,de,Generic E-commerce,shifin,Financial Masochism Framing
+de_0068,Versandkostenfrei ab € 39 (AT/DE) · Click&Collect... In den Warenkorb.,Not Dark Pattern,de,sonnentor.com,shifin,Standard Transactional Interface
+de_0069,Verträge hier kündigen,Not Dark Pattern,de,Statutory Requirement,shifin,Statutory Compliance
+de_0070,"Darüber hinaus beziehungsweise in dem Fall, in dem Sie nur als Gast bestellen beziehungsweise buchen, ohne ein Kundenkonto anzulegen, speichern wir Ihre Daten nur im Rahmen...",Not Dark Pattern,de,wempe.com,shifin,GDPR/DSGVO Transparency

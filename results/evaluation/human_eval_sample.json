@@ -1,0 +1,1112 @@
+[
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text uses numerical social validation ('61 people') to imply popularity and urgency.",
+      "Match to Social Proof category: The phrase 'have already bought' mimics the structure of social proof examples, even though it includes a discount.",
+      "Assess confidence: The format matches Social Proof examples, but the inclusion of a discount complicates categorization. However, the core manipulation remains social validation."
+    ],
+    "label": "Social Proof",
+    "confidence": 0.95,
+    "psychological_mechanism": "Bandwagon effect",
+    "evidence_span": "61 people have already bought that product today",
+    "harm_dimension": "Manipulates decisions through false social validation",
+    "rationale": "The text artificially inflates perceived product value by suggesting widespread purchase, even though the discount may be unrelated to actual demand.",
+    "rewrite": "This product is available with a 50% discount.",
+    "input_text": "61 people have already bought that product today with 50% discount",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 48,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Social Proof",
+      "Social Proof",
+      "Social Proof",
+      "Urgency",
+      "Social Proof"
+    ],
+    "retrieved_scores": [
+      0.7181,
+      0.6442,
+      0.6246,
+      0.6104,
+      0.6067
+    ],
+    "gold_label": "Social Proof"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text uses emotionally charged language ('despise') to dissuade users from considering discounts, which could pressure them into accepting non-discounted offers.",
+      "Match to Misdirection category: The text manipulates attention by framing discounts as undesirable, potentially steering users toward less favorable choices.",
+      "Assess confidence: The structure mirrors known Misdirection patterns (e.g., 'No thanks, I don't want a discount'), though the intensity of 'despise' adds uniqueness."
+    ],
+    "label": "Misdirection",
+    "confidence": 0.95,
+    "psychological_mechanism": "Emotional manipulation through negative framing",
+    "evidence_span": "No thanks, I despise coupons!",
+    "harm_dimension": "Forces acceptance of higher-priced options through emotional coercion",
+    "rationale": "The text uses extreme negative language to dissuade discount usage, manipulating users into potentially paying more by making discounts seem undesirable.",
+    "rewrite": "Enjoy your discount with code COUPON123! No commitment required.",
+    "input_text": "No thanks, I despise coupons!",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 29,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Misdirection",
+      "Misdirection",
+      "Misdirection",
+      "Misdirection",
+      "Misdirection"
+    ],
+    "retrieved_scores": [
+      0.7209,
+      0.7209,
+      0.7173,
+      0.6758,
+      0.664
+    ],
+    "gold_label": "Misdirection"
+  },
+  {
+    "reasoning_steps": [
+      "Identify that the text explains cancellation consequences (charge after renewal) but does not explicitly obstruct the cancellation process itself.",
+      "Match to 'Obstruction' category as the text creates disincentives for cancellation through financial risk, even if cancellation is technically possible.",
+      "Assess confidence at 0.95 as the structure mirrors Obstruction examples where cancellation terms are made less appealing through conditional charges."
+    ],
+    "label": "Obstruction",
+    "confidence": 0.95,
+    "psychological_mechanism": "Loss aversion",
+    "evidence_span": "If you email to cancel after your Membership has been renewed, your credit/debit card will have been charged the then current paid annual membership fee for the Passport Program",
+    "harm_dimension": "Financial disincentive for cancellation",
+    "rationale": "The text creates a disincentive for cancellation by charging the card if canceled after renewal, even though cancellation is technically possible, which discourages users from exercising their right to cancel.",
+    "rewrite": "You may cancel your Membership at any time by emailing us at passportmembership@1800flowers.com. Your credit/debit card on file will not be charged, and a confirmation email will be sent to you.",
+    "input_text": "We will also send you an additional email confirming your renewal. Should you elect not to renew your Membership, you may cancel at any time prior to the renewal by emailing us at passportmembership@1800flowers.com and your credit/debit card on file with us will not be charged. A confirmation email will be sent to you. If you email to cancel after your Membership has been renewed, your credit/debit card will have been charged the then current paid annual membership fee for the Passport Program, however you may request, and 1-800-Flowers may grant, a pro-rata refund within its sole discretion based upon the extent that you may have utilized the benefits of the Passport Program and the period of time remaining on your paid Membership.",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 177,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Obstruction",
+      "Obstruction",
+      "Obstruction",
+      "Obstruction",
+      "Obstruction"
+    ],
+    "retrieved_scores": [
+      1.0,
+      0.5811,
+      0.5743,
+      0.5695,
+      0.5611
+    ],
+    "gold_label": "Obstruction"
+  },
+  {
+    "reasoning_steps": [
+      "Identify that the text represents a user's refusal to engage with a promotional offer, but the phrasing frames the refusal as a negative trait ('don\u2019t want to save money') rather than a neutral choice.",
+      "Match this to the 'Misdirection' category, as the text manipulates the user's self-perception to discourage opting out, rather than presenting clear, unbiased options.",
+      "Confidence is high (0.95) due to the clear manipulation of emotional framing, though ambiguity remains about whether this is part of a larger UI context (e.g., forced opt-in)."
+    ],
+    "label": "Misdirection",
+    "confidence": 0.95,
+    "psychological_mechanism": "Confirmshaming",
+    "evidence_span": "No thanks. I don\u2019t want to save money.",
+    "harm_dimension": "Emotional pressure to conform to perceived financial norms",
+    "rationale": "The text frames declining an offer as a personal failing rather than a neutral decision, manipulating self-perception to discourage opt-out.",
+    "rewrite": "No thanks. I prefer to browse without promotional offers.",
+    "input_text": "No thanks. I don\u2019t want to save money.",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 38,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Misdirection",
+      "Misdirection",
+      "Misdirection",
+      "Misdirection",
+      "Misdirection"
+    ],
+    "retrieved_scores": [
+      1.0,
+      0.9301,
+      0.9015,
+      0.8909,
+      0.7809
+    ],
+    "gold_label": "Misdirection"
+  },
+  {
+    "reasoning_steps": [
+      "Identify that the text mentions a specific customer's recent purchase ('Annie in Cheras, Malaysia just bought')",
+      "Match this to the Social Proof category, which uses real customer actions to create artificial social validation",
+      "Assess confidence based on clear alignment with the Social Proof pattern in provided examples"
+    ],
+    "label": "Social Proof",
+    "confidence": 0.95,
+    "psychological_mechanism": "Bandwagon effect",
+    "evidence_span": "Annie in Cheras, Malaysia just bought: An Abundance of Flowers - Van-Go Paint-By-Number Kit",
+    "harm_dimension": "Artificial social validation pressure",
+    "rationale": "The text uses a real customer's purchase to create false social proof, influencing consumers to buy based on perceived popularity rather than product merit.",
+    "rewrite": "An Abundance of Flowers - Van-Go Paint-By-Number Kit. Create your own masterpiece with this detailed floral painting kit.",
+    "input_text": "Annie in Cheras, Malaysia just bought: An Abundance of Flowers - Van-Go Paint-By-Number Kit",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 91,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Social Proof",
+      "Social Proof",
+      "Not Dark Pattern",
+      "Social Proof",
+      "Not Dark Pattern"
+    ],
+    "retrieved_scores": [
+      1.0,
+      0.482,
+      0.4737,
+      0.4734,
+      0.4571
+    ],
+    "gold_label": "Social Proof"
+  },
+  {
+    "reasoning_steps": [
+      "Identify any manipulation tactics: The text provides clear instructions for contacting support without deception or pressure.",
+      "Match to category: The text is transparent and does not obstruct, misdirect, or force actions.",
+      "Assess confidence: No ambiguous elements; the text is neutral and informative."
+    ],
+    "label": "Not Dark Pattern",
+    "confidence": 1.0,
+    "psychological_mechanism": "Transparency Principle",
+    "evidence_span": "For subscription inquiries, visit our website and log into your account. Navigate to 'Account Settings' > 'Subscription",
+    "harm_dimension": "No consumer harm detected",
+    "rationale": "The text provides clear, unambiguous guidance for customer support without employing deceptive practices or manipulation tactics.",
+    "rewrite": "For subscription inquiries, visit our website and log into your account. Navigate to 'Account Settings' > 'Subscription Management' to contact support via live chat or email. A representative will assist you shortly.",
+    "input_text": "For subscription inquiries, visit our website and log into your account. Navigate to 'Account Settings' > 'Subscription Management' to contact support via live chat or email. A representative will assist you shortly.",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 119,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Obstruction",
+      "Not Dark Pattern",
+      "Obstruction",
+      "Not Dark Pattern",
+      "Not Dark Pattern"
+    ],
+    "retrieved_scores": [
+      0.6717,
+      0.572,
+      0.5619,
+      0.5493,
+      0.5376
+    ],
+    "gold_label": "Obstruction"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text uses a refusal to accept discounts, which may pressure users into accepting terms against their will.",
+      "Match to category: This aligns with 'Misdirection' as it manipulates users by framing the refusal as a negative, potentially diverting attention from genuine opt-out options.",
+      "Assess confidence: The phrasing mirrors known misdirection patterns in examples, though context could slightly alter interpretation."
+    ],
+    "label": "Misdirection",
+    "confidence": 1.0,
+    "psychological_mechanism": "Confirmshaming",
+    "evidence_span": "No, I Don't Like Discounts",
+    "harm_dimension": "Coercive decision-making",
+    "rationale": "The text pressures users to accept discounts by framing refusal as a negative, manipulating choices through emotional coercion.",
+    "rewrite": "You can opt out of discounts at any time \u2014 your preferences matter.",
+    "input_text": "No, I Don't Like Discounts",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 26,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Misdirection",
+      "Misdirection",
+      "Misdirection",
+      "Misdirection",
+      "Misdirection"
+    ],
+    "retrieved_scores": [
+      0.848,
+      0.7775,
+      0.7445,
+      0.7445,
+      0.7212
+    ],
+    "gold_label": "Misdirection"
+  },
+  {
+    "reasoning_steps": [
+      "Identify any manipulation tactics: The product title simply lists available pattern types without deceptive claims, time pressure, or hidden terms.",
+      "Match to category: The text is a neutral product description with no artificial scarcity, urgency, or forced actions.",
+      "Assess confidence: No ambiguous elements - the text is straightforward and transparent."
+    ],
+    "label": "Not Dark Pattern",
+    "confidence": 1.0,
+    "psychological_mechanism": "Transparency Principle",
+    "evidence_span": "Wedding Cross Stich & Embroidery Patterns",
+    "harm_dimension": "None",
+    "rationale": "The product title is a neutral description of available pattern types without any manipulative tactics.",
+    "rewrite": "Wedding Cross Stitch & Embroidery Patterns",
+    "input_text": "Wedding Cross Stich & Embroidery Patterns",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 41,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Not Dark Pattern"
+    ],
+    "retrieved_scores": [
+      0.6597,
+      0.6475,
+      0.598,
+      0.5377,
+      0.4933
+    ],
+    "gold_label": "Not Dark Pattern"
+  },
+  {
+    "reasoning_steps": [
+      "The text explicitly states cancellation is possible at any time with no fee, which contradicts obstruction tactics that make cancellation difficult.",
+      "No artificial time pressure, hidden fees, or forced actions are present. The cancellation process is clearly described without manipulation.",
+      "The text provides straightforward options for cancellation and support without deceptive practices."
+    ],
+    "label": "Not Dark Pattern",
+    "confidence": 0.95,
+    "psychological_mechanism": "Transparency",
+    "evidence_span": "You can cancel your subscription at any time. No fee.",
+    "harm_dimension": "No consumer harm detected",
+    "rationale": "The text clearly communicates cancellation rights without deception or manipulation.",
+    "rewrite": "You can cancel your subscription at any time. No fee. To cancel, complete the cancellation form on our website. If you prefer to pause, skip your next delivery by the 7th. For assistance, call 1-800-BLOOM-999 between 9 AM and 5 PM, Monday through Friday.",
+    "input_text": "You can cancel your subscription at any time. No fee. To cancel, complete the cancellation form on our website. If you prefer to pause, skip your next delivery by the 7th. For assistance, call 1-800-BLOOM-999 between 9 AM and 5 PM, Monday through Friday.",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 53,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Obstruction",
+      "Obstruction",
+      "Obstruction",
+      "Obstruction",
+      "Obstruction"
+    ],
+    "retrieved_scores": [
+      0.7609,
+      0.6539,
+      0.6452,
+      0.6394,
+      0.636
+    ],
+    "gold_label": "Obstruction"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text uses 'Only 2 Left in Stock' to imply limited availability, creating artificial scarcity.",
+      "Match to dark pattern category: This fits 'Scarcity' as it falsely emphasizes limited stock to pressure immediate purchase.",
+      "Assess confidence: The phrasing is a classic dark pattern with no ambiguity in intent."
+    ],
+    "label": "Scarcity",
+    "confidence": 0.95,
+    "psychological_mechanism": "Scarcity Principle",
+    "evidence_span": "Only 2 Left in Stock",
+    "harm_dimension": "Rushed purchases based on false scarcity claims",
+    "rationale": "The text artificially creates urgency by emphasizing limited stock, manipulating consumers to act quickly without verifying actual availability.",
+    "rewrite": "This item is available \u2014 add it to your cart.",
+    "input_text": "Only 2 Left in Stock",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 20,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Scarcity",
+      "Scarcity",
+      "Scarcity",
+      "Scarcity",
+      "Scarcity"
+    ],
+    "retrieved_scores": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.9504
+    ],
+    "gold_label": "Scarcity"
+  },
+  {
+    "reasoning_steps": [
+      "Identify any manipulation tactics present in the text: The product title 'Skin Concerns' is a neutral product category descriptor with no overtly manipulative language.",
+      "Match tactics to the most fitting dark pattern category: No elements of scarcity, urgency, social proof, misdirection, obstruction, forced action, or sneaking are present.",
+      "Assess confidence and note any ambiguities: The text is clearly a straightforward product category name with no deceptive elements."
+    ],
+    "label": "Not Dark Pattern",
+    "confidence": 1.0,
+    "psychological_mechanism": "unknown",
+    "evidence_span": "Skin Concerns",
+    "harm_dimension": "None",
+    "rationale": "The product title is a simple category descriptor with no manipulative tactics or deceptive practices.",
+    "rewrite": "Skin Concerns",
+    "input_text": "Skin Concerns",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 13,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Not Dark Pattern"
+    ],
+    "retrieved_scores": [
+      1.0,
+      0.6242,
+      0.5051,
+      0.4843,
+      0.412
+    ],
+    "gold_label": "Not Dark Pattern"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text mentions a fee for a 'Booking Protection Plan' that is 'Automatically included' without explicit opt-in options.",
+      "Match to dark pattern category: The automatic inclusion of a charge without clear opt-out aligns with 'Sneaking' (hidden charges) or 'Forced Action' (mandatory steps). However, the primary manipulation is the concealed fee rather than forcing an action.",
+      "Assess confidence: The text explicitly states the fee is automatically added, which is a clear example of sneaking. No ambiguity in the pricing manipulation."
+    ],
+    "label": "Sneaking",
+    "confidence": 0.95,
+    "psychological_mechanism": "Scarcity bias through hidden cost",
+    "evidence_span": "Automatically included for added security",
+    "harm_dimension": "Unexpected charges for optional services",
+    "rationale": "The text automatically adds a $10 fee for a protection plan without clear opt-out options, deceiving users into paying for an optional service.",
+    "rewrite": "Booking Protection Plan \u2013 $10.00 (optional) \u2013 Add to your cart for added security.",
+    "input_text": "**Booking Protection Plan Added \u2013 $10.00** \u2013 Automatically included for added security.",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 41,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Misdirection",
+      "Sneaking",
+      "Misdirection",
+      "Misdirection",
+      "Urgency"
+    ],
+    "retrieved_scores": [
+      0.6032,
+      0.5375,
+      0.5155,
+      0.4525,
+      0.4461
+    ],
+    "gold_label": "Sneaking"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text uses a countdown format ('Please Order Within: 0 0 : 0 2 : 4 1 : 10 65') to create artificial time pressure.",
+      "Match to dark pattern category: This fits 'Urgency' as it artificially creates a deadline to push immediate action.",
+      "Assess confidence: The format is unconventional but the intent matches urgency tactics seen in examples. Ambiguity exists in time formatting but the core manipulation remains."
+    ],
+    "label": "Urgency",
+    "confidence": 0.95,
+    "psychological_mechanism": "Scarcity bias",
+    "evidence_span": "Please Order Within: 0 0 : 0 2 : 4 1 : 10 65",
+    "harm_dimension": "Rushed decision-making",
+    "rationale": "The text creates artificial urgency by implying a time-sensitive action requirement, even with unclear time formatting.",
+    "rewrite": "This item is available \u2014 add it to your cart.",
+    "input_text": "Please Order Within: 0 0 : 0 2 : 4 1 : 10 65",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 44,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Urgency",
+      "Urgency",
+      "Urgency",
+      "Urgency",
+      "Urgency"
+    ],
+    "retrieved_scores": [
+      0.4833,
+      0.4573,
+      0.4519,
+      0.4397,
+      0.4368
+    ],
+    "gold_label": "Urgency"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text mentions subscription auto-renewal with a fee, which could imply hidden costs or lack of opt-out clarity.",
+      "Match to dark pattern category: Auto-renewal without clear opt-out options falls under 'Obstruction' or 'Forced Action', but the text lacks explicit cancellation steps.",
+      "Assess confidence: The text is neutral about cancellation processes, making it ambiguous whether it's a dark pattern."
+    ],
+    "label": "Not Dark Pattern",
+    "confidence": 0.9,
+    "psychological_mechanism": "Commitment bias",
+    "evidence_span": "\u25caAfter 1 year, subscription auto renews with fee.",
+    "harm_dimension": "Unintended subscription continuation",
+    "rationale": "The text provides standard subscription terms without deceptive practices, though auto-renewal could be considered a neutral business model.",
+    "rewrite": "\u25caAfter 1 year, subscription auto renews with fee. Review your iFit\u00ae Coach account on a computer, tablet, smartphone, or equipment console. You can cancel anytime in your account settings.",
+    "input_text": "\u25caAfter 1 year, subscription auto renews with fee. Review your iFit\u00ae Coach account on a computer, tablet, smartphone, or equipment console.",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 49,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Misdirection",
+      "Urgency",
+      "Urgency",
+      "Urgency",
+      "Sneaking"
+    ],
+    "retrieved_scores": [
+      0.5379,
+      0.4093,
+      0.4093,
+      0.4093,
+      0.4088
+    ],
+    "gold_label": "Sneaking"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text requires agreement to marketing emails without providing an opt-out option.",
+      "Match to Forced Action category: Users are compelled to accept unwanted terms (marketing emails) without escape.",
+      "Confidence is high as the explicit 'No opt-out available' confirms forced compliance."
+    ],
+    "label": "Forced Action",
+    "confidence": 0.95,
+    "psychological_mechanism": "Commitment bias",
+    "evidence_span": "No opt-out available",
+    "harm_dimension": "Coercive marketing consent",
+    "rationale": "The text forces users to accept marketing emails without providing an opt-out, violating user autonomy.",
+    "rewrite": "Proceed to subscribe to the Elite Gaming Pass by agreeing to our Terms and Privacy Policy. You may opt out of marketing emails at any time.",
+    "input_text": "Proceed to subscribe to the Elite Gaming Pass by agreeing to our Terms, Privacy Policy, and marketing emails. No opt-out available.",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 20,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Forced Action",
+      "Not Dark Pattern",
+      "Sneaking",
+      "Not Dark Pattern",
+      "Obstruction"
+    ],
+    "retrieved_scores": [
+      0.5083,
+      0.4852,
+      0.4471,
+      0.4469,
+      0.4167
+    ],
+    "gold_label": "Forced Action"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The phrase 'ends soon' creates artificial time pressure to prompt immediate action.",
+      "Match to dark pattern category: This aligns with 'Urgency' as it leverages fear of missing out (FOMO) through time-based scarcity.",
+      "Assess confidence: The phrasing is a classic urgency trigger with no ambiguity in intent."
+    ],
+    "label": "Urgency",
+    "confidence": 1.0,
+    "psychological_mechanism": "Fear of Missing Out (FOMO)",
+    "evidence_span": "Sale ends soon:",
+    "harm_dimension": "Rushed decision-making without price comparison",
+    "rationale": "The text artificially creates time pressure to encourage impulsive purchases before a non-specified deadline.",
+    "rewrite": "This sale is currently active",
+    "input_text": "Sale ends soon:",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 15,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Urgency",
+      "Urgency",
+      "Urgency",
+      "Urgency",
+      "Urgency"
+    ],
+    "retrieved_scores": [
+      0.7686,
+      0.7436,
+      0.7391,
+      0.716,
+      0.6848
+    ],
+    "gold_label": "Urgency"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text uses sarcasm (';)') and implies paying more later, which could pressure users into a false sense of urgency or financial obligation.",
+      "Match to Misdirection category: The phrase 'I WANT TO PAY MORE LATER' manipulates by suggesting a better deal exists if delayed, diverting attention from actual payment terms.",
+      "Confidence is high due to direct implication of financial manipulation, though tone ambiguity slightly reduces certainty."
+    ],
+    "label": "Misdirection",
+    "confidence": 0.95,
+    "psychological_mechanism": "Bait-and-switch",
+    "evidence_span": "I WANT TO PAY MORE LATER ;)",
+    "harm_dimension": "Financial exploitation through deceptive payment timing",
+    "rationale": "The text manipulates users into believing they'll benefit from delayed payment, creating false expectations about pricing terms.",
+    "rewrite": "You can pay later if you prefer.",
+    "input_text": "I WANT TO PAY MORE LATER ;)",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 27,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Misdirection",
+      "Not Dark Pattern",
+      "Misdirection",
+      "Misdirection",
+      "Misdirection"
+    ],
+    "retrieved_scores": [
+      1.0,
+      0.5733,
+      0.5623,
+      0.5567,
+      0.5322
+    ],
+    "gold_label": "Misdirection"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text references 'other users' carts' with a numerical value, implying popularity through indirect social validation.",
+      "Match to dark pattern category: This aligns with Social Proof by leveraging fabricated or exaggerated social validation to influence purchasing decisions.",
+      "Assess confidence: The phrasing mirrors textbook Social Proof examples (e.g., 'In other users' carts 59') with no ambiguity in intent."
+    ],
+    "label": "Social Proof",
+    "confidence": 1.0,
+    "psychological_mechanism": "Bandwagon effect",
+    "evidence_span": "In other users' carts 59",
+    "harm_dimension": "Manipulative social validation",
+    "rationale": "The text artificially inflates perceived product interest by referencing other users' carts, pressuring consumers to act based on fabricated social proof.",
+    "rewrite": "This item has 59 views",
+    "input_text": "In other users' carts 59",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 24,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Social Proof",
+      "Social Proof",
+      "Social Proof",
+      "Social Proof",
+      "Social Proof"
+    ],
+    "retrieved_scores": [
+      1.0,
+      0.6495,
+      0.6444,
+      0.6281,
+      0.5893
+    ],
+    "gold_label": "Social Proof"
+  },
+  {
+    "reasoning_steps": [
+      "Identify that the text is a navigational link categorizing related products without any manipulative language",
+      "Match to 'Not Dark Pattern' category since it's a standard UI element with no deceptive intent",
+      "Assess confidence based on absence of any manipulation tactics in the text"
+    ],
+    "label": "Not Dark Pattern",
+    "confidence": 1.0,
+    "psychological_mechanism": "unknown",
+    "evidence_span": "Related Categories",
+    "harm_dimension": "No consumer harm",
+    "rationale": "The text represents a standard category navigation link with no deceptive practices or manipulative UI elements",
+    "rewrite": "Related Categories",
+    "input_text": " Related Categories ",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 18,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Not Dark Pattern"
+    ],
+    "retrieved_scores": [
+      0.4787,
+      0.4755,
+      0.3482,
+      0.3444,
+      0.337
+    ],
+    "gold_label": "Not Dark Pattern"
+  },
+  {
+    "reasoning_steps": [
+      "Identify any manipulation tactics present in the text: The product name 'Digital Device Covers' is a neutral description without any persuasive language or deceptive elements.",
+      "Match tactics to the most fitting dark pattern category: No tactics are present, so it falls under 'Not Dark Pattern'.",
+      "Assess confidence and note any ambiguities: The text is clearly a product name with no manipulative intent, so confidence is high."
+    ],
+    "label": "Not Dark Pattern",
+    "confidence": 1.0,
+    "psychological_mechanism": "None",
+    "evidence_span": "Digital Device Covers",
+    "harm_dimension": "None",
+    "rationale": "The product text is a straightforward product name with no manipulative language or deceptive practices.",
+    "rewrite": "Digital Device Covers",
+    "input_text": " Digital Device Covers ",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 21,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Not Dark Pattern"
+    ],
+    "retrieved_scores": [
+      0.5245,
+      0.5029,
+      0.4839,
+      0.3867,
+      0.3867
+    ],
+    "gold_label": "Not Dark Pattern"
+  },
+  {
+    "reasoning_steps": [
+      "Identify that the text requires users to confirm acceptance of terms and data usage to complete the purchase, which forces them to agree unless they take extra steps.",
+      "Match this to the 'Forced Action' category, as users are compelled to accept terms without clear, easy opt-out options during the purchase process.",
+      "Assess confidence as high, as the text explicitly ties acceptance to completing the purchase, but the decline option is presented as an extra step."
+    ],
+    "label": "Forced Action",
+    "confidence": 0.95,
+    "psychological_mechanism": "Commitment and Consistency",
+    "evidence_span": "To complete your purchase, confirm acceptance of our Terms, data usage for promotions, and contact via email, phone, or mail.",
+    "harm_dimension": "Loss of control over personal data and forced agreement",
+    "rationale": "The text pressures users to accept terms and data usage as a prerequisite for purchase, making it difficult to opt out without additional effort.",
+    "rewrite": "To complete your purchase, you can proceed without confirming acceptance of our Terms, data usage for promotions, and contact methods. If you wish to decline, call 1-800-987-6543.",
+    "input_text": "To complete your purchase, confirm acceptance of our Terms, data usage for promotions, and contact via email, phone, or mail. Call 1-800-987-6543 to decline.",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 125,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Obstruction",
+      "Not Dark Pattern",
+      "Not Dark Pattern",
+      "Obstruction",
+      "Obstruction"
+    ],
+    "retrieved_scores": [
+      0.6112,
+      0.599,
+      0.5886,
+      0.5873,
+      0.575
+    ],
+    "gold_label": "Forced Action"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text '2 items left' directly communicates limited availability.",
+      "Match to dark pattern category: This fits Scarcity as it implies limited stock to encourage immediate purchase.",
+      "Assess confidence: The phrasing mirrors textbook scarcity tactics with no ambiguity."
+    ],
+    "label": "Scarcity",
+    "confidence": 1.0,
+    "psychological_mechanism": "Scarcity bias",
+    "evidence_span": "2 items left",
+    "harm_dimension": "Misleading availability claims",
+    "rationale": "The text artificially creates urgency by implying limited stock, even if actual availability is not constrained.",
+    "rewrite": "This item is available \u2014 add it to your cart.",
+    "input_text": "2 items left",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 12,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Scarcity",
+      "Scarcity",
+      "Scarcity",
+      "Scarcity",
+      "Scarcity"
+    ],
+    "retrieved_scores": [
+      0.9414,
+      0.937,
+      0.9118,
+      0.9097,
+      0.8738
+    ],
+    "gold_label": "Scarcity"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text uses all caps and exclamation marks to emphasize limited stock, a common tactic in scarcity-based dark patterns.",
+      "Match to category: The explicit mention of limited stock ('ONLY 5 LEFT IN STOCK') fits the Scarcity category by creating artificial scarcity.",
+      "Assess confidence: The phrasing matches textbook examples of Scarcity dark patterns with high certainty."
+    ],
+    "label": "Scarcity",
+    "confidence": 1.0,
+    "psychological_mechanism": "Scarcity bias",
+    "evidence_span": "ONLY 5 LEFT IN STOCK",
+    "harm_dimension": "Artificial scarcity pressure",
+    "rationale": "The text artificially creates urgency by emphasizing limited stock availability to manipulate purchasing decisions.",
+    "rewrite": "This item is available \u2014 add it to your cart.",
+    "input_text": "ONLY 5 LEFT IN STOCK",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 20,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Scarcity",
+      "Scarcity",
+      "Scarcity",
+      "Scarcity",
+      "Scarcity"
+    ],
+    "retrieved_scores": [
+      1.0,
+      0.9419,
+      0.9419,
+      0.9224,
+      0.9023
+    ],
+    "gold_label": "Scarcity"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactic: The phrase 'Limited time offer' creates artificial time pressure to prompt immediate action.",
+      "Match to dark pattern category: This aligns with 'Urgency' as it leverages time-based scarcity to manipulate decision-making.",
+      "Assess confidence: The phrasing is a direct match to established urgency tactics in dark pattern examples."
+    ],
+    "label": "Urgency",
+    "confidence": 1.0,
+    "psychological_mechanism": "Urgency bias",
+    "evidence_span": "Limited time offer",
+    "harm_dimension": "Rushed purchasing decisions",
+    "rationale": "The phrase creates artificial urgency by implying the offer expires soon, pressuring consumers to act without fully evaluating options.",
+    "rewrite": "This offer is available now \u2013 add it to your cart.",
+    "input_text": "Limited time offer",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 18,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Urgency",
+      "Urgency",
+      "Urgency",
+      "Urgency",
+      "Scarcity"
+    ],
+    "retrieved_scores": [
+      1.0,
+      1.0,
+      1.0,
+      0.9147,
+      0.9013
+    ],
+    "gold_label": "Urgency"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text uses a countdown ('09:58 minutes') to create artificial time pressure, which is a classic urgency tactic. The second sentence introduces conditional scarcity by implying items may become unavailable if not purchased immediately.",
+      "Match tactics to dark pattern categories: The countdown timer ('09:58 minutes') directly aligns with the 'Urgency' category, while the conditional scarcity statement could also relate to 'Scarcity' but is secondary to the primary urgency trigger.",
+      "Assess confidence: The countdown is a clear urgency signal, but the second sentence's ambiguity (whether 'release them' refers to cart abandonment or item availability) reduces certainty. However, the primary manipulation is the time pressure."
+    ],
+    "label": "Urgency",
+    "confidence": 0.9,
+    "psychological_mechanism": "Artificial time pressure",
+    "evidence_span": "Your Cart Will Expire In 09:58 minutes!",
+    "harm_dimension": "Forced rapid decision-making",
+    "rationale": "The countdown timer creates false urgency to pressure customers into immediate purchases, while the conditional scarcity statement adds confusion about item availability.",
+    "rewrite": "Your cart is available for purchase. Please note that these items may not be available again if you release them.",
+    "input_text": "Your Cart Will Expire In 09:58 minutes!Please note that these items may not be available again if you release them.",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 39,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Urgency",
+      "Urgency",
+      "Urgency",
+      "Urgency",
+      "Urgency"
+    ],
+    "retrieved_scores": [
+      0.7509,
+      0.6558,
+      0.6545,
+      0.6528,
+      0.6522
+    ],
+    "gold_label": "Urgency"
+  },
+  {
+    "reasoning_steps": [
+      "Identify the use of numerical social validation ('Over 238 people have bought')",
+      "Match to Social Proof category which manipulates through artificial social validation",
+      "Assess confidence based on clear quantitative social proof signal"
+    ],
+    "label": "Social Proof",
+    "confidence": 1.0,
+    "psychological_mechanism": "Social Proof",
+    "evidence_span": "Over 238 people have bought this product",
+    "harm_dimension": "Influencing decisions through potentially manipulated popularity metrics",
+    "rationale": "The text uses quantitative social validation to create artificial demand through perceived popularity",
+    "rewrite": "This item has been purchased by many customers - add it to your cart to experience the same satisfaction.",
+    "input_text": "Over 238 people have bought this product",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 40,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Social Proof",
+      "Social Proof",
+      "Social Proof",
+      "Social Proof",
+      "Social Proof"
+    ],
+    "retrieved_scores": [
+      1.0,
+      0.8034,
+      0.7949,
+      0.7715,
+      0.7578
+    ],
+    "gold_label": "Social Proof"
+  },
+  {
+    "reasoning_steps": [
+      "Identify cancellation process requirements: the text specifies cancellation must be done by calling a customer service department.",
+      "Match to obstruction category: the text provides only a phone number for cancellation without mentioning alternative easy opt-out methods, which aligns with obstruction tactics.",
+      "Assess confidence: the structure mirrors previous obstruction examples where contact details were the sole cancellation method, though no explicit barriers are described."
+    ],
+    "label": "Obstruction",
+    "confidence": 0.95,
+    "psychological_mechanism": "Obstruction",
+    "evidence_span": "Purchase Benefit Club Member can cancel the Purchase Benefits at any time by calling MDG\u2019s Customer Service department",
+    "harm_dimension": "Difficult cancellation process",
+    "rationale": "The text only provides a phone number for cancellation without offering alternative easy opt-out methods, which could unnecessarily complicate the cancellation process.",
+    "rewrite": "Purchase Benefit Club Member can cancel the Purchase Benefits at any time through your account settings by selecting 'Cancel Membership' or by calling MDG\u2019s Customer Service department at: 1-800-906-0975 ext. 352 and requesting to cancel the Purchase Benefits.",
+    "input_text": "Purchase Benefit Club Member can cancel the Purchase Benefits at any time by calling MDG\u2019s Customer Service department at: 1-800-906-0975 ext. 352 and requesting to cancel the Purchase Benefits.",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 118,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Obstruction",
+      "Obstruction",
+      "Obstruction",
+      "Obstruction",
+      "Obstruction"
+    ],
+    "retrieved_scores": [
+      0.6404,
+      0.6381,
+      0.6081,
+      0.6011,
+      0.5873
+    ],
+    "gold_label": "Obstruction"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text uses 'Only 2 left at this price!' to create artificial scarcity.",
+      "Match to dark pattern category: This fits Scarcity as it falsely implies limited availability to pressure quick decisions.",
+      "Assess confidence: The structure mirrors textbook scarcity examples with no ambiguity."
+    ],
+    "label": "Scarcity",
+    "confidence": 1.0,
+    "psychological_mechanism": "Scarcity principle",
+    "evidence_span": "Only 2 left at this price!",
+    "harm_dimension": "Time-pressure induced impulsive buying",
+    "rationale": "The text artificially limits availability to manipulate urgency and prevent price comparison",
+    "rewrite": "This item is available \u2014 add it to your cart.",
+    "input_text": "Hurry! Only 2 left at this price!",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 26,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Scarcity",
+      "Scarcity",
+      "Scarcity",
+      "Scarcity",
+      "Scarcity"
+    ],
+    "retrieved_scores": [
+      1.0,
+      0.8661,
+      0.8591,
+      0.8306,
+      0.8254
+    ],
+    "gold_label": "Scarcity"
+  },
+  {
+    "reasoning_steps": [
+      "Identify manipulation tactics: The text lists a discount followed by delivery and tax charges, resulting in a final total higher than the original price.",
+      "Match to dark pattern category: The final total exceeds the original price despite a discount, suggesting hidden charges that manipulate price perception.",
+      "Assess confidence: The structure clearly hides additional costs, but the exact intent requires contextual validation."
+    ],
+    "label": "Sneaking",
+    "confidence": 0.95,
+    "psychological_mechanism": "Price obfuscation",
+    "evidence_span": "Discount -$6.75 Delivery $13.99 Tax $3.46 Item Total $55.69",
+    "harm_dimension": "Financial surprise",
+    "rationale": "The final total exceeds the original price despite a discount, creating the illusion of higher cost through hidden charges.",
+    "rewrite": "Hugs and Kisses Rose Bouquet $44.99 with $6.75 discount. Delivery $13.99 and tax $3.46 apply. Final price: $55.69",
+    "input_text": "Hugs and Kisses Rose Bouquet $44.99 Discount -$6.75 Delivery $13.99 Tax $3.46 Item Total $55.69",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 59,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Sneaking",
+      "Sneaking",
+      "Sneaking",
+      "Urgency",
+      "Not Dark Pattern"
+    ],
+    "retrieved_scores": [
+      1.0,
+      0.5897,
+      0.5464,
+      0.5358,
+      0.5189
+    ],
+    "gold_label": "Sneaking"
+  },
+  {
+    "reasoning_steps": [
+      "Identify the auto-renewal charge and lack of cancellation instructions in the text",
+      "Match to 'Sneaking' category as the auto-renewal is not clearly opt-outable",
+      "Confidence is high due to explicit auto-renewal without cancellation guidance"
+    ],
+    "label": "Sneaking",
+    "confidence": 0.95,
+    "psychological_mechanism": "Omission of cancellation options",
+    "evidence_span": "No cancellation needed\u2014just keep playing!",
+    "harm_dimension": "Hidden subscription charges",
+    "rationale": "The text hides the auto-renewal subscription requirement and removes cancellation instructions, making it difficult for users to opt out after the trial period.",
+    "rewrite": "UNLOCK VIP GAMING ACCESS! Your free trial includes exclusive in-game items. After 30 days, you'll be charged \u00a34.99/month for continued perks. You can cancel at any time through your account settings.",
+    "input_text": "UNLOCK VIP GAMING ACCESS! Your free trial includes exclusive in-game items. After 30 days, auto-renewal charges \u00a34.99/month for continued perks. No cancellation needed\u2014just keep playing!",
+    "span_exact": true,
+    "span_ci": true,
+    "span_length": 41,
+    "parse_ok": true,
+    "k": 5,
+    "encoder": "sbert",
+    "strategy": "knn",
+    "retrieved_labels": [
+      "Sneaking",
+      "Obstruction",
+      "Obstruction",
+      "Obstruction",
+      "Obstruction"
+    ],
+    "retrieved_scores": [
+      0.7436,
+      0.5944,
+      0.5717,
+      0.5706,
+      0.5671
+    ],
+    "gold_label": "Sneaking"
+  }
+]
