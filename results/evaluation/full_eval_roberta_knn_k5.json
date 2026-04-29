@@ -1,0 +1,197 @@
+{
+  "file": "rag_roberta_knn_k5.jsonl",
+  "n": 376,
+  "layer1": {
+    "classification": {
+      "macro_f1": 0.7733,
+      "macro_precision": 0.8073,
+      "macro_recall": 0.7613,
+      "cohen_kappa": 0.9099,
+      "per_class": {
+        "Forced Action": {
+          "f1": 0.8235,
+          "precision": 0.7,
+          "recall": 1.0,
+          "support": 7.0
+        },
+        "Misdirection": {
+          "f1": 0.8364,
+          "precision": 0.92,
+          "recall": 0.7667,
+          "support": 30.0
+        },
+        "Not Dark Pattern": {
+          "f1": 0.9529,
+          "precision": 0.9348,
+          "recall": 0.9718,
+          "support": 177.0
+        },
+        "Obstruction": {
+          "f1": 0.6316,
+          "precision": 0.8571,
+          "recall": 0.5,
+          "support": 12.0
+        },
+        "Scarcity": {
+          "f1": 0.9844,
+          "precision": 0.9692,
+          "recall": 1.0,
+          "support": 63.0
+        },
+        "Sneaking": {
+          "f1": 0.8571,
+          "precision": 1.0,
+          "recall": 0.75,
+          "support": 8.0
+        },
+        "Social Proof": {
+          "f1": 0.9677,
+          "precision": 0.9783,
+          "recall": 0.9574,
+          "support": 47.0
+        },
+        "Urgency": {
+          "f1": 0.9062,
+          "precision": 0.9062,
+          "recall": 0.9062,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          7,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          23,
+          3,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          2,
+          172,
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          5,
+          6,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          63,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          1,
+          0,
+          6,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          45,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          1,
+          0,
+          0,
+          29
+        ]
+      ]
+    },
+    "confidence": {
+      "mean_confidence": 0.9704,
+      "accuracy": 0.9335,
+      "calibration_gap": 0.0369,
+      "brier_score": 0.0563,
+      "auroc": 0.7394,
+      "confidence_buckets": {
+        "0.0-0.2": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.2-0.4": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.4-0.6": {
+          "count": 1,
+          "correct": 0
+        },
+        "0.6-0.8": {
+          "count": 3,
+          "correct": 1
+        },
+        "0.8-1.0": {
+          "count": 372,
+          "correct": 350
+        }
+      }
+    },
+    "output_quality": {
+      "rewrite_coverage_dp": 0.9219,
+      "rewrite_coverage_all": 0.6064,
+      "n_dp_records": 192,
+      "avg_rewrite_words": 9.04,
+      "avg_rationale_words": 16.73,
+      "avg_input_words": 8.45
+    }
+  },
+  "layer2": {
+    "cascade": {
+      "exact_rate": 0.9894,
+      "fuzzy_rate": 0.9947,
+      "semantic_rate": 0.9947,
+      "any_grounded_rate": 0.9947,
+      "avg_fuzzy_score": 0.96,
+      "avg_semantic_score": 0.0069
+    },
+    "legacy": {
+      "exact_rate": 0.9894,
+      "ci_rate": 0.9947,
+      "avg_span_len": 34.86,
+      "empty_spans": 0
+    }
+  }
+}

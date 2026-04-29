@@ -1,0 +1,2748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Human Evaluation — Dark Pattern RAG Pipeline</title>
+<style>
+  body { font-family: Arial, sans-serif; font-size: 13px; max-width: 1100px; margin: 40px auto; color: #222; }
+  h1 { font-size: 20px; border-bottom: 2px solid #333; padding-bottom: 8px; }
+  .meta { font-size: 11px; color: #888; margin-top: 4px; }
+  .instructions { background: #f0f4ff; border-left: 4px solid #3d85c8; padding: 14px 18px; margin-bottom: 30px; border-radius: 4px; }
+  .instructions h3 { margin-top: 0; font-size: 14px; }
+  .rubric-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 12px; }
+  .rubric-table th { background: #3d85c8; color: white; padding: 6px 10px; text-align: left; }
+  .rubric-table td { border: 1px solid #ccc; padding: 6px 10px; vertical-align: top; }
+  .rubric-table tr:nth-child(even) { background: #f5f5f5; }
+  .record { border: 1px solid #ccc; border-radius: 6px; margin-bottom: 30px; overflow: hidden; }
+  .record-header { background: #374151; color: white; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .record-header .cat { font-size: 12px; background: #6b7280; padding: 2px 8px; border-radius: 10px; }
+  .correct { background: #16a34a !important; }
+  .wrong { background: #dc2626 !important; }
+  .record-body { padding: 14px 18px; }
+  .field { margin-bottom: 10px; }
+  .field label { font-weight: bold; font-size: 11px; color: #555; text-transform: uppercase; display: block; margin-bottom: 2px; }
+  .field .value { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px; padding: 8px 10px; line-height: 1.5; }
+  .field .value.evidence { border-left: 3px solid #f59e0b; background: #fffbeb; }
+  .field .value.rationale { border-left: 3px solid #3d85c8; background: #eff6ff; }
+  .field .value.rewrite { border-left: 3px solid #16a34a; background: #f0fdf4; }
+  .scores { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed #ccc; }
+  .score-item label { font-weight: bold; font-size: 12px; display: block; margin-bottom: 4px; }
+  .score-item .desc { font-size: 10px; color: #666; margin-bottom: 6px; display: block; }
+  .score-item select { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
+  .comment-row { margin-top: 12px; }
+  .comment-row textarea { width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; resize: vertical; }
+  .annotator-block { background: #f0f4ff; border: 1px solid #3d85c8; border-radius: 6px; padding: 16px; margin-bottom: 30px; }
+  .annotator-block input { padding: 6px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; width: 280px; }
+  .submit-btn { background: #1c4587; color: white; padding: 12px 32px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; margin-top: 20px; }
+  .submit-btn:hover { background: #274e13; }
+  .progress { background: #e5e7eb; border-radius: 4px; height: 8px; margin: 10px 0; }
+  .progress-bar { background: #3d85c8; height: 8px; border-radius: 4px; width: 0%; transition: width 0.3s; }
+  #progress-label { font-size: 12px; color: #555; }
+</style>
+</head>
+<body>
+
+<h1>Human Evaluation Sheet — Dark Pattern RAG Pipeline</h1>
+<p class="meta">Pipeline: RAG SBERT KNN k=5 &nbsp;|&nbsp; Sample: 30 stratified outputs &nbsp;|&nbsp; HCNLP Group 7, OvGU Magdeburg 2026</p>
+
+<div class="instructions">
+  <h3>Instructions</h3>
+  <p>You will evaluate <strong>30 pipeline outputs</strong>. For each record, read the <strong>product text</strong>, then evaluate the pipeline's <strong>rationale</strong> and <strong>rewrite</strong> on four criteria using the rubric below. Each criterion is scored <strong>1–5</strong>.</p>
+  <p>The gold label and predicted label are shown — please score the quality of the explanation <em>independently</em> of whether the label is correct (a good rationale for a wrong label can still be coherent). However, note any label errors in the comment field.</p>
+  <table class="rubric-table">
+    <tr><th>Criterion</th><th>1 — Poor</th><th>3 — Acceptable</th><th>5 — Excellent</th></tr>
+    <tr>
+      <td><strong>Coherence</strong><br>Reasoning steps logically lead to the label</td>
+      <td>Steps contradict the label or each other</td>
+      <td>Steps mostly support the label but with gaps</td>
+      <td>Clear logical chain from text → mechanism → label</td>
+    </tr>
+    <tr>
+      <td><strong>Faithfulness</strong><br>All claims grounded in the input text</td>
+      <td>Rationale introduces facts not in the text</td>
+      <td>Mostly grounded, one minor unsupported claim</td>
+      <td>Every claim directly traceable to the input text</td>
+    </tr>
+    <tr>
+      <td><strong>Specificity</strong><br>Cites concrete phrases, not generic descriptions</td>
+      <td>Generic boilerplate ("this is a dark pattern")</td>
+      <td>References the text but vaguely</td>
+      <td>Quotes or paraphrases specific text fragments</td>
+    </tr>
+    <tr>
+      <td><strong>Non-Circularity</strong><br>Explains WHY the tactic is manipulative</td>
+      <td>Restates the label name as the explanation</td>
+      <td>Partially explains mechanism but incomplete</td>
+      <td>Names the psychological mechanism and consumer harm</td>
+    </tr>
+  </table>
+  <p><strong>After scoring all 30:</strong> click <em>Export CSV</em> to download your scores as a file to share with the team.</p>
+</div>
+
+<div class="annotator-block">
+  <strong>Annotator name:</strong>&nbsp;
+  <input type="text" id="annotator-name" placeholder="e.g. Jobin / Akshita / Shifin" />
+  &nbsp;&nbsp;
+  <span id="progress-label">0 / 30 scored</span>
+  <div class="progress"><div class="progress-bar" id="pbar"></div></div>
+</div>
+
+<form id="eval-form">
+
+<div class="record" id="rec-1">
+  <div class="record-header">
+    <strong>Record 1 of 30</strong>
+    <span class="cat">Gold: <strong>Social Proof</strong></span>
+    <span class="cat correct">Predicted: <strong>Social Proof</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">61 people have already bought that product today with 50% discount</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">61 people have already bought that product today</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Bandwagon effect</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Manipulates decisions through false social validation</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text artificially inflates perceived product value by suggesting widespread purchase, even though the discount may be unrelated to actual demand.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">This product is available with a 50% discount.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r1_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r1_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r1_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r1_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r1_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-2">
+  <div class="record-header">
+    <strong>Record 2 of 30</strong>
+    <span class="cat">Gold: <strong>Misdirection</strong></span>
+    <span class="cat correct">Predicted: <strong>Misdirection</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">No thanks, I despise coupons!</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">No thanks, I despise coupons!</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Emotional manipulation through negative framing</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Forces acceptance of higher-priced options through emotional coercion</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text uses extreme negative language to dissuade discount usage, manipulating users into potentially paying more by making discounts seem undesirable.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">Enjoy your discount with code COUPON123! No commitment required.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r2_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r2_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r2_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r2_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r2_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-3">
+  <div class="record-header">
+    <strong>Record 3 of 30</strong>
+    <span class="cat">Gold: <strong>Obstruction</strong></span>
+    <span class="cat correct">Predicted: <strong>Obstruction</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">We will also send you an additional email confirming your renewal. Should you elect not to renew your Membership, you may cancel at any time prior to the renewal by emailing us at passportmembership@1800flowers.com and your credit/debit card on file with us will not be charged. A confirmation email will be sent to you. If you email to cancel after your Membership has been renewed, your credit/debit card will have been charged the then current paid annual membership fee for the Passport Program, however you may request, and 1-800-Flowers may grant, a pro-rata refund within its sole discretion based upon the extent that you may have utilized the benefits of the Passport Program and the period of time remaining on your paid Membership.</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">If you email to cancel after your Membership has been renewed, your credit/debit card will have been charged the then current paid annual membership fee for the Passport Program</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Loss aversion</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Financial disincentive for cancellation</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text creates a disincentive for cancellation by charging the card if canceled after renewal, even though cancellation is technically possible, which discourages users from exercising their right to cancel.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">You may cancel your Membership at any time by emailing us at passportmembership@1800flowers.com. Your credit/debit card on file will not be charged, and a confirmation email will be sent to you.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r3_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r3_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r3_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r3_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r3_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-4">
+  <div class="record-header">
+    <strong>Record 4 of 30</strong>
+    <span class="cat">Gold: <strong>Misdirection</strong></span>
+    <span class="cat correct">Predicted: <strong>Misdirection</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">No thanks. I don’t want to save money.</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">No thanks. I don’t want to save money.</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Confirmshaming</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Emotional pressure to conform to perceived financial norms</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text frames declining an offer as a personal failing rather than a neutral decision, manipulating self-perception to discourage opt-out.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">No thanks. I prefer to browse without promotional offers.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r4_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r4_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r4_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r4_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r4_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-5">
+  <div class="record-header">
+    <strong>Record 5 of 30</strong>
+    <span class="cat">Gold: <strong>Social Proof</strong></span>
+    <span class="cat correct">Predicted: <strong>Social Proof</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Annie in Cheras, Malaysia just bought: An Abundance of Flowers - Van-Go Paint-By-Number Kit</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Annie in Cheras, Malaysia just bought: An Abundance of Flowers - Van-Go Paint-By-Number Kit</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Bandwagon effect</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Artificial social validation pressure</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text uses a real customer&#x27;s purchase to create false social proof, influencing consumers to buy based on perceived popularity rather than product merit.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">An Abundance of Flowers - Van-Go Paint-By-Number Kit. Create your own masterpiece with this detailed floral painting kit.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r5_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r5_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r5_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r5_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r5_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-6">
+  <div class="record-header">
+    <strong>Record 6 of 30</strong>
+    <span class="cat">Gold: <strong>Obstruction</strong></span>
+    <span class="cat wrong">Predicted: <strong>Not Dark Pattern</strong> &nbsp; ✗ Wrong</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">For subscription inquiries, visit our website and log into your account. Navigate to &#x27;Account Settings&#x27; &gt; &#x27;Subscription Management&#x27; to contact support via live chat or email. A representative will assist you shortly.</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">For subscription inquiries, visit our website and log into your account. Navigate to &#x27;Account Settings&#x27; &gt; &#x27;Subscription</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Transparency Principle</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">No consumer harm detected</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text provides clear, unambiguous guidance for customer support without employing deceptive practices or manipulation tactics.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">For subscription inquiries, visit our website and log into your account. Navigate to &#x27;Account Settings&#x27; &gt; &#x27;Subscription Management&#x27; to contact support via live chat or email. A representative will assist you shortly.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r6_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r6_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r6_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r6_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r6_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-7">
+  <div class="record-header">
+    <strong>Record 7 of 30</strong>
+    <span class="cat">Gold: <strong>Misdirection</strong></span>
+    <span class="cat correct">Predicted: <strong>Misdirection</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">No, I Don&#x27;t Like Discounts</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">No, I Don&#x27;t Like Discounts</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Confirmshaming</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Coercive decision-making</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text pressures users to accept discounts by framing refusal as a negative, manipulating choices through emotional coercion.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">You can opt out of discounts at any time — your preferences matter.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r7_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r7_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r7_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r7_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r7_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-8">
+  <div class="record-header">
+    <strong>Record 8 of 30</strong>
+    <span class="cat">Gold: <strong>Not Dark Pattern</strong></span>
+    <span class="cat correct">Predicted: <strong>Not Dark Pattern</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Wedding Cross Stich &amp; Embroidery Patterns</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Wedding Cross Stich &amp; Embroidery Patterns</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Transparency Principle</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">None</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The product title is a neutral description of available pattern types without any manipulative tactics.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">Wedding Cross Stitch &amp; Embroidery Patterns</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r8_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r8_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r8_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r8_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r8_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-9">
+  <div class="record-header">
+    <strong>Record 9 of 30</strong>
+    <span class="cat">Gold: <strong>Obstruction</strong></span>
+    <span class="cat wrong">Predicted: <strong>Not Dark Pattern</strong> &nbsp; ✗ Wrong</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">You can cancel your subscription at any time. No fee. To cancel, complete the cancellation form on our website. If you prefer to pause, skip your next delivery by the 7th. For assistance, call 1-800-BLOOM-999 between 9 AM and 5 PM, Monday through Friday.</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">You can cancel your subscription at any time. No fee.</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Transparency</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">No consumer harm detected</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text clearly communicates cancellation rights without deception or manipulation.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">You can cancel your subscription at any time. No fee. To cancel, complete the cancellation form on our website. If you prefer to pause, skip your next delivery by the 7th. For assistance, call 1-800-BLOOM-999 between 9 AM and 5 PM, Monday through Friday.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r9_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r9_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r9_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r9_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r9_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-10">
+  <div class="record-header">
+    <strong>Record 10 of 30</strong>
+    <span class="cat">Gold: <strong>Scarcity</strong></span>
+    <span class="cat correct">Predicted: <strong>Scarcity</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Only 2 Left in Stock</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Only 2 Left in Stock</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Scarcity Principle</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Rushed purchases based on false scarcity claims</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text artificially creates urgency by emphasizing limited stock, manipulating consumers to act quickly without verifying actual availability.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">This item is available — add it to your cart.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r10_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r10_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r10_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r10_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r10_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-11">
+  <div class="record-header">
+    <strong>Record 11 of 30</strong>
+    <span class="cat">Gold: <strong>Not Dark Pattern</strong></span>
+    <span class="cat correct">Predicted: <strong>Not Dark Pattern</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Skin Concerns</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Skin Concerns</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">unknown</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">None</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The product title is a simple category descriptor with no manipulative tactics or deceptive practices.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">Skin Concerns</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r11_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r11_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r11_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r11_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r11_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-12">
+  <div class="record-header">
+    <strong>Record 12 of 30</strong>
+    <span class="cat">Gold: <strong>Sneaking</strong></span>
+    <span class="cat correct">Predicted: <strong>Sneaking</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">**Booking Protection Plan Added – $10.00** – Automatically included for added security.</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Automatically included for added security</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Scarcity bias through hidden cost</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Unexpected charges for optional services</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text automatically adds a $10 fee for a protection plan without clear opt-out options, deceiving users into paying for an optional service.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">Booking Protection Plan – $10.00 (optional) – Add to your cart for added security.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r12_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r12_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r12_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r12_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r12_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-13">
+  <div class="record-header">
+    <strong>Record 13 of 30</strong>
+    <span class="cat">Gold: <strong>Urgency</strong></span>
+    <span class="cat correct">Predicted: <strong>Urgency</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Please Order Within: 0 0 : 0 2 : 4 1 : 10 65</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Please Order Within: 0 0 : 0 2 : 4 1 : 10 65</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Scarcity bias</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Rushed decision-making</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text creates artificial urgency by implying a time-sensitive action requirement, even with unclear time formatting.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">This item is available — add it to your cart.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r13_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r13_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r13_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r13_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r13_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-14">
+  <div class="record-header">
+    <strong>Record 14 of 30</strong>
+    <span class="cat">Gold: <strong>Sneaking</strong></span>
+    <span class="cat wrong">Predicted: <strong>Not Dark Pattern</strong> &nbsp; ✗ Wrong</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">◊After 1 year, subscription auto renews with fee. Review your iFit® Coach account on a computer, tablet, smartphone, or equipment console.</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">◊After 1 year, subscription auto renews with fee.</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Commitment bias</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Unintended subscription continuation</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text provides standard subscription terms without deceptive practices, though auto-renewal could be considered a neutral business model.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">◊After 1 year, subscription auto renews with fee. Review your iFit® Coach account on a computer, tablet, smartphone, or equipment console. You can cancel anytime in your account settings.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r14_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r14_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r14_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r14_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r14_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-15">
+  <div class="record-header">
+    <strong>Record 15 of 30</strong>
+    <span class="cat">Gold: <strong>Forced Action</strong></span>
+    <span class="cat correct">Predicted: <strong>Forced Action</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Proceed to subscribe to the Elite Gaming Pass by agreeing to our Terms, Privacy Policy, and marketing emails. No opt-out available.</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">No opt-out available</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Commitment bias</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Coercive marketing consent</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text forces users to accept marketing emails without providing an opt-out, violating user autonomy.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">Proceed to subscribe to the Elite Gaming Pass by agreeing to our Terms and Privacy Policy. You may opt out of marketing emails at any time.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r15_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r15_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r15_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r15_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r15_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-16">
+  <div class="record-header">
+    <strong>Record 16 of 30</strong>
+    <span class="cat">Gold: <strong>Urgency</strong></span>
+    <span class="cat correct">Predicted: <strong>Urgency</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Sale ends soon:</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Sale ends soon:</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Fear of Missing Out (FOMO)</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Rushed decision-making without price comparison</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text artificially creates time pressure to encourage impulsive purchases before a non-specified deadline.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">This sale is currently active</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r16_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r16_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r16_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r16_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r16_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-17">
+  <div class="record-header">
+    <strong>Record 17 of 30</strong>
+    <span class="cat">Gold: <strong>Misdirection</strong></span>
+    <span class="cat correct">Predicted: <strong>Misdirection</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">I WANT TO PAY MORE LATER ;)</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">I WANT TO PAY MORE LATER ;)</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Bait-and-switch</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Financial exploitation through deceptive payment timing</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text manipulates users into believing they&#x27;ll benefit from delayed payment, creating false expectations about pricing terms.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">You can pay later if you prefer.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r17_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r17_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r17_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r17_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r17_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-18">
+  <div class="record-header">
+    <strong>Record 18 of 30</strong>
+    <span class="cat">Gold: <strong>Social Proof</strong></span>
+    <span class="cat correct">Predicted: <strong>Social Proof</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">In other users&#x27; carts 59</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">In other users&#x27; carts 59</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Bandwagon effect</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Manipulative social validation</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text artificially inflates perceived product interest by referencing other users&#x27; carts, pressuring consumers to act based on fabricated social proof.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">This item has 59 views</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r18_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r18_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r18_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r18_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r18_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-19">
+  <div class="record-header">
+    <strong>Record 19 of 30</strong>
+    <span class="cat">Gold: <strong>Not Dark Pattern</strong></span>
+    <span class="cat correct">Predicted: <strong>Not Dark Pattern</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value"> Related Categories </div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Related Categories</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">unknown</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">No consumer harm</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text represents a standard category navigation link with no deceptive practices or manipulative UI elements</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">Related Categories</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r19_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r19_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r19_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r19_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r19_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-20">
+  <div class="record-header">
+    <strong>Record 20 of 30</strong>
+    <span class="cat">Gold: <strong>Not Dark Pattern</strong></span>
+    <span class="cat correct">Predicted: <strong>Not Dark Pattern</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value"> Digital Device Covers </div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Digital Device Covers</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">None</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">None</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The product text is a straightforward product name with no manipulative language or deceptive practices.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">Digital Device Covers</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r20_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r20_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r20_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r20_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r20_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-21">
+  <div class="record-header">
+    <strong>Record 21 of 30</strong>
+    <span class="cat">Gold: <strong>Forced Action</strong></span>
+    <span class="cat correct">Predicted: <strong>Forced Action</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">To complete your purchase, confirm acceptance of our Terms, data usage for promotions, and contact via email, phone, or mail. Call 1-800-987-6543 to decline.</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">To complete your purchase, confirm acceptance of our Terms, data usage for promotions, and contact via email, phone, or mail.</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Commitment and Consistency</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Loss of control over personal data and forced agreement</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text pressures users to accept terms and data usage as a prerequisite for purchase, making it difficult to opt out without additional effort.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">To complete your purchase, you can proceed without confirming acceptance of our Terms, data usage for promotions, and contact methods. If you wish to decline, call 1-800-987-6543.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r21_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r21_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r21_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r21_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r21_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-22">
+  <div class="record-header">
+    <strong>Record 22 of 30</strong>
+    <span class="cat">Gold: <strong>Scarcity</strong></span>
+    <span class="cat correct">Predicted: <strong>Scarcity</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">2 items left</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">2 items left</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Scarcity bias</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Misleading availability claims</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text artificially creates urgency by implying limited stock, even if actual availability is not constrained.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">This item is available — add it to your cart.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r22_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r22_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r22_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r22_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r22_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-23">
+  <div class="record-header">
+    <strong>Record 23 of 30</strong>
+    <span class="cat">Gold: <strong>Scarcity</strong></span>
+    <span class="cat correct">Predicted: <strong>Scarcity</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">ONLY 5 LEFT IN STOCK</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">ONLY 5 LEFT IN STOCK</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Scarcity bias</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Artificial scarcity pressure</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text artificially creates urgency by emphasizing limited stock availability to manipulate purchasing decisions.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">This item is available — add it to your cart.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r23_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r23_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r23_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r23_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r23_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-24">
+  <div class="record-header">
+    <strong>Record 24 of 30</strong>
+    <span class="cat">Gold: <strong>Urgency</strong></span>
+    <span class="cat correct">Predicted: <strong>Urgency</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Limited time offer</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Limited time offer</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Urgency bias</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Rushed purchasing decisions</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The phrase creates artificial urgency by implying the offer expires soon, pressuring consumers to act without fully evaluating options.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">This offer is available now – add it to your cart.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r24_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r24_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r24_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r24_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r24_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-25">
+  <div class="record-header">
+    <strong>Record 25 of 30</strong>
+    <span class="cat">Gold: <strong>Urgency</strong></span>
+    <span class="cat correct">Predicted: <strong>Urgency</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Your Cart Will Expire In 09:58 minutes!Please note that these items may not be available again if you release them.</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Your Cart Will Expire In 09:58 minutes!</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Artificial time pressure</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Forced rapid decision-making</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The countdown timer creates false urgency to pressure customers into immediate purchases, while the conditional scarcity statement adds confusion about item availability.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">Your cart is available for purchase. Please note that these items may not be available again if you release them.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r25_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r25_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r25_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r25_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r25_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-26">
+  <div class="record-header">
+    <strong>Record 26 of 30</strong>
+    <span class="cat">Gold: <strong>Social Proof</strong></span>
+    <span class="cat correct">Predicted: <strong>Social Proof</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Over 238 people have bought this product</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Over 238 people have bought this product</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Social Proof</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Influencing decisions through potentially manipulated popularity metrics</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text uses quantitative social validation to create artificial demand through perceived popularity</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">This item has been purchased by many customers - add it to your cart to experience the same satisfaction.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r26_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r26_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r26_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r26_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r26_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-27">
+  <div class="record-header">
+    <strong>Record 27 of 30</strong>
+    <span class="cat">Gold: <strong>Obstruction</strong></span>
+    <span class="cat correct">Predicted: <strong>Obstruction</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Purchase Benefit Club Member can cancel the Purchase Benefits at any time by calling MDG’s Customer Service department at: 1-800-906-0975 ext. 352 and requesting to cancel the Purchase Benefits.</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Purchase Benefit Club Member can cancel the Purchase Benefits at any time by calling MDG’s Customer Service department</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Obstruction</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Difficult cancellation process</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text only provides a phone number for cancellation without offering alternative easy opt-out methods, which could unnecessarily complicate the cancellation process.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">Purchase Benefit Club Member can cancel the Purchase Benefits at any time through your account settings by selecting &#x27;Cancel Membership&#x27; or by calling MDG’s Customer Service department at: 1-800-906-0975 ext. 352 and requesting to cancel the Purchase Benefits.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r27_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r27_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r27_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r27_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r27_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-28">
+  <div class="record-header">
+    <strong>Record 28 of 30</strong>
+    <span class="cat">Gold: <strong>Scarcity</strong></span>
+    <span class="cat correct">Predicted: <strong>Scarcity</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Hurry! Only 2 left at this price!</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Only 2 left at this price!</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Scarcity principle</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Time-pressure induced impulsive buying</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text artificially limits availability to manipulate urgency and prevent price comparison</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">This item is available — add it to your cart.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r28_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r28_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r28_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r28_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r28_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-29">
+  <div class="record-header">
+    <strong>Record 29 of 30</strong>
+    <span class="cat">Gold: <strong>Sneaking</strong></span>
+    <span class="cat correct">Predicted: <strong>Sneaking</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">Hugs and Kisses Rose Bouquet $44.99 Discount -$6.75 Delivery $13.99 Tax $3.46 Item Total $55.69</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">Discount -$6.75 Delivery $13.99 Tax $3.46 Item Total $55.69</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Price obfuscation</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Financial surprise</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The final total exceeds the original price despite a discount, creating the illusion of higher cost through hidden charges.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">Hugs and Kisses Rose Bouquet $44.99 with $6.75 discount. Delivery $13.99 and tax $3.46 apply. Final price: $55.69</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r29_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r29_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r29_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r29_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r29_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="record" id="rec-30">
+  <div class="record-header">
+    <strong>Record 30 of 30</strong>
+    <span class="cat">Gold: <strong>Sneaking</strong></span>
+    <span class="cat correct">Predicted: <strong>Sneaking</strong> &nbsp; ✓ Correct</span>
+  </div>
+  <div class="record-body">
+    <div class="field">
+      <label>Product Text (input)</label>
+      <div class="value">UNLOCK VIP GAMING ACCESS! Your free trial includes exclusive in-game items. After 30 days, auto-renewal charges £4.99/month for continued perks. No cancellation needed—just keep playing!</div>
+    </div>
+    <div class="field">
+      <label>Evidence Span</label>
+      <div class="value evidence">No cancellation needed—just keep playing!</div>
+    </div>
+    <div class="field">
+      <label>Psychological Mechanism</label>
+      <div class="value">Omission of cancellation options</div>
+    </div>
+    <div class="field">
+      <label>Harm Dimension</label>
+      <div class="value">Hidden subscription charges</div>
+    </div>
+    <div class="field">
+      <label>Rationale (evaluate coherence, faithfulness, specificity, non-circularity)</label>
+      <div class="value rationale">The text hides the auto-renewal subscription requirement and removes cancellation instructions, making it difficult for users to opt out after the trial period.</div>
+    </div>
+    <div class="field">
+      <label>Rewrite (evaluate whether dark pattern is removed, content preserved)</label>
+      <div class="value rewrite">UNLOCK VIP GAMING ACCESS! Your free trial includes exclusive in-game items. After 30 days, you&#x27;ll be charged £4.99/month for continued perks. You can cancel at any time through your account settings.</div>
+    </div>
+    <div class="scores">
+      <div class="score-item">
+        <label>1. Coherence</label>
+        <span class="desc">Logic: steps → label</span>
+        <select name="r30_coherence" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>2. Faithfulness</label>
+        <span class="desc">Grounded in input text</span>
+        <select name="r30_faithfulness" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>3. Specificity</label>
+        <span class="desc">Concrete phrases cited</span>
+        <select name="r30_specificity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+      <div class="score-item">
+        <label>4. Non Circularity</label>
+        <span class="desc">Explains WHY manipulative</span>
+        <select name="r30_non_circularity" onchange="updateProgress()">
+          <option value="">— select —</option>
+          <option value="1">1 — Poor</option>
+          <option value="2">2 — Below avg</option>
+          <option value="3">3 — Acceptable</option>
+          <option value="4">4 — Good</option>
+          <option value="5">5 — Excellent</option>
+        </select>
+      </div>
+    </div>
+    <div class="comment-row">
+      <textarea name="r30_comment" rows="2" placeholder="Optional: notes on label correctness, unusual phrasing, edge cases…"></textarea>
+    </div>
+  </div>
+</div>
+</form>
+
+<button class="submit-btn" onclick="exportCSV()">Export CSV</button>
+
+<script>
+
+function updateProgress() {
+  const total = 30;
+  let scored = 0;
+  for (let i = 1; i <= total; i++) {
+    const criteria = ['coherence','faithfulness','specificity','non_circularity'];
+    const allFilled = criteria.every(c => {
+      const el = document.querySelector(`[name="r${i}_${c}"]`);
+      return el && el.value !== '';
+    });
+    if (allFilled) scored++;
+  }
+  document.getElementById('progress-label').textContent = `${scored} / ${total} scored`;
+  document.getElementById('pbar').style.width = `${(scored/total)*100}%`;
+}
+
+function exportCSV() {
+  const annotator = document.getElementById('annotator-name').value || 'unknown';
+  const criteria = ['coherence','faithfulness','specificity','non_circularity'];
+  const header = ['record','annotator','gold_label','predicted_label','coherence','faithfulness','specificity','non_circularity','composite','comment'];
+  const rows = [header.join(',')];
+  const goldLabels = ["Social Proof", "Misdirection", "Obstruction", "Misdirection", "Social Proof", "Obstruction", "Misdirection", "Not Dark Pattern", "Obstruction", "Scarcity", "Not Dark Pattern", "Sneaking", "Urgency", "Sneaking", "Forced Action", "Urgency", "Misdirection", "Social Proof", "Not Dark Pattern", "Not Dark Pattern", "Forced Action", "Scarcity", "Scarcity", "Urgency", "Urgency", "Social Proof", "Obstruction", "Scarcity", "Sneaking", "Sneaking"];
+  const predLabels = ["Social Proof", "Misdirection", "Obstruction", "Misdirection", "Social Proof", "Not Dark Pattern", "Misdirection", "Not Dark Pattern", "Not Dark Pattern", "Scarcity", "Not Dark Pattern", "Sneaking", "Urgency", "Not Dark Pattern", "Forced Action", "Urgency", "Misdirection", "Social Proof", "Not Dark Pattern", "Not Dark Pattern", "Forced Action", "Scarcity", "Scarcity", "Urgency", "Urgency", "Social Proof", "Obstruction", "Scarcity", "Sneaking", "Sneaking"];
+
+  for (let i = 1; i <= 30; i++) {
+    const vals = criteria.map(c => {
+      const el = document.querySelector(`[name="r${i}_${c}"]`);
+      return el ? (el.value || '') : '';
+    });
+    const composite = vals.every(v => v !== '') ? vals.reduce((a,v) => a + parseInt(v), 0) : '';
+    const comment = (document.querySelector(`[name="r${i}_comment"]`).value || '').replace(/"/g,'""');
+    rows.push([i, annotator, `"${goldLabels[i-1]}"`, `"${predLabels[i-1]}"`, ...vals, composite, `"${comment}"`].join(','));
+  }
+  const blob = new Blob([rows.join('\n')], {type: 'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `human_eval_${annotator}.csv`;
+  a.click();
+}
+
+</script>
+</body>
+</html>
