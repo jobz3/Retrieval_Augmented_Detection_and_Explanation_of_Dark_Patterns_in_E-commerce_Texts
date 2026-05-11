@@ -557,7 +557,7 @@ if run and user_input.strip():
                         page_html[:m.end()] + base_tag + page_html[m.end():]
                         if m else base_tag + page_html
                     )
-                    st.components.v1.html(page_html, height=PANEL_HEIGHT, scrolling=True)
+                    st.iframe(f'<div style="height:{PANEL_HEIGHT}px;overflow:auto">{page_html}</div>')
                 except Exception as e:
                     st.warning(f"Could not load preview: {e}")
 
@@ -581,11 +581,7 @@ if run and user_input.strip():
             panel_ph = st.empty()
             cards    = [_skeleton_card(s, src) for s, src in snippets]
             with panel_ph:
-                st.components.v1.html(
-                    _full_panel_html(cards, 0, 0, len(snippets)),
-                    height=PANEL_HEIGHT + 20,
-                    scrolling=False,
-                )
+                st.iframe(_full_panel_html(cards, 0, 0, len(snippets)))
 
             dark_count = clean_count = 0
 
@@ -603,11 +599,7 @@ if run and user_input.strip():
 
                 pending = len(snippets) - i - 1
                 with panel_ph:
-                    st.components.v1.html(
-                        _full_panel_html(cards, dark_count, clean_count, pending),
-                        height=PANEL_HEIGHT + 20,
-                        scrolling=False,
-                    )
+                    st.iframe(_full_panel_html(cards, dark_count, clean_count, pending))
 
     # ── Text mode ─────────────────────────────────────────────────────────────
     else:
@@ -618,11 +610,7 @@ if run and user_input.strip():
                 st.error(f"Pipeline error: {e}")
                 st.stop()
 
-        st.components.v1.html(
-            _PANEL_CSS + _result_card(finding),
-            height=500,
-            scrolling=True,
-        )
+        st.iframe(_PANEL_CSS + _result_card(finding))
 
 elif run:
     st.warning("Please enter a URL or text.")

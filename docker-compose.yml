@@ -1,18 +1,5 @@
 services:
 
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_models:/root/.ollama
-    healthcheck:
-      test: ["CMD", "curl", "-sf", "http://localhost:11434/api/tags"]
-      interval: 10s
-      timeout: 5s
-      retries: 12
-      start_period: 10s
-
   app:
     build: .
     ports:
@@ -24,13 +11,13 @@ services:
       # HuggingFace model cache — persisted so the encoder is only downloaded once
       - hf_cache:/root/.cache/huggingface
     environment:
-      - OLLAMA_BASE_URL=http://ollama:11434
+      # Reaches the Ollama daemon already running on the host machine
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
       - PYTHONPATH=/app
-    depends_on:
-      ollama:
-        condition: service_healthy
+    extra_hosts:
+      # Resolves host.docker.internal on Linux (no-op on Mac/Windows where it is built-in)
+      - "host.docker.internal:host-gateway"
     restart: on-failure
 
 volumes:
-  ollama_models:
   hf_cache:
