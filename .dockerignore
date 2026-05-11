@@ -1,0 +1,40 @@
+# Version control
+.git/
+.gitignore
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Large data / model files (bind-mounted at runtime)
+data/
+outputs/
+
+# Secrets
+.env
+secrets.yaml
+
+# Dev tools
+.vscode/
+.idea/
+.codex
+
+# Notebooks and results
+*.ipynb
+results/
+
+# Paper and presentation assets
+paper_latex/
+presentation/
+
+# Misc
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

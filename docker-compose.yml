@@ -1,0 +1,36 @@
+services:
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  app:
+    build: .
+    ports:
+      - "8501:8501"
+    volumes:
+      # Pre-built processed data and FAISS indices (gitignored, must exist locally)
+      - ./data/processed:/app/data/processed:ro
+      - ./outputs/indices:/app/outputs/indices
+      # HuggingFace model cache — persisted so the encoder is only downloaded once
+      - hf_cache:/root/.cache/huggingface
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - PYTHONPATH=/app
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: on-failure
+
+volumes:
+  ollama_models:
+  hf_cache:

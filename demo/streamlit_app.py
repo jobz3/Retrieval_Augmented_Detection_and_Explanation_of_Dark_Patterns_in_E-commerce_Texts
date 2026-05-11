@@ -8,23 +8,221 @@ Run with:
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
+from typing import Optional
 
 import requests
 import streamlit as st
+from bs4 import BeautifulSoup
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from demo.app import (
-    _analyse_snippet,
-    _extract_snippets,
-    _FETCH_HEADERS,
-    _LABEL_COLORS,
-    get_retriever,
+from src.pipelines.rag_few_shot import predict
+from src.pipelines.span_grounding import check_grounding
+from src.retrieval.retrieve import Retriever
+
+# ---------------------------------------------------------------------------
+# Shared retriever (loaded once at startup)
+# ---------------------------------------------------------------------------
+
+_retriever: Optional[Retriever] = None
+
+_BROWSER_UA = (
+    "Mozilla/5.0 (X11; Linux x86_64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/120.0.0.0 Safari/537.36"
 )
+_FETCH_HEADERS = {
+    "User-Agent": _BROWSER_UA,
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+}
+
+
+def get_retriever() -> Retriever:
+    global _retriever
+    if _retriever is None:
+        _retriever = Retriever(encoder="sbert", strategy="knn", k=5)
+    return _retriever
+
+
+# ---------------------------------------------------------------------------
+# Text extraction — DOM pass then structured JSON fallback
+# ---------------------------------------------------------------------------
+
+_SCRAPE_TAGS = ["p", "span", "h1", "h2", "h3", "h4", "button", "label", "li", "a"]
+_MIN_LEN = 30
+_MAX_LEN = 500
+
+_SKIP_RE = re.compile(
+    r"^(skip\s|home$|menu$|search$|cart$|wishlist$|log\s*(in|out)|sign\s*(in|up)|"
+    r"my account|privacy|cookie|terms|contact|about us|©|all rights|copyright|"
+    r"back to top|newsletter|follow us|share$|download|select\s+size|"
+    r"size\s+guide|add to (cart|bag|wishlist)|sold out|out of stock|"
+    r"\d{4}\s*[-–]\s*\d{4}|[a-z]{2,3}\s*\d{2,3}$)",
+    re.IGNORECASE,
+)
+
+_LABEL_ONLY_RE = re.compile(r"^[A-Z\s]{2,20}$")
+
+_JSON_KEYS = {
+    "name", "description", "title", "headline", "text",
+    "catchphrase", "slogan", "tagline", "badge", "tag",
+    "disambiguatingDescription", "alternateName",
+    "availability", "itemCondition", "priceValidUntil",
+}
+_JSON_SKIP_RE = re.compile(
+    r"^(https?://|schema\.org|@|[0-9]{4}-[0-9]{2}-[0-9]{2}|\s*$)",
+    re.IGNORECASE,
+)
+
+
+def _collect_json_strings(obj, depth: int = 0) -> list[str]:
+    if depth > 8:
+        return []
+    results = []
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if isinstance(v, str) and k.lower() in _JSON_KEYS:
+                v = v.strip()
+                if 30 <= len(v) <= 500 and not _JSON_SKIP_RE.match(v):
+                    results.append(v)
+            else:
+                results.extend(_collect_json_strings(v, depth + 1))
+    elif isinstance(obj, list):
+        for item in obj:
+            results.extend(_collect_json_strings(item, depth + 1))
+    return results
+
+
+def _extract_from_json_scripts(html: str) -> list[str]:
+    soup = BeautifulSoup(html, "html.parser")
+    results: list[str] = []
+
+    for tag in soup.find_all("script", type="application/ld+json"):
+        try:
+            data = json.loads(tag.string or "")
+            results.extend(_collect_json_strings(data))
+        except (json.JSONDecodeError, TypeError):
+            pass
+
+    for pattern in [
+        r'window\.__[A-Z_]{2,50}__\s*=\s*(\{[\s\S]{20,20000}?\});?\s*(?:\n|</script>)',
+        r'(?:__NEXT_DATA__|__NUXT__|__INITIAL_STATE__|__APP_STATE__)\s*=\s*(\{[\s\S]{20,50000}?\})\s*</script>',
+    ]:
+        for m in re.finditer(pattern, html, re.IGNORECASE):
+            try:
+                data = json.loads(m.group(1))
+                results.extend(_collect_json_strings(data))
+            except (json.JSONDecodeError, ValueError):
+                pass
+
+    return results
+
+
+def _extract_snippets(html: str) -> list[tuple[str, str]]:
+    """
+    Two-pass extraction, deduped. Returns at most 25 best candidates as
+    (text, source) tuples where source is "DOM" or "JSON".
+
+    Pass 1: visible DOM text from product-copy tags (server-rendered pages).
+    Pass 2: strings from embedded JSON blobs (JS-rendered SPAs).
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    for tag in soup(["script", "style", "noscript", "meta", "head", "nav", "footer"]):
+        tag.decompose()
+
+    seen: set[str] = set()
+    snippets: list[tuple[str, str]] = []
+
+    for el in soup.find_all(_SCRAPE_TAGS):
+        text = re.sub(r"\s+", " ", el.get_text(separator=" ", strip=True)).strip()
+        if (
+            _MIN_LEN <= len(text) <= _MAX_LEN
+            and text not in seen
+            and not _SKIP_RE.match(text)
+            and not _LABEL_ONLY_RE.match(text)
+        ):
+            seen.add(text)
+            snippets.append((text, "DOM"))
+
+    for text in _extract_from_json_scripts(html):
+        text = re.sub(r"\s+", " ", text).strip()
+        if (
+            text not in seen
+            and not _SKIP_RE.match(text)
+            and not _LABEL_ONLY_RE.match(text)
+        ):
+            seen.add(text)
+            snippets.append((text, "JSON"))
+
+    _SIGNAL_RE = re.compile(
+        r'(\d|€|\$|£|%|save|deal|offer|left|only|hurry|limited|free|discount|'
+        r'last|sold|stock|buy|order|now|today|expires|valid|off\b|sale\b)',
+        re.IGNORECASE,
+    )
+
+    def _score(item: tuple[str, str]) -> int:
+        s = item[0]
+        score = 0
+        if _SIGNAL_RE.search(s):
+            score += 10
+        if len(s) >= 80:
+            score += 12
+        elif len(s) >= 50:
+            score += 8
+        elif len(s) >= 35:
+            score += 4
+        if s[0].isupper() and s[-1] in '.!':
+            score += 3
+        return score
+
+    snippets.sort(key=_score, reverse=True)
+
+    _NUM_RE = re.compile(r'\d[\d.,\-/]*')
+    unique: list[tuple[str, str]] = []
+    skeletons: set[str] = set()
+    for item in snippets:
+        skeleton = _NUM_RE.sub('#', item[0].lower()).strip()
+        if skeleton not in skeletons:
+            skeletons.add(skeleton)
+            unique.append(item)
+    return unique[:25]
+
+
+# ---------------------------------------------------------------------------
+# Analysis helpers
+# ---------------------------------------------------------------------------
+
+_LABEL_COLORS = {
+    "Scarcity":         "#e74c3c",
+    "Urgency":          "#e67e22",
+    "Social Proof":     "#9b59b6",
+    "Misdirection":     "#2980b9",
+    "Obstruction":      "#16a085",
+    "Forced Action":    "#c0392b",
+    "Sneaking":         "#7f8c8d",
+    "Not Dark Pattern": "#27ae60",
+    "Uncertain":        "#95a5a6",
+}
+
+
+def _analyse_snippet(text: str) -> dict:
+    retriever = get_retriever()
+    result, grounding, retrieved = predict(text, retriever=retriever)
+    d = result.to_dict()
+    d["input_text"]       = text
+    d["is_dark_pattern"]  = result.is_dark_pattern()
+    d["span_exact"]       = grounding["exact"]
+    d["color"]            = _LABEL_COLORS.get(d["label"], "#95a5a6")
+    d["retrieved_labels"] = [r["category"] for r in retrieved]
+    d.pop("reasoning_steps", None)
+    return d
+
 
 # ── page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -67,7 +265,6 @@ st.markdown("""
 
 PANEL_HEIGHT = 860   # px — shared by preview iframe and findings scroll panel
 
-# All CSS for the self-contained findings panel (injected inside the html component)
 _PANEL_CSS = """
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -106,7 +303,6 @@ body {
 .dp-card.clean-card { border-left: 3px solid #27ae60; }
 .dp-card.pend-card  { opacity: 0.65; }
 
-/* skeleton shimmer */
 .skel {
     background: linear-gradient(90deg,#22263a 25%,#2e334d 50%,#22263a 75%);
     background-size: 200% 100%;
@@ -116,20 +312,17 @@ body {
 .skel.w80 { width:80%; } .skel.w55 { width:55%; } .skel.w35 { width:35%; }
 @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-/* label badge */
 .lbl {
     display:inline-block; padding:3px 11px; border-radius:20px;
     font-size:0.75rem; font-weight:700; color:#fff; margin-bottom:8px;
 }
 
-/* snippet text with span highlight */
 .snip { font-size:0.88rem; color:#e8eaf6; line-height:1.55; margin-bottom:10px; }
 .hi {
     background:rgba(255,200,40,0.22); border-bottom:2px solid rgba(255,200,40,0.7);
     border-radius:3px; padding:0 2px; font-weight:600; color:#ffe082;
 }
 
-/* explainability sections */
 .xpl-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -147,7 +340,6 @@ body {
 }
 .xpl-value { font-size: 0.82rem; color: #e8eaf6; line-height: 1.4; }
 
-/* confidence bar */
 .conf-row { display:flex; align-items:center; gap:8px; }
 .conf-bar-bg {
     flex:1; background:#0f1117; border-radius:3px; height:6px; overflow:hidden;
@@ -155,7 +347,6 @@ body {
 .conf-bar-fill { height:100%; border-radius:3px; }
 .conf-pct { font-size:0.8rem; font-weight:700; min-width:32px; text-align:right; }
 
-/* rewrite box */
 .rewrite {
     background:rgba(39,174,96,0.08); border:1px solid rgba(39,174,96,0.28);
     border-radius:7px; padding:9px 11px; font-size:0.84rem;
@@ -166,18 +357,15 @@ body {
     letter-spacing:0.07em; color:#52b788; margin-bottom:5px;
 }
 
-/* grounded badge */
 .grounded {
     display:inline-block; background:rgba(39,174,96,0.15);
     border:1px solid rgba(39,174,96,0.3); border-radius:20px;
     padding:2px 9px; font-size:0.7rem; color:#52b788; margin-top:6px;
 }
 
-/* source badge */
 .src-dom  { display:inline-block; background:rgba(92,107,192,.15); border:1px solid rgba(92,107,192,.3); border-radius:4px; padding:1px 6px; font-size:0.65rem; color:#9fa8da; margin-left:6px; vertical-align:middle; }
 .src-json { display:inline-block; background:rgba(249,168,38,.12);  border:1px solid rgba(249,168,38,.3);  border-radius:4px; padding:1px 6px; font-size:0.65rem; color:#ffd54f; margin-left:6px; vertical-align:middle; }
 
-/* evidence span label */
 .span-label {
     font-size:0.65rem; font-weight:800; text-transform:uppercase;
     letter-spacing:0.07em; color:#b0963a; margin-bottom:3px;
@@ -240,10 +428,8 @@ def _result_card(f: dict) -> str:
     src_cls    = "src-dom" if source == "DOM" else "src-json"
     src_tip    = "Extracted from visible HTML" if source == "DOM" else "Extracted from embedded page script (JSON-LD / SPA data)"
 
-    # Full snippet with yellow highlight on the key phrase
     highlighted = _highlight(text, span)
 
-    # Confidence bar
     conf_row = f"""
     <div class="conf-row">
       <div class="conf-bar-bg">
@@ -252,7 +438,6 @@ def _result_card(f: dict) -> str:
       <div class="conf-pct" style="color:{bar_color}">{conf_pct}%</div>
     </div>"""
 
-    # Evidence span block — shown separately with explanation label
     if span and is_dark:
         span_block = f"""
         <div class="span-label">🔍 Key Phrase (Evidence Span)</div>
@@ -356,10 +541,8 @@ if run and user_input.strip():
             st.error("Please enter a valid URL starting with http:// or https://")
             st.stop()
 
-        # Wide layout: preview (left, bigger) | findings (right, scrollable)
         col_prev, col_find = st.columns([3, 2])
 
-        # ── LEFT: page preview ────────────────────────────────────────────────
         with col_prev:
             st.markdown("**Page Preview**")
             page_html = None
@@ -378,11 +561,9 @@ if run and user_input.strip():
                 except Exception as e:
                     st.warning(f"Could not load preview: {e}")
 
-        # ── RIGHT: findings panel (single html component, updated in place) ──
         with col_find:
             st.markdown("**Analysis**")
 
-            # Extract snippets from already-fetched HTML
             with st.spinner("Extracting snippets…"):
                 raw_html = page_html or ""
                 if not raw_html:
@@ -397,7 +578,6 @@ if run and user_input.strip():
                 st.warning("No analysable text found. The page may require JavaScript to render.")
                 st.stop()
 
-            # Render all skeletons immediately in one scrollable component
             panel_ph = st.empty()
             cards    = [_skeleton_card(s, src) for s, src in snippets]
             with panel_ph:
