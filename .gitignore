@@ -124,7 +124,6 @@ desktop.ini
 *.tmp
 *.temp
 
-*.md
 logs/
 *.sbatch
 .codex
