@@ -6,9 +6,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         gcc g++ curl \
     && rm -rf /var/lib/apt/lists/*
 
-# CPU-only PyTorch first — avoids pulling the multi-GB CUDA build
+# CPU-only PyTorch wheels first — avoids pulling the multi-GB CUDA build and
+# keeps torchvision's compiled operators matched to torch.
 RUN pip install --no-cache-dir \
-    torch --index-url https://download.pytorch.org/whl/cpu
+    torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
 COPY requirements-demo.txt .
 RUN pip install --no-cache-dir -r requirements-demo.txt

@@ -1,18 +1,27 @@
 """
-Cross-lingual evaluation — German zero-shot transfer.
+Cross-lingual evaluation — zero-shot and RAG transfer for non-English test sets.
+
+Supports German (default, `--lang de`) and Italian (`--lang it`). Both languages
+share the same evaluation logic; only the source dataset and the output filename
+prefix change.
 
 Improvements over baseline:
   #1 Retrieval threshold — if max retrieved score < threshold, fall back to zero-shot
   #2 K tuning — sweep k=1,2,3,5 to find optimal k for low-quality retrieval
   #3 Label diversity re-ranking — penalise retrievals where all k neighbours share one label
-  #4 German system prompt — category signals in German (in prompts.py)
+  #4 Language-aware system prompt — language-agnostic prompt accepts any input language
   #5 Confidence-based abstention — flag low-confidence predictions for analysis
 
 Usage:
+    # German (existing)
     python -m src.evaluation.cross_lingual_eval --mode both --strategy knn
     python -m src.evaluation.cross_lingual_eval --mode ktune
     python -m src.evaluation.cross_lingual_eval --mode both --strategy knn --threshold 0.15 --diversity-alpha 0.3
     python -m src.evaluation.cross_lingual_eval --mode both --encoder multilingual --strategy knn --k 1
+
+    # Italian (CLiC-it 2026 cross-lingual check)
+    python -m src.evaluation.cross_lingual_eval --lang it --mode both --encoder multilingual --strategy knn --k 5
+    python -m src.evaluation.cross_lingual_eval --lang it --mode ktune --encoder multilingual --strategy knn
 """
 
 from __future__ import annotations
@@ -31,9 +40,18 @@ from src.utils.io import save_jsonl
 from src.utils.ollama_client import chat_json, DEFAULT_MODEL
 
 ROOT        = Path(__file__).resolve().parents[2]
-GERMAN_DATA = ROOT / "data" / "german" / "german_dark_patterns.jsonl"
 PIPELINES   = ROOT / "results" / "pipelines"
 RESULTS_DIR = ROOT / "results" / "evaluation"
+
+# Per-language dataset paths and output filename prefixes. Adding a new language
+# is a single entry here: (jsonl path, output prefix).
+LANG_DATA: dict[str, tuple[Path, str]] = {
+    "de": (ROOT / "data" / "german"  / "german_dark_patterns.jsonl",  "german"),
+    "it": (ROOT / "data" / "italian" / "italian_dark_patterns.jsonl", "italian"),
+}
+
+# Back-compat alias retained for any external scripts that imported GERMAN_DATA.
+GERMAN_DATA = LANG_DATA["de"][0]
 
 ALL_CLASSES = [
     "Forced Action", "Misdirection", "Not Dark Pattern",
@@ -50,9 +68,18 @@ app = typer.Typer()
 # Helpers
 # ---------------------------------------------------------------------------
 
-def load_german() -> list[dict]:
-    with open(GERMAN_DATA, encoding="utf-8") as f:
+def load_lang(lang: str) -> list[dict]:
+    """Load the per-language test set as a list of records."""
+    if lang not in LANG_DATA:
+        raise ValueError(f"Unsupported language '{lang}'. Choose: {sorted(LANG_DATA)}")
+    path, _ = LANG_DATA[lang]
+    with open(path, encoding="utf-8") as f:
         return [json.loads(l) for l in f if l.strip()]
+
+
+def load_german() -> list[dict]:
+    """Back-compat shim — prefer load_lang('de')."""
+    return load_lang("de")
 
 
 def _make_error_record(text: str, gold: str, exc: Exception) -> dict:
@@ -166,10 +193,10 @@ def _predict_rag_improved(
 # Run modes
 # ---------------------------------------------------------------------------
 
-def run_zero_shot(records: list[dict], model: str = DEFAULT_MODEL) -> list[dict]:
+def run_zero_shot(records: list[dict], model: str = DEFAULT_MODEL, lang: str = "de") -> list[dict]:
     out_records = []
     n = len(records)
-    print(f"Zero-shot German inference ({n} records) ...")
+    print(f"Zero-shot {lang.upper()} inference ({n} records) ...")
     for i, rec in enumerate(records):
         print(f"  [{i+1}/{n}]", end="\r", flush=True)
         text, gold = rec["text"], rec["category"]
@@ -206,6 +233,7 @@ def run_rag(
     model: str = DEFAULT_MODEL,
     threshold: float = 0.0,
     diversity_alpha: float = 0.0,
+    lang: str = "de",
 ) -> list[dict]:
     from src.retrieval.retrieve import Retriever
     retriever = Retriever(encoder=encoder, strategy=strategy, k=k)
@@ -213,7 +241,7 @@ def run_rag(
     out_records = []
     n = len(records)
     tag = f"k={k}, encoder={encoder}, strategy={strategy}, threshold={threshold}, div_alpha={diversity_alpha}"
-    print(f"RAG German inference ({tag}, {n} records) ...")
+    print(f"RAG {lang.upper()} inference ({tag}, {n} records) ...")
     for i, rec in enumerate(records):
         print(f"  [{i+1}/{n}]", end="\r", flush=True)
         text, gold = rec["text"], rec["category"]
@@ -368,6 +396,7 @@ def run_ktune(
     threshold: float = 0.15,
     diversity_alpha: float = 0.3,
     k_values: list[int] | None = None,
+    lang: str = "de",
 ) -> dict:
     """Sweep k values and report macro F1 for each. Default: [1, 2, 3, 5, 7, 10, 15]."""
     from sklearn.metrics import f1_score
@@ -375,12 +404,13 @@ def run_ktune(
     if k_values is None:
         k_values = [1, 2, 3, 5, 7, 10, 15]
 
+    prefix = LANG_DATA[lang][1]
     results = {}
-    print(f"\nK-tuning sweep (strategy={strategy}, encoder={encoder}, threshold={threshold}, k_values={k_values}) ...")
+    print(f"\nK-tuning sweep (lang={lang}, strategy={strategy}, encoder={encoder}, threshold={threshold}, k_values={k_values}) ...")
     for k in k_values:
         recs = run_rag(
             records, strategy=strategy, k=k, encoder=encoder, model=model,
-            threshold=threshold, diversity_alpha=diversity_alpha,
+            threshold=threshold, diversity_alpha=diversity_alpha, lang=lang,
         )
         golds = [r["gold_label"] for r in recs]
         preds = [r["label"]      for r in recs]
@@ -389,7 +419,7 @@ def run_ktune(
         results[k] = round(f1, 4)
         print(f"  k={k}: macro F1 = {f1:.4f}")
 
-        out = PIPELINES / f"german_rag_{encoder}_{strategy}_k{k}_improved.jsonl"
+        out = PIPELINES / f"{prefix}_rag_{encoder}_{strategy}_k{k}_improved.jsonl"
         save_jsonl(recs, out)
 
     best_k = max(results, key=results.__getitem__)
@@ -403,6 +433,7 @@ def run_ktune(
 
 @app.command()
 def main(
+    lang:            str   = typer.Option("de",    help="Test-set language: de | it"),
     mode:            str   = typer.Option("both",  help="zero_shot | rag | both | ktune"),
     strategy:        str   = typer.Option("knn",   help="RAG strategy: knn | diversity | prototype"),
     k:               int   = typer.Option(5,       help="RAG k"),
@@ -414,8 +445,9 @@ def main(
     abstain:         bool  = typer.Option(False,   help="[#5] Exclude low-confidence predictions from metrics"),
 ) -> None:
     parsed_k_values = [int(x) for x in k_values.split(",") if x.strip()] if k_values.strip() else None
-    german = load_german()
-    print(f"Loaded {len(german)} German records")
+    records = load_lang(lang)
+    prefix  = LANG_DATA[lang][1]
+    print(f"Loaded {len(records)} {prefix.capitalize()} records")
 
     PIPELINES.mkdir(parents=True, exist_ok=True)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -424,41 +456,41 @@ def main(
 
     if mode == "ktune":
         ktune_result = run_ktune(
-            german, strategy=strategy, encoder=encoder, model=model,
+            records, strategy=strategy, encoder=encoder, model=model,
             threshold=threshold, diversity_alpha=diversity_alpha,
-            k_values=parsed_k_values,
+            k_values=parsed_k_values, lang=lang,
         )
-        out = RESULTS_DIR / f"german_ktune_{encoder}_{strategy}.json"
+        out = RESULTS_DIR / f"{prefix}_ktune_{encoder}_{strategy}.json"
         with open(out, "w") as f:
             json.dump(ktune_result, f, indent=2)
         print(f"\nK-tune results saved → {out}")
         return
 
     if mode in ("zero_shot", "both"):
-        zs_records = run_zero_shot(german, model=model)
-        zs_out = PIPELINES / "german_zero_shot.jsonl"
+        zs_records = run_zero_shot(records, model=model, lang=lang)
+        zs_out = PIPELINES / f"{prefix}_zero_shot.jsonl"
         save_jsonl(zs_records, zs_out)
 
         clf  = _classification_metrics(zs_records, abstain=abstain)
         grnd = _grounding_metrics(zs_records)
-        print_summary("Zero-shot (German)", clf, grnd, len(zs_records))
-        all_summaries.append({"name": "zero_shot_german", "n": len(zs_records), "classification": clf, "grounding": grnd})
+        print_summary(f"Zero-shot ({prefix.capitalize()})", clf, grnd, len(zs_records))
+        all_summaries.append({"name": f"zero_shot_{prefix}", "n": len(zs_records), "classification": clf, "grounding": grnd})
 
     if mode in ("rag", "both"):
         rag_records = run_rag(
-            german, strategy=strategy, k=k, encoder=encoder, model=model,
-            threshold=threshold, diversity_alpha=diversity_alpha,
+            records, strategy=strategy, k=k, encoder=encoder, model=model,
+            threshold=threshold, diversity_alpha=diversity_alpha, lang=lang,
         )
         suffix = f"_t{threshold}_d{diversity_alpha}".replace(".", "p") if (threshold or diversity_alpha) else ""
-        rag_out = PIPELINES / f"german_rag_{encoder}_{strategy}_k{k}{suffix}.jsonl"
+        rag_out = PIPELINES / f"{prefix}_rag_{encoder}_{strategy}_k{k}{suffix}.jsonl"
         save_jsonl(rag_records, rag_out)
 
         clf      = _classification_metrics(rag_records, abstain=abstain)
         grnd     = _grounding_metrics(rag_records)
         fallback = _fallback_stats(rag_records)
-        print_summary(f"RAG {encoder} {strategy} k={k} (German)", clf, grnd, len(rag_records), fallback=fallback)
+        print_summary(f"RAG {encoder} {strategy} k={k} ({prefix.capitalize()})", clf, grnd, len(rag_records), fallback=fallback)
         all_summaries.append({
-            "name": f"rag_{encoder}_{strategy}_k{k}_german",
+            "name": f"rag_{encoder}_{strategy}_k{k}_{prefix}",
             "n": len(rag_records),
             "classification": clf,
             "grounding": grnd,
@@ -483,7 +515,7 @@ def main(
         })
         print(f"\n[English baseline] Macro F1: {en_clf['macro_f1']:.4f}  (n={len(en_records)})")
 
-    out = RESULTS_DIR / "cross_lingual_comparison.json"
+    out = RESULTS_DIR / f"cross_lingual_comparison_{lang}.json"
     with open(out, "w") as f:
         json.dump(all_summaries, f, indent=2)
     print(f"\nSaved → {out}")
