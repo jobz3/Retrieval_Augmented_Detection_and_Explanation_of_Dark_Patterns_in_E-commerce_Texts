@@ -1,0 +1,228 @@
+[
+  {
+    "name": "rag_sbert_knn_k5_english",
+    "n": 376,
+    "classification": {
+      "macro_f1": 0.9228,
+      "macro_precision": 0.971,
+      "macro_recall": 0.889,
+      "cohen_kappa": 0.9589,
+      "per_class": {
+        "Forced Action": {
+          "f1": 0.8333,
+          "precision": 1.0,
+          "recall": 0.7143,
+          "support": 7.0
+        },
+        "Misdirection": {
+          "f1": 0.9667,
+          "precision": 0.9667,
+          "recall": 0.9667,
+          "support": 30.0
+        },
+        "Not Dark Pattern": {
+          "f1": 0.9751,
+          "precision": 0.9565,
+          "recall": 0.9944,
+          "support": 177.0
+        },
+        "Obstruction": {
+          "f1": 0.7,
+          "precision": 0.875,
+          "recall": 0.5833,
+          "support": 12.0
+        },
+        "Scarcity": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 63.0
+        },
+        "Sneaking": {
+          "f1": 0.9333,
+          "precision": 1.0,
+          "recall": 0.875,
+          "support": 8.0
+        },
+        "Social Proof": {
+          "f1": 0.9892,
+          "precision": 1.0,
+          "recall": 0.9787,
+          "support": 47.0
+        },
+        "Urgency": {
+          "f1": 0.9846,
+          "precision": 0.9697,
+          "recall": 1.0,
+          "support": 32.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          5,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          29,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          176,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          5,
+          7,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          63,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          7,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          46,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          32
+        ]
+      ]
+    },
+    "grounding": {
+      "exact_rate": 0.9973,
+      "ci_rate": 0.9973,
+      "avg_span_len": 35.14,
+      "empty_spans": 0
+    }
+  },
+  {
+    "name": "rag_multilingual_it_knn_k5_italian",
+    "n": 78,
+    "classification": {
+      "macro_f1": 0.6041,
+      "macro_precision": 0.747,
+      "macro_recall": 0.6031,
+      "cohen_kappa": 0.6117,
+      "accuracy": 0.6667,
+      "n_evaluated": 78,
+      "n_abstained": 0,
+      "per_class": {
+        "Forced Action": {
+          "f1": 0.8333,
+          "precision": 0.8333,
+          "recall": 0.8333,
+          "support": 6.0
+        },
+        "Misdirection": {
+          "f1": 0.4545,
+          "precision": 0.8333,
+          "recall": 0.3125,
+          "support": 16.0
+        },
+        "Not Dark Pattern": {
+          "f1": 0.6415,
+          "precision": 0.4722,
+          "recall": 1.0,
+          "support": 17.0
+        },
+        "Obstruction": {
+          "f1": 0.6667,
+          "precision": 1.0,
+          "recall": 0.5,
+          "support": 8.0
+        },
+        "Scarcity": {
+          "f1": 0.8571,
+          "precision": 0.8571,
+          "recall": 0.8571,
+          "support": 7.0
+        },
+        "Sneaking": {
+          "f1": 0.2222,
+          "precision": 1.0,
+          "recall": 0.125,
+          "support": 8.0
+        },
+        "Social Proof": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 6.0
+        },
+        "Urgency": {
+          "f1": 0.7619,
+          "precision": 0.7273,
+          "recall": 0.8,
+          "support": 10.0
+        }
+      }
+    },
+    "grounding": {
+      "exact_rate": 0.9872,
+      "ci_rate": 1.0,
+      "fuzzy_rate": 1.0,
+      "avg_span_len": 50.54,
+      "empty_spans": 1
+    },
+    "fallback": {
+      "n_fallback": 0,
+      "fallback_rate": 0.0,
+      "fallback_accuracy": null,
+      "rag_accuracy": 0.6667
+    },
+    "threshold": 0.15,
+    "diversity_alpha": 0.3
+  }
+]
