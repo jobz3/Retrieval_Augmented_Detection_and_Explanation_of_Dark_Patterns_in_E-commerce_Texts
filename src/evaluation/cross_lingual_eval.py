@@ -438,7 +438,7 @@ def main(
     strategy:        str   = typer.Option("knn",   help="RAG strategy: knn | diversity | prototype"),
     k:               int   = typer.Option(5,       help="RAG k"),
     k_values:        str   = typer.Option("",      help="Comma-separated k values for ktune, e.g. '1,2,3,5,7,10,15'. Empty = default."),
-    encoder:         str   = typer.Option("sbert", help="RAG encoder: sbert | bert | multilingual | multilingual_de"),
+    encoder:         str   = typer.Option("sbert", help="RAG encoder: sbert | bert | multilingual | multilingual_<lang> (e.g. multilingual_de, multilingual_it)"),
     model:           str   = typer.Option(DEFAULT_MODEL, help="Ollama model tag"),
     threshold:       float = typer.Option(0.15,   help="[#1] Min retrieval score; below → zero-shot fallback. 0=disabled"),
     diversity_alpha: float = typer.Option(0.3,    help="[#3] Label diversity penalty weight. 0=disabled"),

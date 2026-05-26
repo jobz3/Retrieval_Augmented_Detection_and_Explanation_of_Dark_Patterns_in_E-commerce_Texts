@@ -128,7 +128,11 @@ def encode_texts(
         return encode_with_hf(texts, bert_model, batch_size, show_progress=show_progress, device=device)
     elif encoder == "roberta":
         return encode_with_hf(texts, roberta_model, batch_size, show_progress=show_progress, device=device)
-    elif encoder in ("multilingual", "multilingual_de"):
+    elif encoder == "multilingual" or encoder.startswith("multilingual_"):
+        # multilingual_de, multilingual_it, etc. all share the same encoder;
+        # only the underlying index differs (translated to that target language).
         return encode_with_sbert(texts, MULTILINGUAL_MODEL, batch_size, show_progress, device=device)
     else:
-        raise ValueError(f"Unknown encoder '{encoder}'. Choose: sbert, bert, roberta, multilingual, multilingual_de")
+        raise ValueError(
+            f"Unknown encoder '{encoder}'. Choose: sbert, bert, roberta, multilingual, multilingual_<lang>"
+        )
