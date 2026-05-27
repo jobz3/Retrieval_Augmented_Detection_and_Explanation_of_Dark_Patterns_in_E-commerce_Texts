@@ -21,7 +21,7 @@ from src.pipelines.schema import OUTPUT_SCHEMA_STR
 
 SYSTEM_PROMPT = f"""You are an expert in consumer psychology and e-commerce manipulation.
 Your task: analyse a product page text and identify any dark pattern — a deceptive copy or UI practice that manipulates consumers.
-The text may be in any language (English, German, or other). Analyse it in the original language — do not translate.
+The text may be in any language (English, German, Italian, or other). Analyse it in the original language — do not translate.
 
 Respond with ONLY a valid JSON object following this exact schema (no markdown fences, no extra keys):
 {OUTPUT_SCHEMA_STR}
@@ -45,6 +45,45 @@ Rules you must follow:
 6. rewrite must rewrite the product text to remove the dark pattern while preserving the core offer.
    - If the text is a dark pattern: produce a complete, natural sentence even if the input is short (e.g. "LAST 1 LEFT" → "This item is available — add it to your cart.").
    - If the label is "Not Dark Pattern": copy the input text unchanged."""
+
+
+# ---------------------------------------------------------------------------
+# Optional language-specific signal-phrase appendix
+# ---------------------------------------------------------------------------
+# Appended to SYSTEM_PROMPT when the caller knows the input is in a specific
+# language. Lists per-category surface cues that frequently appear in that
+# language but have no direct English equivalent in the EC-DarkPattern training
+# corpus. Helps the LLM anchor Italian regulatory/retail vocabulary
+# (PEC, raccomandata A/R, RAEE, contributo ambientale, …) to the correct label
+# when retrieval alone cannot bridge the gap.
+
+ITALIAN_SIGNAL_APPENDIX = """
+
+Italian-specific surface cues (use these to disambiguate when the input is in Italian):
+  Scarcity       — "solo X rimasti", "ultimi X pezzi", "ultime camere", "in esaurimento", "edizione limitata"
+  Urgency        — "solo per oggi", "ultima chance", "subito", "scade tra", "termina tra", "affrettati", "ultime ore", "follia del giorno"
+  Social Proof   — "prenotato X volte", "scelto da X utenti", "il più venduto", "hanno acquistato", "salvato in X liste dei desideri"
+  Misdirection   — "prezzo di pubblicazione", "prezzo consigliato", "prezzo imbattibile", "risparmi rispetto a", strikethrough discount math
+  Obstruction    — "raccomandata A/R", "PEC", "Posta Elettronica Certificata", "numero verde (orari limitati)", "area clienti", "modulo PDF", "X giorni di preavviso", "contattare il servizio clienti via telefono", "non è possibile cancellare online"
+  Forced Action  — "devi accettare i cookie di profilazione", "devi verificare il numero", "obbligatorio inserire", "iscriviti alla newsletter per", "registrati per continuare la lettura"
+  Sneaking       — "applicato in fase di checkout", "costo di servizio", "spese di gestione obbligatorie", "contributo ambientale RAEE", "costi doganali a carico del destinatario", "non include", "rinnovo automatico", auto-added paid subscription
+  Not Dark Pattern — "consegna standard 3-5 giorni", "garanzia soddisfatti o rimborsati", "recensioni verificate", "politica di reso 30 giorni", neutral product/category labels, last-access timestamps"""
+
+
+_LANG_APPENDICES: dict[str, str] = {
+    "it": ITALIAN_SIGNAL_APPENDIX,
+}
+
+
+def system_prompt_for(lang: str | None = None) -> str:
+    """Return the system prompt, optionally augmented with per-language signal cues.
+
+    `lang` is a language code recognised in `_LANG_APPENDICES` (currently only
+    "it"). Any other value — including None — returns the base language-agnostic
+    prompt unchanged, so existing English and German callers are unaffected.
+    """
+    appendix = _LANG_APPENDICES.get((lang or "").lower(), "")
+    return SYSTEM_PROMPT + appendix
 
 
 # ---------------------------------------------------------------------------

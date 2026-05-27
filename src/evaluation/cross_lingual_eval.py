@@ -33,7 +33,7 @@ from pathlib import Path
 import typer
 
 from src.pipelines.output_parser import parse_prediction, ParseError
-from src.pipelines.prompts import SYSTEM_PROMPT, format_zero_shot_prompt, format_few_shot_prompt
+from src.pipelines.prompts import SYSTEM_PROMPT, format_zero_shot_prompt, format_few_shot_prompt, system_prompt_for
 from src.pipelines.schema import PatternType, PredictionResult
 from src.pipelines.span_grounding import check_grounding, annotate_grounding, cascade_summary
 from src.utils.io import save_jsonl
@@ -104,9 +104,9 @@ def _make_error_record(text: str, gold: str, exc: Exception) -> dict:
     return rec
 
 
-def _predict_zero_shot(text: str, model: str = DEFAULT_MODEL) -> tuple[PredictionResult, dict]:
+def _predict_zero_shot(text: str, model: str = DEFAULT_MODEL, lang: str | None = None) -> tuple[PredictionResult, dict]:
     prompt = format_zero_shot_prompt(text)
-    raw    = chat_json(prompt, model=model, system=SYSTEM_PROMPT, temperature=0.0)
+    raw    = chat_json(prompt, model=model, system=system_prompt_for(lang), temperature=0.0)
     result = parse_prediction(raw, text)
     return result, check_grounding(result, text)
 
@@ -162,6 +162,7 @@ def _predict_rag_improved(
     model: str = DEFAULT_MODEL,
     threshold: float = 0.0,
     diversity_alpha: float = 0.0,
+    lang: str | None = None,
 ) -> tuple[PredictionResult, dict, list[dict], bool]:
     """
     RAG prediction with optional threshold fallback (#1) and diversity re-ranking (#3).
@@ -174,7 +175,7 @@ def _predict_rag_improved(
     # Improvement #1: threshold fallback
     max_score = max((r["score"] for r in retrieved), default=0.0)
     if threshold > 0.0 and max_score < threshold:
-        result, grounding = _predict_zero_shot(text, model=model)
+        result, grounding = _predict_zero_shot(text, model=model, lang=lang)
         return result, grounding, retrieved, True
 
     # Improvement #3: diversity re-ranking
@@ -183,7 +184,7 @@ def _predict_rag_improved(
 
     examples  = [{"text": r["text"], "category": r["category"]} for r in retrieved]
     prompt    = format_few_shot_prompt(text, examples)
-    raw       = chat_json(prompt, model=model, system=SYSTEM_PROMPT, temperature=0.0)
+    raw       = chat_json(prompt, model=model, system=system_prompt_for(lang), temperature=0.0)
     result    = parse_prediction(raw, text)
     grounding = check_grounding(result, text)
     return result, grounding, retrieved, False
@@ -201,7 +202,7 @@ def run_zero_shot(records: list[dict], model: str = DEFAULT_MODEL, lang: str = "
         print(f"  [{i+1}/{n}]", end="\r", flush=True)
         text, gold = rec["text"], rec["category"]
         try:
-            result, grounding = _predict_zero_shot(text, model=model)
+            result, grounding = _predict_zero_shot(text, model=model, lang=lang)
             parse_ok = True
         except (ParseError, ValueError) as exc:
             print(f"\n  ⚠ parse error [{i}]: {exc}")
@@ -249,6 +250,7 @@ def run_rag(
             result, grounding, retrieved, used_fallback = _predict_rag_improved(
                 text, retriever=retriever, model=model,
                 threshold=threshold, diversity_alpha=diversity_alpha,
+                lang=lang,
             )
             parse_ok = True
         except (ParseError, ValueError) as exc:
