@@ -16,16 +16,15 @@
 # measured ±0.03 variance band, not identical artifacts.
 #
 # AUGMENTATION IS OFF BY DEFAULT (RUN_AUGMENT=0).
-# The synthetic-data step has a circular dependency: it filters LLM-generated
-# rare-class examples with a BERT validator, but that validator — trained on the
-# original imbalanced split — has F1=0 on Sneaking and Forced Action, so it
-# rejects essentially every rare-class candidate ("Accepted 0 for Sneaking").
-# The paper's accepted synthetic set is therefore committed to git at
+# `augment` uses a bigram-Jaccard near-duplicate filter (the paper's method) — it
+# generates rare-class examples with the LLM at temperature 0.8 and drops only
+# near-duplicates, so it runs end-to-end without a classifier. It is still
+# STOCHASTIC, so it will NOT reproduce the paper's exact synthetic text.
+# The paper's accepted synthetic set is committed to git at
 # results/augmentation/synthetic_examples.json (47 Forced Action / 42 Sneaking /
 # 56 Obstruction). The canonical reproduction REUSES that committed log and lets
 # the deterministic `resplit` rebuild the exact paper train_v2.
-# Set RUN_AUGMENT=1 only if you want to test the (stochastic, lossy) generator
-# itself — it will NOT reproduce the paper's examples.
+# Set RUN_AUGMENT=1 only if you want to regenerate a fresh (different) synthetic set.
 #
 # PREREQUISITES
 #   - Ollama serving qwen3:8b  (ollama serve; ollama pull qwen3:8b)
@@ -55,18 +54,11 @@ python -m src.data.preprocess
 
 # ---------------------------------------------------------------------------
 if [ "$RUN_AUGMENT" = "1" ]; then
-  banner "STAGE 2  Train BERT validator on ORIGINAL split  [needed by augment]"
-  # augment.py filters LLM-generated examples with this classifier.
-  # Must train on 'train' (not train_v2, which does not exist yet).
-  # NOTE: this validator will have F1=0 on Sneaking / Forced Action (rare in the
-  # original split), which is why augment rejects most rare-class candidates.
-  python -m src.baselines.train_classifier \
-      --model bert --seed $SEED \
-      --train-file train --val-file val --test-file test
-
-  banner "STAGE 3  Synthetic augmentation  [STOCHASTIC, LOSSY: LLM temp 0.8]"
-  # Will NOT reproduce the paper's examples. Overwrites the committed log.
-  python -m src.data.augment --validator bert --seed $SEED
+  banner "STAGE 2-3  Synthetic augmentation  [STOCHASTIC: LLM temp 0.8]"
+  # Bigram-Jaccard diversity filter (paper method) — no classifier validator.
+  # Runs end-to-end but will NOT reproduce the paper's exact text; overwrites
+  # the committed synthetic log.
+  python -m src.data.augment --seed $SEED
 else
   banner "STAGE 2-3  SKIPPED  (RUN_AUGMENT=0) — reusing committed synthetic log"
   # Guard: ensure the committed paper synthetic set is intact before resplit.

@@ -10,9 +10,21 @@ Strategy
                         rare class so the LLM stays domain-grounded.
 - Composite variation : vary product type across calls to avoid repetition.
 - JSON output         : more reliable than Python lists (confirmed by paper).
-- Post-filter         : run the saved BERT classifier on generated texts;
-                        keep only examples predicted as the intended class
-                        with softmax confidence >= CONFIDENCE_THRESHOLD.
+- Diversity filter    : a bigram-Jaccard near-duplicate filter (> JACCARD_THRESHOLD)
+                        discards candidates that are too similar to an already-kept
+                        synthetic example or to a real seed, keeping the synthetic
+                        set lexically diverse (high distinct-2, low pairwise overlap).
+
+NOTE on the filtering method
+----------------------------
+Earlier revisions filtered generated text with a fine-tuned BERT classifier
+(keep only examples the classifier predicts as the intended class). That was
+removed: (a) it is not the method described in the paper, which specifies a
+bigram-Jaccard near-duplicate filter; and (b) a classifier trained on the
+original imbalanced split has ~0 recall on the rarest classes (Sneaking,
+Forced Action), so it rejected essentially every rare-class candidate — the
+exact opposite of what augmentation needs. The diversity filter below matches
+the paper and does not depend on a rare-class-aware classifier.
 
 Targets (chosen to balance rare classes without oversampling)
 -------------------------------------------------------------
@@ -22,9 +34,9 @@ Targets (chosen to balance rare classes without oversampling)
 
 Usage
 -----
-    python -m src.data.augment                        # uses qwen3:8b, bert validator
-    python -m src.data.augment --model mistral-nemo:12b --validator roberta
-    python -m src.data.augment --dry-run              # print prompts, skip LLM
+    python -m src.data.augment                          # qwen3:8b, Jaccard filter
+    python -m src.data.augment --jaccard-threshold 0.5  # looser dedup
+    python -m src.data.augment --dry-run                # print prompts, skip LLM
 """
 
 from __future__ import annotations
@@ -34,10 +46,7 @@ import json
 import random
 from pathlib import Path
 
-import torch
-import torch.nn.functional as F
 import typer
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from tqdm import tqdm
 
 from src.utils.ollama_client import chat_json
@@ -47,7 +56,6 @@ from src.utils.ollama_client import chat_json
 # ---------------------------------------------------------------------------
 ROOT = Path(__file__).resolve().parents[2]
 PROCESSED_DIR = ROOT / "data" / "processed"
-MODEL_DIR = ROOT / "outputs" / "models"
 RESULTS_DIR = ROOT / "results" / "augmentation"
 
 # ---------------------------------------------------------------------------
@@ -61,7 +69,8 @@ TARGETS: dict[str, int] = {
     "Obstruction": 75,
 }
 
-CONFIDENCE_THRESHOLD = 0.60  # minimum BERT softmax confidence to accept a generated example
+JACCARD_THRESHOLD = 0.4      # discard a candidate whose bigram-Jaccard similarity to
+                             # any kept example or seed exceeds this (paper: >0.4)
 EXAMPLES_PER_CALL = 3        # how many texts to request per LLM call
 TEMPERATURE = 0.8            # higher temperature for output diversity (paper used 0.8)
 
@@ -142,56 +151,28 @@ Return as JSON with this exact structure:
 
 
 # ---------------------------------------------------------------------------
-# BERT-based validator
+# Bigram-Jaccard near-duplicate filter (paper-faithful diversity filter)
 # ---------------------------------------------------------------------------
 
-class BERTValidator:
-    """
-    Wraps a saved HuggingFace classifier to filter generated examples.
-    Only keeps examples predicted as the intended category with
-    softmax confidence >= threshold.
-    """
+def _bigrams(text: str) -> set[tuple[str, str]]:
+    """Word-level bigrams of a lowercased text."""
+    tokens = text.lower().split()
+    return set(zip(tokens, tokens[1:]))
 
-    def __init__(self, validator_key: str, label_map: dict[str, int], device: str):
-        model_path = MODEL_DIR / validator_key
-        if not model_path.exists():
-            raise FileNotFoundError(
-                f"No saved model at {model_path}. "
-                f"Run `python -m src.baselines.train_classifier --model {validator_key}` first."
-            )
-        self.tokenizer = AutoTokenizer.from_pretrained(model_path)
-        self.model = AutoModelForSequenceClassification.from_pretrained(model_path).to(device)
-        self.model.eval()
-        self.label_map = label_map
-        self.device = device
 
-    @torch.no_grad()
-    def filter(
-        self,
-        texts: list[str],
-        intended_category: str,
-        threshold: float = CONFIDENCE_THRESHOLD,
-    ) -> list[tuple[str, float]]:
-        """
-        Returns list of (text, confidence) for texts that pass the filter.
-        """
-        intended_id = self.label_map[intended_category]
-        passed = []
-        for text in texts:
-            enc = self.tokenizer(
-                text,
-                max_length=128,
-                padding="max_length",
-                truncation=True,
-                return_tensors="pt",
-            ).to(self.device)
-            logits = self.model(**enc).logits
-            probs = F.softmax(logits, dim=-1).squeeze()
-            pred_id = probs.argmax().item()
-            confidence = probs[intended_id].item()
-            if pred_id == intended_id and confidence >= threshold:
-                passed.append((text, round(confidence, 4)))
-        return passed
+def bigram_jaccard(a: str, b: str) -> float:
+    """Jaccard similarity over word bigrams. 0.0 if either text has no bigram."""
+    ba, bb = _bigrams(a), _bigrams(b)
+    if not ba or not bb:
+        return 0.0
+    union = ba | bb
+    return len(ba & bb) / len(union) if union else 0.0
+
+
+def is_near_duplicate(candidate: str, existing: list[str], threshold: float) -> bool:
+    """True if `candidate` is a near-duplicate (bigram-Jaccard > threshold) of any
+    text in `existing`."""
+    return any(bigram_jaccard(candidate, e) > threshold for e in existing)
 
 
 # ---------------------------------------------------------------------------
@@ -200,7 +181,6 @@ class BERTValidator:
 
 def load_training_data() -> tuple[list[dict], dict[str, int]]:
     """Load train.csv and label_map.json."""
-    rows = []
     with open(PROCESSED_DIR / "train.csv") as f:
         rows = list(csv.DictReader(f))
 
@@ -219,13 +199,16 @@ def augment_category(
     seeds: list[str],
     target_count: int,
     current_count: int,
-    validator: BERTValidator | None,
+    jaccard_threshold: float,
     model: str,
     dry_run: bool,
 ) -> list[str]:
     """
     Generate synthetic texts for one category until target_count is reached
     (or until we've made a reasonable number of attempts).
+
+    A candidate is kept only if it is not a bigram-Jaccard near-duplicate
+    (> jaccard_threshold) of an already-kept synthetic example or of a real seed.
 
     Returns list of accepted synthetic texts.
     """
@@ -244,6 +227,7 @@ def augment_category(
     max_calls = (needed // EXAMPLES_PER_CALL + 1) * 4  # allow 4x retries
     call_count = 0
     product_idx = 0
+    n_dropped_dupes = 0
 
     with tqdm(total=needed, desc=f"    Generating {category}", unit="ex") as pbar:
         while len(accepted) < needed and call_count < max_calls:
@@ -257,7 +241,6 @@ def augment_category(
             if dry_run:
                 print(f"\n--- DRY RUN PROMPT (call {call_count}) ---\n{prompt}\n")
                 accepted.extend([f"[dry-run example {i}]" for i in range(EXAMPLES_PER_CALL)])
-                pbar.update(min(EXAMPLES_PER_CALL, needed - len(accepted) + EXAMPLES_PER_CALL))
                 break
 
             try:
@@ -276,20 +259,23 @@ def augment_category(
             except (ValueError, KeyError):
                 continue
 
-            if validator is not None:
-                passed = validator.filter(candidates, category)
-                n_passed = len(passed)
-                n_rejected = len(candidates) - n_passed
-                if n_rejected:
-                    tqdm.write(f"      [{category}] rejected {n_rejected}/{len(candidates)} by validator")
-                candidates = [text for text, _ in passed]
+            # Bigram-Jaccard near-duplicate filter: reject candidates too similar
+            # to an already-kept synthetic example or to a real seed.
+            kept_this_call = 0
+            for cand in candidates:
+                if len(accepted) >= needed:
+                    break
+                if is_near_duplicate(cand, accepted + seeds, jaccard_threshold):
+                    n_dropped_dupes += 1
+                    continue
+                accepted.append(cand)
+                kept_this_call += 1
+            if kept_this_call:
+                pbar.update(kept_this_call)
 
-            # Don't exceed target
-            remaining = needed - len(accepted)
-            candidates = candidates[:remaining]
-            accepted.extend(candidates)
-            pbar.update(len(candidates))
-
+    if n_dropped_dupes:
+        print(f"      [{category}] dropped {n_dropped_dupes} near-duplicate candidate(s) "
+              f"(bigram-Jaccard > {jaccard_threshold})")
     print(f"    → Accepted {len(accepted)} synthetic examples for '{category}'")
     return accepted[:needed]
 
@@ -328,17 +314,15 @@ app = typer.Typer()
 @app.command()
 def main(
     model: str = typer.Option("qwen3:8b", help="Ollama model tag for generation"),
-    validator: str = typer.Option("bert", help="Saved model key for filtering: bert | roberta"),
-    no_validate: bool = typer.Option(False, help="Skip BERT validation step"),
-    confidence: float = typer.Option(CONFIDENCE_THRESHOLD, help="Min BERT confidence to accept"),
+    jaccard_threshold: float = typer.Option(
+        JACCARD_THRESHOLD, help="Bigram-Jaccard similarity above which a candidate is dropped as a near-duplicate"
+    ),
     seed: int = typer.Option(42, help="Random seed"),
     dry_run: bool = typer.Option(False, help="Print prompts but skip LLM calls"),
 ) -> None:
     random.seed(seed)
-    torch.manual_seed(seed)
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"Device: {device}  |  LLM: {model}  |  Validator: {'none' if no_validate else validator}")
+    print(f"LLM: {model}  |  diversity filter: bigram-Jaccard > {jaccard_threshold}")
 
     # Load data
     rows, label_map = load_training_data()
@@ -349,12 +333,6 @@ def main(
     print("\nCurrent training distribution:")
     for cat, n in sorted(current_dist.items(), key=lambda x: x[1]):
         print(f"  {n:>5}  {cat}")
-
-    # Load validator
-    bert_validator = None
-    if not no_validate and not dry_run:
-        print(f"\nLoading validator: {validator}")
-        bert_validator = BERTValidator(validator, label_map, device)
 
     # Augment each rare class
     all_synthetic_rows: list[dict] = []
@@ -369,7 +347,7 @@ def main(
             seeds=seeds,
             target_count=target,
             current_count=current_count,
-            validator=bert_validator,
+            jaccard_threshold=jaccard_threshold,
             model=model,
             dry_run=dry_run,
         )
@@ -394,7 +372,7 @@ def main(
         writer.writeheader()
         writer.writerows(augmented_rows)
 
-    # Save synthetic-only log (with confidence info)
+    # Save synthetic-only log
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     log_path = RESULTS_DIR / "synthetic_examples.json"
     log: dict[str, list[str]] = {}
@@ -416,14 +394,9 @@ def main(
     print(f"Synthetic examples log     → {log_path}")
     print(f"\nTotal: {len(augmented_rows)} (was {len(rows)})")
 
-    # Remind user of the two-pass workflow
-    print("\nNext steps:")
-    print("  1. Re-train BERT on the augmented split:")
-    print("     python -m src.baselines.train_classifier --model bert --train-file train_augmented")
-    print("  2. (Optional) Re-run augmentation with the retrained model as validator")
-    print("     to filter out any low-quality synthetic examples:")
-    print("     python -m src.data.augment --validator bert")
-    print("     (This requires the retrained checkpoint at outputs/models/bert_train_augmented/)")
+    print("\nNext step:")
+    print("  Re-split with the synthetic examples to build the v2 train/val/test splits:")
+    print("     python -m src.data.resplit")
 
 
 if __name__ == "__main__":
