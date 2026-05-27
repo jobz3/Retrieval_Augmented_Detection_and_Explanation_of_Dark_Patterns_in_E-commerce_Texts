@@ -15,6 +15,18 @@
 # "Reproducible" therefore means: same conclusions and numbers within the
 # measured ±0.03 variance band, not identical artifacts.
 #
+# AUGMENTATION IS OFF BY DEFAULT (RUN_AUGMENT=0).
+# The synthetic-data step has a circular dependency: it filters LLM-generated
+# rare-class examples with a BERT validator, but that validator — trained on the
+# original imbalanced split — has F1=0 on Sneaking and Forced Action, so it
+# rejects essentially every rare-class candidate ("Accepted 0 for Sneaking").
+# The paper's accepted synthetic set is therefore committed to git at
+# results/augmentation/synthetic_examples.json (47 Forced Action / 42 Sneaking /
+# 56 Obstruction). The canonical reproduction REUSES that committed log and lets
+# the deterministic `resplit` rebuild the exact paper train_v2.
+# Set RUN_AUGMENT=1 only if you want to test the (stochastic, lossy) generator
+# itself — it will NOT reproduce the paper's examples.
+#
 # PREREQUISITES
 #   - Ollama serving qwen3:8b  (ollama serve; ollama pull qwen3:8b)
 #   - .venv activated, requirements.txt installed
@@ -31,6 +43,8 @@ export PYTHONPATH=.
 
 DEVICE="${DEVICE:-cuda}"   # override with DEVICE=cpu bash reproduce_full_pipeline.sh
 SEED=42
+RUN_AUGMENT="${RUN_AUGMENT:-0}"   # 0 = reuse committed synthetic log (canonical); 1 = regenerate (stochastic, lossy)
+SYNTH_LOG="results/augmentation/synthetic_examples.json"
 
 banner () { printf '\n============================================================\n  %s\n============================================================\n' "$1"; }
 
@@ -40,18 +54,28 @@ banner "STAGE 1  Preprocess raw TSV -> train/val/test splits  [deterministic]"
 python -m src.data.preprocess
 
 # ---------------------------------------------------------------------------
-banner "STAGE 2  Train BERT validator on ORIGINAL split  [needed by augment]"
-# augment.py filters LLM-generated examples with this classifier.
-# Must train on 'train' (not train_v2, which does not exist yet).
-python -m src.baselines.train_classifier \
-    --model bert --seed $SEED \
-    --train-file train --val-file val --test-file test
+if [ "$RUN_AUGMENT" = "1" ]; then
+  banner "STAGE 2  Train BERT validator on ORIGINAL split  [needed by augment]"
+  # augment.py filters LLM-generated examples with this classifier.
+  # Must train on 'train' (not train_v2, which does not exist yet).
+  # NOTE: this validator will have F1=0 on Sneaking / Forced Action (rare in the
+  # original split), which is why augment rejects most rare-class candidates.
+  python -m src.baselines.train_classifier \
+      --model bert --seed $SEED \
+      --train-file train --val-file val --test-file test
 
-# ---------------------------------------------------------------------------
-banner "STAGE 3  Synthetic augmentation  [STOCHASTIC: LLM temp 0.8]"
-# Produces results/augmentation/synthetic_examples.json
-# Rare classes only (Forced Action, Sneaking, Obstruction).
-python -m src.data.augment --validator bert --seed $SEED
+  banner "STAGE 3  Synthetic augmentation  [STOCHASTIC, LOSSY: LLM temp 0.8]"
+  # Will NOT reproduce the paper's examples. Overwrites the committed log.
+  python -m src.data.augment --validator bert --seed $SEED
+else
+  banner "STAGE 2-3  SKIPPED  (RUN_AUGMENT=0) — reusing committed synthetic log"
+  # Guard: ensure the committed paper synthetic set is intact before resplit.
+  if git rev-parse --git-dir >/dev/null 2>&1; then
+    git checkout -- "$SYNTH_LOG" 2>/dev/null || true
+  fi
+  python -c "import json,sys; d=json.load(open('$SYNTH_LOG')); c={k:len(v) for k,v in d.items()}; print('  synthetic log:', c); sys.exit(0 if c.get('Sneaking',0)>0 and c.get('Forced Action',0)>0 else 1)" \
+    || { echo 'ERROR: committed synthetic log missing rare-class examples. Run: git checkout -- '"$SYNTH_LOG"; exit 1; }
+fi
 
 # ---------------------------------------------------------------------------
 banner "STAGE 4  Re-split original + synthetic -> v2 splits  [deterministic]"
