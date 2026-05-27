@@ -83,11 +83,33 @@ def build_translated_index(
     texts = df["text"].tolist()
     print(f"Loaded {len(texts)} English training examples")
 
-    # Translate
+    # Translate (reuse a cached translation only if it matches the current train_v2)
     text_col = f"text_{tgt_lang}"
     out_csv  = PROCESSED_DIR / f"train_v2_{tgt_lang}.csv"
-    if out_csv.exists():
-        print(f"Found existing translation: {out_csv} — skipping translation step")
+
+    def _cache_is_valid(path: Path) -> bool:
+        """A cached translation is reusable only if it has the required column,
+        the same row count, and the same English source texts as the current
+        train_v2.csv. Guards against a stale cache from an older split."""
+        try:
+            cached = pd.read_csv(path)
+        except Exception:
+            return False
+        if text_col not in cached.columns or "text" not in cached.columns:
+            print(f"  cache {path.name} missing required columns — re-translating")
+            return False
+        if len(cached) != len(df):
+            print(f"  cache {path.name} has {len(cached)} rows but train_v2 has "
+                  f"{len(df)} — stale, re-translating")
+            return False
+        if cached["text"].tolist() != texts:
+            print(f"  cache {path.name} English source texts differ from train_v2 "
+                  f"— stale, re-translating")
+            return False
+        return True
+
+    if out_csv.exists() and _cache_is_valid(out_csv):
+        print(f"Found valid translation cache: {out_csv} — skipping translation step")
         df_tgt = pd.read_csv(out_csv)
         tgt_texts = df_tgt[text_col].tolist()
     else:
