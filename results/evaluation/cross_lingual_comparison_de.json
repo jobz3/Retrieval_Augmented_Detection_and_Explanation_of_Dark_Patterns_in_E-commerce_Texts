@@ -1,0 +1,298 @@
+[
+  {
+    "name": "rag_sbert_knn_k5_english",
+    "n": 354,
+    "classification": {
+      "macro_f1": 0.5215,
+      "macro_precision": 0.5348,
+      "macro_recall": 0.5125,
+      "cohen_kappa": 0.9337,
+      "per_class": {
+        "Forced Action": {
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 0.0
+        },
+        "Misdirection": {
+          "f1": 0.8085,
+          "precision": 0.95,
+          "recall": 0.7037,
+          "support": 27.0
+        },
+        "Not Dark Pattern": {
+          "f1": 0.9685,
+          "precision": 0.9441,
+          "recall": 0.9941,
+          "support": 170.0
+        },
+        "Obstruction": {
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 3.0
+        },
+        "Scarcity": {
+          "f1": 0.9851,
+          "precision": 1.0,
+          "recall": 0.9706,
+          "support": 68.0
+        },
+        "Sneaking": {
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 2.0
+        },
+        "Social Proof": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 48.0
+        },
+        "Urgency": {
+          "f1": 0.9315,
+          "precision": 0.9189,
+          "recall": 0.9444,
+          "support": 36.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          19,
+          5,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          1,
+          0,
+          169,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          66,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          48,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          34
+        ]
+      ]
+    },
+    "grounding": {
+      "exact_rate": 0.9859,
+      "ci_rate": 0.9859,
+      "avg_span_len": 31.65,
+      "empty_spans": 1
+    }
+  },
+  {
+    "name": "zero_shot_german",
+    "n": 71,
+    "classification": {
+      "macro_f1": 0.5673,
+      "macro_precision": 0.6049,
+      "macro_recall": 0.5937,
+      "cohen_kappa": 0.6664,
+      "accuracy": 0.7042,
+      "n_evaluated": 71,
+      "n_abstained": 0,
+      "per_class": {
+        "Forced Action": {
+          "f1": 0.8,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "support": 6.0
+        },
+        "Misdirection": {
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 8.0
+        },
+        "Not Dark Pattern": {
+          "f1": 0.6154,
+          "precision": 0.4444,
+          "recall": 1.0,
+          "support": 12.0
+        },
+        "Obstruction": {
+          "f1": 0.2,
+          "precision": 0.3333,
+          "recall": 0.1429,
+          "support": 7.0
+        },
+        "Scarcity": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 9.0
+        },
+        "Sneaking": {
+          "f1": 0.6667,
+          "precision": 1.0,
+          "recall": 0.5,
+          "support": 8.0
+        },
+        "Social Proof": {
+          "f1": 0.8235,
+          "precision": 1.0,
+          "recall": 0.7,
+          "support": 10.0
+        },
+        "Urgency": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 11.0
+        }
+      }
+    },
+    "grounding": {
+      "exact_rate": 0.9859,
+      "ci_rate": 0.9859,
+      "fuzzy_rate": 1.0,
+      "avg_span_len": 50.8,
+      "empty_spans": 0
+    }
+  },
+  {
+    "name": "rag_multilingual_knn_k5_german",
+    "n": 71,
+    "classification": {
+      "macro_f1": 0.7667,
+      "macro_precision": 0.8074,
+      "macro_recall": 0.756,
+      "cohen_kappa": 0.8676,
+      "accuracy": 0.8732,
+      "n_evaluated": 71,
+      "n_abstained": 0,
+      "per_class": {
+        "Forced Action": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 6.0
+        },
+        "Misdirection": {
+          "f1": 0.9333,
+          "precision": 1.0,
+          "recall": 0.875,
+          "support": 8.0
+        },
+        "Not Dark Pattern": {
+          "f1": 0.8,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "support": 12.0
+        },
+        "Obstruction": {
+          "f1": 0.5,
+          "precision": 0.6,
+          "recall": 0.4286,
+          "support": 7.0
+        },
+        "Scarcity": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 9.0
+        },
+        "Sneaking": {
+          "f1": 0.6667,
+          "precision": 1.0,
+          "recall": 0.5,
+          "support": 8.0
+        },
+        "Social Proof": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 10.0
+        },
+        "Urgency": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 11.0
+        }
+      }
+    },
+    "grounding": {
+      "exact_rate": 0.9718,
+      "ci_rate": 0.9718,
+      "fuzzy_rate": 1.0,
+      "avg_span_len": 50.2,
+      "empty_spans": 1
+    },
+    "fallback": {
+      "n_fallback": 0,
+      "fallback_rate": 0.0,
+      "fallback_accuracy": null,
+      "rag_accuracy": 0.8732
+    },
+    "threshold": 0.15,
+    "diversity_alpha": 0.3
+  }
+]
