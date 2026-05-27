@@ -2,12 +2,15 @@
 Thin wrapper around the Ollama Python client.
 Handles JSON-mode requests and retries on malformed output.
 
-Project-specific behavior:
-- qwen3:* uses client.chat() with think=False via the HTTP API (avoids CLI timeout)
-- qwen3.5:* runs correctly on GPU on this HPC setup
-- but the Python client path can return empty output
-- for qwen3.5:* we therefore use generate(), and if that returns empty text,
-  we fall back to the Ollama CLI against the same local server
+Reasoning ("thinking") mode:
+- Qwen3 supports a reasoning mode that the paper runs ENABLED (the model reasons
+  before emitting the structured JSON). It is controlled per call by `think`,
+  resolved as: explicit `think=` arg > env OLLAMA_THINK > default True.
+- `think` is passed as a TOP-LEVEL client.chat() argument (the documented
+  ollama-python API). Older clients that lack the kwarg fall back to passing it
+  inside `options`.
+- Set OLLAMA_THINK=0 to disable reasoning (faster; the original workaround for
+  long-prompt CLI timeouts / empty-output issues).
 """
 
 from __future__ import annotations
@@ -98,6 +101,13 @@ def _extract_json_object(raw: str) -> dict:
 
 
 
+def _resolve_think(think: bool | None) -> bool:
+    """Resolve reasoning mode: explicit arg > env OLLAMA_THINK > default True."""
+    if think is not None:
+        return think
+    return os.getenv("OLLAMA_THINK", "1").strip().lower() not in ("0", "false", "no", "off")
+
+
 def chat_json(
     prompt: str,
     model: str = DEFAULT_MODEL,
@@ -106,6 +116,7 @@ def chat_json(
     timeout: float = 300.0,
     max_retries: int = 3,
     retry_delay: float = 1.0,
+    think: bool | None = None,
 ) -> dict:
     messages = []
     if system:
@@ -113,21 +124,30 @@ def chat_json(
     messages.append({"role": "user", "content": prompt})
 
     options = {"temperature": temperature}
+    think_enabled = _resolve_think(think)
 
     for attempt in range(1, max_retries + 1):
         try:
             client = ollama.Client(host=OLLAMA_BASE_URL, timeout=timeout)
 
-            # qwen3:* supports think=False via the HTTP API — use that instead of
-            # the CLI subprocess path, which times out on long prompts.
+            # Qwen3 reasoning mode is a TOP-LEVEL client.chat() argument in modern
+            # ollama-python. Older clients lack the kwarg → fall back to options.
             if model.lower().startswith("qwen3:"):
-                options_with_think = {**options, "think": False}
-                response = client.chat(
-                    model=model,
-                    messages=messages,
-                    format="json",
-                    options=options_with_think,
-                )
+                try:
+                    response = client.chat(
+                        model=model,
+                        messages=messages,
+                        format="json",
+                        think=think_enabled,
+                        options=options,
+                    )
+                except TypeError:
+                    response = client.chat(
+                        model=model,
+                        messages=messages,
+                        format="json",
+                        options={**options, "think": think_enabled},
+                    )
             else:
                 response = client.chat(
                     model=model,
