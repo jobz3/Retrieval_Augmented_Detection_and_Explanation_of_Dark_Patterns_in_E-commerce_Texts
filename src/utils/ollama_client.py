@@ -102,10 +102,17 @@ def _extract_json_object(raw: str) -> dict:
 
 
 def _resolve_think(think: bool | None) -> bool:
-    """Resolve reasoning mode: explicit arg > env OLLAMA_THINK > default True."""
+    """Resolve reasoning mode: explicit arg > env OLLAMA_THINK > default False.
+
+    Default is False: an A/B test on the EC-DarkPattern v2 test set showed that
+    DISABLING Qwen3 reasoning reproduces the paper's headline (macro F1 0.904 vs
+    0.923) while ENABLING it degrades to 0.812 — with retrieved demonstrations
+    supplying the label signal, chain-of-thought makes the model hedge
+    ("Uncertain") and drift. Set OLLAMA_THINK=1 to re-enable for experiments.
+    """
     if think is not None:
         return think
-    return os.getenv("OLLAMA_THINK", "1").strip().lower() not in ("0", "false", "no", "off")
+    return os.getenv("OLLAMA_THINK", "0").strip().lower() in ("1", "true", "yes", "on")
 
 
 def chat_json(
