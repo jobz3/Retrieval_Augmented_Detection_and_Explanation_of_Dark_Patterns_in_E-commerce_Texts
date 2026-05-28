@@ -235,13 +235,31 @@ def run_rag(
     threshold: float = 0.0,
     diversity_alpha: float = 0.0,
     lang: str = "de",
+    warmup: int = 0,
 ) -> list[dict]:
     from src.retrieval.retrieve import Retriever
     retriever = Retriever(encoder=encoder, strategy=strategy, k=k)
 
+    # Optional LLM warm-up: fire `warmup` throwaway RAG predictions before the
+    # real loop so a cold-start (--mode rag) run reaches the same warm
+    # model/KV-cache/CUDA-kernel state as a --mode both run (which is implicitly
+    # warmed by the preceding zero-shot pass). Results are discarded; this only
+    # removes the cold-vs-warm confound that made the two modes disagree.
+    if warmup > 0 and records:
+        n_warm = min(warmup, len(records))
+        print(f"  warming up LLM with {n_warm} throwaway RAG call(s) ...")
+        for rec in records[:n_warm]:
+            try:
+                _predict_rag_improved(
+                    rec["text"], retriever=retriever, model=model,
+                    threshold=threshold, diversity_alpha=diversity_alpha, lang=lang,
+                )
+            except Exception:
+                pass  # warm-up failures are irrelevant; we discard output
+
     out_records = []
     n = len(records)
-    tag = f"k={k}, encoder={encoder}, strategy={strategy}, threshold={threshold}, div_alpha={diversity_alpha}"
+    tag = f"k={k}, encoder={encoder}, strategy={strategy}, threshold={threshold}, div_alpha={diversity_alpha}, warmup={warmup}"
     print(f"RAG {lang.upper()} inference ({tag}, {n} records) ...")
     for i, rec in enumerate(records):
         print(f"  [{i+1}/{n}]", end="\r", flush=True)
@@ -445,6 +463,7 @@ def main(
     threshold:       float = typer.Option(0.15,   help="[#1] Min retrieval score; below → zero-shot fallback. 0=disabled"),
     diversity_alpha: float = typer.Option(0.3,    help="[#3] Label diversity penalty weight. 0=disabled"),
     abstain:         bool  = typer.Option(False,   help="[#5] Exclude low-confidence predictions from metrics"),
+    warmup:          int   = typer.Option(0,      help="Throwaway RAG calls before the real loop to warm the LLM (removes cold-vs-warm mode confound)"),
 ) -> None:
     parsed_k_values = [int(x) for x in k_values.split(",") if x.strip()] if k_values.strip() else None
     records = load_lang(lang)
@@ -482,6 +501,7 @@ def main(
         rag_records = run_rag(
             records, strategy=strategy, k=k, encoder=encoder, model=model,
             threshold=threshold, diversity_alpha=diversity_alpha, lang=lang,
+            warmup=warmup,
         )
         suffix = f"_t{threshold}_d{diversity_alpha}".replace(".", "p") if (threshold or diversity_alpha) else ""
         rag_out = PIPELINES / f"{prefix}_rag_{encoder}_{strategy}_k{k}{suffix}.jsonl"
