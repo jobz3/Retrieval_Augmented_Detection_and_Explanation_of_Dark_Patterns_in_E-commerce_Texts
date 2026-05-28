@@ -314,11 +314,17 @@ def _classification_metrics(records: list[dict], abstain: bool = False) -> dict:
 
     golds   = [r["gold_label"] for r in eval_recs]
     preds   = [r["label"]      for r in eval_recs]
-    present = sorted(set(golds) | set(preds))
 
-    macro_f1 = f1_score(golds, preds, labels=present, average="macro",    zero_division=0)
-    macro_p  = precision_score(golds, preds, labels=present, average="macro", zero_division=0)
-    macro_r  = recall_score(golds, preds, labels=present, average="macro",   zero_division=0)
+    # Macro over the FIXED taxonomy (the 8 EC-DarkPattern classes), NOT over
+    # sorted(set(golds)|set(preds)). The set-union convention injected a phantom
+    # zero-F1 class whenever the model emitted an out-of-taxonomy label such as
+    # "Uncertain", deflating macro-F1 by ~0.05-0.09 per such prediction — which
+    # made scores swing with the (run-dependent) Uncertain rate. Scoring against
+    # the fixed label set counts an "Uncertain" as a miss for the true class
+    # (correct) without creating a spurious class.
+    macro_f1 = f1_score(golds, preds, labels=ALL_CLASSES, average="macro",    zero_division=0)
+    macro_p  = precision_score(golds, preds, labels=ALL_CLASSES, average="macro", zero_division=0)
+    macro_r  = recall_score(golds, preds, labels=ALL_CLASSES, average="macro",   zero_division=0)
     kappa    = cohen_kappa_score(golds, preds, labels=ALL_CLASSES)
 
     report = classification_report(
@@ -434,8 +440,7 @@ def run_ktune(
         )
         golds = [r["gold_label"] for r in recs]
         preds = [r["label"]      for r in recs]
-        present = sorted(set(golds) | set(preds))
-        f1 = f1_score(golds, preds, labels=present, average="macro", zero_division=0)
+        f1 = f1_score(golds, preds, labels=ALL_CLASSES, average="macro", zero_division=0)
         results[k] = round(f1, 4)
         print(f"  k={k}: macro F1 = {f1:.4f}")
 

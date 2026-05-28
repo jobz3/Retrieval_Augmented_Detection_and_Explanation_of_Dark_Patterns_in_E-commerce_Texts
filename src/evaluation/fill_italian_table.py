@@ -48,9 +48,10 @@ def _metrics_from_records(records: list[dict]) -> dict:
     ]
     golds = [r["gold_label"] for r in records]
     preds = [r["label"]      for r in records]
-    present = sorted(set(golds) | set(preds))
+    # Fixed-taxonomy macro (see metrics.py): avoids the phantom-class deflation
+    # from out-of-taxonomy "Uncertain" predictions under the set-union convention.
     return {
-        "macro_f1":    round(f1_score(golds, preds, labels=present, average="macro", zero_division=0), 4),
+        "macro_f1":    round(f1_score(golds, preds, labels=ALL_CLASSES, average="macro", zero_division=0), 4),
         "cohen_kappa": round(cohen_kappa_score(golds, preds, labels=ALL_CLASSES), 4),
         "accuracy":    round(sum(g == p for g, p in zip(golds, preds)) / len(golds), 4),
     }

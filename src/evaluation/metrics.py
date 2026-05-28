@@ -61,10 +61,13 @@ def classification_metrics(records: list[dict]) -> dict:
     golds = [r["gold_label"] for r in records]
     preds = [r["label"]      for r in records]
 
-    present = sorted(set(golds) | set(preds))
-    macro_f1  = f1_score(golds, preds, labels=present, average="macro",    zero_division=0)
-    macro_p   = precision_score(golds, preds, labels=present, average="macro", zero_division=0)
-    macro_r   = recall_score(golds, preds, labels=present, average="macro",   zero_division=0)
+    # Macro over the FIXED 8-class taxonomy, not sorted(set(golds)|set(preds)).
+    # The set-union convention injected a phantom zero-F1 class whenever the model
+    # emitted an out-of-taxonomy label (e.g. "Uncertain"), deflating macro-F1 by
+    # ~0.05-0.09 per such prediction and making scores swing with the Uncertain rate.
+    macro_f1  = f1_score(golds, preds, labels=ALL_CLASSES, average="macro",    zero_division=0)
+    macro_p   = precision_score(golds, preds, labels=ALL_CLASSES, average="macro", zero_division=0)
+    macro_r   = recall_score(golds, preds, labels=ALL_CLASSES, average="macro",   zero_division=0)
     kappa     = cohen_kappa_score(golds, preds, labels=ALL_CLASSES)
 
     report = classification_report(
