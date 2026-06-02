@@ -22,6 +22,9 @@ class PatternType(str, Enum):
     FORCED_ACTION = "Forced Action"
     SNEAKING = "Sneaking"
     NONE = "Not Dark Pattern"
+    # Internal sentinel for parse / LLM-call failures only. It is NOT offered to
+    # the model as a label choice (the prompt and OUTPUT_SCHEMA_STR list only the
+    # eight categories above); the model signals doubt via a low confidence value.
     UNCERTAIN = "Uncertain"
 
 
@@ -31,7 +34,9 @@ class PredictionResult(BaseModel):
 
     Fields:
         reasoning_steps:        Ordered list of reasoning steps before the final label.
-        label:                  Dark pattern category or "Not Dark Pattern" / "Uncertain".
+        label:                  One of the eight categories (a dark-pattern type or
+                                "Not Dark Pattern"). "Uncertain" is an internal
+                                failure sentinel only, never a model-chosen label.
         confidence:             Self-assessed probability [0, 1] for the label.
         psychological_mechanism: Named cognitive bias or persuasion principle.
         evidence_span:          Verbatim substring from the input text.
@@ -87,7 +92,7 @@ OUTPUT_SCHEMA_STR = """{
     "<step 2: match tactics to the most fitting dark pattern category>",
     "<step 3: assess confidence and note any ambiguities>"
   ],
-  "label": "<one of: Scarcity | Urgency | Social Proof | Misdirection | Obstruction | Forced Action | Sneaking | Not Dark Pattern | Uncertain>",
+  "label": "<one of: Scarcity | Urgency | Social Proof | Misdirection | Obstruction | Forced Action | Sneaking | Not Dark Pattern>",
   "confidence": <float between 0.0 and 1.0>,
   "psychological_mechanism": "<name of cognitive bias or persuasion principle>",
   "evidence_span": "<verbatim substring from the input text>",

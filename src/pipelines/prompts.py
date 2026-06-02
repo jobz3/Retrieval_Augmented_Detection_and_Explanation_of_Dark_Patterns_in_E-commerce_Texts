@@ -39,10 +39,9 @@ Dark pattern categories and their key signals:
 Rules you must follow:
 1. reasoning_steps MUST be populated FIRST — think step by step before committing to a label.
 2. evidence_span MUST be an exact verbatim substring copied from the input text.
-3. confidence is your certainty [0.0–1.0] for the chosen label.
+3. confidence is your certainty [0.0–1.0] for the chosen label. Always commit to the single most likely of the categories above; if you are unsure, still choose the best fit and express your doubt through a low confidence value rather than abstaining.
 4. For "Not Dark Pattern" set evidence_span to the most representative neutral phrase.
-5. Use "Uncertain" only when you genuinely cannot determine the label.
-6. rewrite must rewrite the product text to remove the dark pattern while preserving the core offer.
+5. rewrite must rewrite the product text to remove the dark pattern while preserving the core offer.
    - If the text is a dark pattern: produce a complete, natural sentence even if the input is short (e.g. "LAST 1 LEFT" → "This item is available — add it to your cart.").
    - If the label is "Not Dark Pattern": copy the input text unchanged."""
 
